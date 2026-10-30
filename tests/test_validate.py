@@ -159,6 +159,16 @@ def test_genuinely_odd_quotes_detected(tmp_path):
     assert hits[0].severity == "error"
 
 
+def test_nonexistent_mod_path_exits_2(capsys, tmp_path):
+    """A mistyped mod path must never read as a clean bill of health."""
+    from tools.validate import main
+
+    rc = main([str(tmp_path / "does_not_exist")])
+    captured = capsys.readouterr()
+    assert rc == 2
+    assert "not a mod directory" in captured.err
+
+
 def test_exit_code_error(capsys):
     from tools.validate import main
 

@@ -45,6 +45,33 @@ def test_diff_groups_repeats():
     assert delta["other"] == 0
 
 
+def test_diff_distinguishes_digit_variant_messages():
+    """Fixing loc key 1006 while introducing 1007 must be visible per-group:
+    only file:line-number churn may be normalized away, never digits inside
+    the message body."""
+    from tools.error_triage import LogError, diff_groups
+
+    before = [LogError("10:00:00", "1936.1.1", "x.cpp:1",
+                       "Some localisation key is missing somewhere: wtt_germany.1006.a")]
+    after = [LogError("10:00:00", "1936.1.1", "x.cpp:1",
+                      "Some localisation key is missing somewhere: wtt_germany.1007.a")]
+    delta = diff_groups(before, after)
+    assert delta[("loc-error",
+                  "Some localisation key is missing somewhere: wtt_germany.1006.a")] == -1
+    assert delta[("loc-error",
+                  "Some localisation key is missing somewhere: wtt_germany.1007.a")] == 1
+
+
+def test_file_line_churn_still_groups_together():
+    from tools.error_triage import LogError, diff_groups
+
+    a = LogError("10:00:00", "1936.1.1", "x.cpp:1",
+                 "history/countries/FIN.txt:393: set_character_flag: Invalid Scope")
+    b = LogError("10:00:01", "1936.1.1", "x.cpp:1",
+                 "history/countries/FIN.txt:400: set_character_flag: Invalid Scope")
+    assert diff_groups([a], [b]) == {}  # identical group, net zero
+
+
 def test_cli_runs_on_fixture(capsys):
     rc = main([str(AFTER), "--against", str(BEFORE)])
     out = capsys.readouterr().out

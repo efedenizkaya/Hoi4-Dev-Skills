@@ -65,22 +65,41 @@ def classify(errors: list[LogError]) -> dict[str, list[LogError]]:
     return buckets
 
 
+_FILE_LINE_NOISE = re.compile(r"([\w \-]+\.(?:txt|cpp|lua|gui|gfx|yml)):\d+")
+
+
 def _group_key(e: LogError) -> tuple[str, str]:
-    """Identity of an error across runs: class + message with digits blanked,
-    so line/column churn does not split otherwise identical errors."""
-    return (_classify_one(e.message), re.sub(r"\d+", "#", e.message))
+    """Identity of an error across runs: class + message with file:line
+    numbers normalized. Digits *inside* the message body (e.g. loc key
+    names, tech ids) are significant and stay — only the ``file.txt:123``
+    prefix churns between runs."""
+    normalized = _FILE_LINE_NOISE.sub(r"\1:#", e.message)
+    return (_classify_one(e.message), normalized)
 
 
-def diff(before: list[LogError], after: list[LogError]) -> dict[str, int]:
-    """Per-class count delta between two runs (negative = improved)."""
+def diff_groups(
+    before: list[LogError], after: list[LogError]
+) -> dict[tuple[str, str], int]:
+    """Per-group count delta between two runs (negative = improved)."""
     from collections import Counter
 
     b = Counter(_group_key(e) for e in before)
     a = Counter(_group_key(e) for e in after)
-    delta: dict[str, int] = {}
-    for key in set(b) | set(a):
-        delta[key[0]] = delta.get(key[0], 0) + a.get(key, 0) - b.get(key, 0)
-    return delta
+    return {
+        key: a.get(key, 0) - b.get(key, 0)
+        for key in set(b) | set(a)
+        if a.get(key, 0) != b.get(key, 0)
+    }
+
+
+def diff(before: list[LogError], after: list[LogError]) -> dict[str, int]:
+    """Per-class count delta between two runs (negative = improved).
+    Includes every class seen in either run, even when its net is zero."""
+    from collections import Counter
+
+    b = Counter(_group_key(e)[0] for e in before)
+    a = Counter(_group_key(e)[0] for e in after)
+    return {cls: a.get(cls, 0) - b.get(cls, 0) for cls in set(b) | set(a)}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -100,6 +119,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{'class':28s} delta")
         for cls, d in sorted(delta.items(), key=lambda kv: kv[1]):
             print(f"{cls:28s} {d:+d}")
+        groups = diff_groups(baseline, errors)
+        if groups:
+            print("\nchanged groups:")
+            for (cls, msg), d in sorted(groups.items(), key=lambda kv: kv[1]):
+                print(f"  {d:+d}  [{cls}] {msg[:80]}")
         return 0
 
     buckets = classify(errors)

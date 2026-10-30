@@ -89,10 +89,9 @@ def extract(game_dir: Path, out_dir: Path, summary_out: Path | None = None) -> P
         "counts": counts,
         "extractedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
+    _write_json(data_dir / "summary.json", summary)
     if summary_out is not None:
         _write_json(summary_out, summary)
-    else:
-        _write_json(data_dir / "summary.json", summary)
     return data_dir
 
 
@@ -113,6 +112,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     if not (game_dir / "launcher-settings.json").is_file():
         print(f"error: {game_dir} does not look like a HOI4 install", file=sys.stderr)
+        return 2
+    if not (game_dir / "documentation").is_dir():
+        print(
+            f"error: {game_dir} has no documentation folder — is this an "
+            "old or broken install?",
+            file=sys.stderr,
+        )
         return 2
 
     data_dir = extract(game_dir, args.out, args.summary_out)

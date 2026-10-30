@@ -39,6 +39,40 @@ def test_summary_counts(tmp_path):
     assert summary["counts"]["modifiers"]["country"] == 3
 
 
+def test_cli_summary_out_flag(capsys, tmp_path):
+    """The documented CLI flow `--summary-out <f>` must succeed and leave
+    both the custom summary and the data-dir summary.json in place."""
+    from tools.extract import main
+
+    out = tmp_path / "extracted"
+    summary = tmp_path / "summary.json"
+    rc = main(
+        [
+            "--game-dir",
+            str(FAKE_GAME),
+            "--out",
+            str(out),
+            "--summary-out",
+            str(summary),
+        ]
+    )
+    assert rc == 0
+    assert summary.is_file()
+    assert (out / "1.19.4.1" / "summary.json").is_file()
+    assert "game version" in capsys.readouterr().out
+
+
+def test_cli_missing_documentation_exits_2(capsys, tmp_path):
+    from tools.extract import main
+
+    bare = tmp_path / "bare_game"
+    bare.mkdir()
+    (bare / "launcher-settings.json").write_text('{"rawVersion": "1.0.0"}')
+    rc = main(["--game-dir", str(bare), "--out", str(tmp_path / "out")])
+    assert rc == 2
+    assert "documentation" in capsys.readouterr().err
+
+
 def test_auto_detect_game_dir(monkeypatch, tmp_path):
     # explicit env var wins
     monkeypatch.setenv("HOI4_GAME_DIR", str(FAKE_GAME))

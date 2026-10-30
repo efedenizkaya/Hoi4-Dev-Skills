@@ -246,6 +246,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    if not args.mod_dir.is_dir():
+        print(f"error: {args.mod_dir} is not a mod directory", file=sys.stderr)
+        return 2
+
     game_dir: Path | None = args.game_dir
     if not args.no_game and game_dir is None:
         try:
