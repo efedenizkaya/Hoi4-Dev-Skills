@@ -1,6 +1,10 @@
 # Hoi4-Dev-Skills
 
-> **Status: under active development.** First release will target HOI4 1.19.x.
+[![CI](https://github.com/efedenizkaya/Hoi4-Dev-Skills/actions/workflows/ci.yml/badge.svg)](https://github.com/efedenizkaya/Hoi4-Dev-Skills/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> **Status: usable.** Skill + tools verified against HOI4 **1.19.4.1**
+> ("Operation Postern"). See the [changelog](CHANGELOG.md).
 
 Verified, game-derived Agent Skill and tooling for AI-assisted
 **Hearts of Iron IV** modding. Makes AI coding assistants (Claude Code,
@@ -16,42 +20,62 @@ official documentation shipped inside the game install.
   game-derived is committed to this repo.
 - **Verification built in.** A static mod validator, an `error.log`
   triage tool, and a documented "launch with `-debug`, diff the errors"
-  loop.
+  loop. The skill refuses to claim a mod works without evidence.
 - **Honest claims.** Every hard claim in the skill is tied to a source
-  (game dump, game file, or attributed wiki paraphrase) in
-  `docs/claims-register.md`.
+  (game docs, game file, or observed log) in
+  [docs/claims-register.md](docs/claims-register.md) — 71 claims and
+  counting.
+- **MIT.** Free to fork, embed and build on (unlike CC-licensed
+  alternatives).
 
-## Tools (available now)
+## Quick start
 
 ```bash
-pip install -r requirements-dev.txt   # dev only; the tools themselves are stdlib
-
-python tools/extract.py               # game docs → version-stamped JSON (extracted/)
-python tools/validate.py <mod_dir>    # static mod lint (braces, IDs, loc keys, overrides)
+git clone https://github.com/efedenizkaya/Hoi4-Dev-Skills.git
+cd Hoi4-Dev-Skills
+./install.sh                                   # or install.ps1 on Windows
+python tools/extract.py                        # reads YOUR game install
+python tools/validate.py <mod_dir>             # static mod lint
 python tools/error_triage.py logs/error.log --against baseline.log
 ```
 
-See [docs/setup-game-data.md](docs/setup-game-data.md).
+Full walkthrough: [docs/tutorial.md](docs/tutorial.md) — from zero to a
+verified event in ~15 minutes.
 
-## The skill (available now)
+## The skill
 
 `skills/hoi4-modding/` is an [Agent Skills](https://agentskills.io)-compliant
-skill for Claude Code, Codex, Cursor, Gemini CLI, OpenCode and other agents:
+skill:
 
 - **Router** (`SKILL.md`): core rules (scope flow, encoding, verification),
   evidence lanes (lint → log triage → game run), and a routing table.
-- **References** (loaded on demand, 14): events, national focus trees,
-  ideas & modifiers, decisions, characters, MIOs, variables & scripting,
+- **14 references** (loaded on demand): events, focus trees, ideas &
+  modifiers, decisions, characters, MIOs, variables & scripting,
   localisation, gfx & assets, AI strategy, tech tree, map/states/history,
-  mod structure, debugging & logs — see the
-  [skill routing table](skills/hoi4-modding/SKILL.md).
+  mod structure, debugging & logs.
 - **Asset kits**: copy-paste event and decision file sets that pass the
   validator out of the box.
-- **Claims register**: [docs/claims-register.md](docs/claims-register.md) —
-  every hard claim tied to game docs, game files, or observed logs.
+- **Claims register**: every hard claim sourced and version-stamped.
 
-Install by copying (or linking) `skills/hoi4-modding/` into your agent's
-skills directory, e.g. `.claude/skills/` or `.agents/skills/` in your project.
+Install details and agent support tiers:
+[docs/INSTALLATION.md](docs/INSTALLATION.md).
+
+## The tools
+
+| Tool | Job |
+|---|---|
+| `tools/extract.py` | game's machine-generated docs → version-stamped JSON (`extracted/<version>/`, git-ignored) |
+| `tools/validate.py` | static lint: braces/quotes, duplicate event ids, missing loc keys, vanilla override awareness |
+| `tools/error_triage.py` | parse, classify and diff `error.log` between two runs — only deltas matter |
+
+Python 3.10+, stdlib only. Details:
+[docs/setup-game-data.md](docs/setup-game-data.md).
+
+## Contributing
+
+Forks and PRs welcome — the core rule is simple: **every claim about game
+behavior must be grounded** in the game's own docs, files, or logs. See
+[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## License
 

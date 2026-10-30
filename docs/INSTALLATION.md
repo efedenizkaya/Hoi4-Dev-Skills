@@ -1,0 +1,77 @@
+# Installation
+
+## What you get
+
+- **The skill** — `skills/hoi4-modding/`: knowledge for your AI agent
+  (Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Copilot, ZCode…).
+- **The tools** — `tools/`: the verification loop the skill instructs the
+  agent to use (`extract.py`, `validate.py`, `error_triage.py`). They run
+  from this repository checkout with Python 3.10+, no dependencies.
+
+## Option A: install the skill (per machine)
+
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/efedenizkaya/Hoi4-Dev-Skills.git
+cd Hoi4-Dev-Skills
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+Linux / macOS / Git Bash:
+
+```bash
+git clone https://github.com/efedenizkaya/Hoi4-Dev-Skills.git
+cd Hoi4-Dev-Skills
+./install.sh
+```
+
+The script copies `skills/hoi4-modding/` into every agent skills directory
+it finds under your home dir (`.claude/skills`, `.agents/skills`,
+`.codex/skills`, `.cursor/skills`, `.gemini/skills`,
+`.config/opencode/skills`, `.copilot/skills`). Re-run it after `git pull`
+to update. Target one agent with `--agent claude`, or anywhere with
+`--dest <dir>`.
+
+Status tiers:
+
+| Tier | Agents | Meaning |
+|---|---|---|
+| Verified | ZCode, Claude Code | installed and exercised daily by the maintainer |
+| Best effort | Codex, Cursor, Gemini CLI, OpenCode, Copilot | spec-compliant install, not manually verified |
+
+## Option B: install into one project
+
+Copy (or link) the skill into the project so teammates get it via git:
+
+```bash
+mkdir -p .agents/skills
+cp -R /path/to/Hoi4-Dev-Skills/skills/hoi4-modding .agents/skills/
+```
+
+Commit it — the skill is data, not code that could diverge.
+
+## Set up the verification tools
+
+The skill tells your agent to run the tools; make them reachable:
+
+```bash
+# from the repo checkout
+python tools/extract.py        # reads YOUR game install, writes extracted/
+python tools/validate.py <your_mod>     # quick check it works
+```
+
+If auto-detection of the Steam install fails, set `HOI4_GAME_DIR`. Details:
+[setup-game-data.md](setup-game-data.md).
+
+Nothing game-derived leaves your machine; `extracted/` is git-ignored.
+
+## Verify the install
+
+Ask your agent: *"What does the hoi4-modding skill say about mutually
+exclusive focuses?"* — it should cite the reference and the claims
+register, not answer purely from memory. Or run the repo test suite:
+
+```bash
+pip install pytest && python -m pytest
+```

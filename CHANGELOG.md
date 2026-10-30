@@ -1,0 +1,45 @@
+# Changelog
+
+## 0.4.0 — Install, CI, tutorial
+
+- `install.sh` / `install.ps1` / `install.cmd`: multi-agent skill install
+  with detection, `--agent`, `--dest`, `--home` overrides; POSIX smoke
+  test in the suite.
+- CI: pytest on Linux + Windows, install smoke, skills-ref frontmatter
+  validation.
+- Docs: INSTALLATION.md, CONTRIBUTING.md (fork/PR + claim-grounding
+  rules), docs/tutorial.md (zero → verified event).
+- Validator: fixed false duplicate-event-id when a firing
+  `country_event` effect appears inside an option (brace-depth check).
+
+## 0.3.0 — Full reference coverage
+
+- 10 new references: ideas & modifiers, decisions, characters, MIO,
+  variables & scripting, localisation, gfx & assets, AI strategy, tech
+  tree, map/states/history — all grounded in the game's own docs and
+  vanilla files.
+- Claims register: 22 → 71 sourced claims.
+- New guard test: every reference must appear in the SKILL.md routing
+  table.
+- Validator: fixed quote-masking false positives (unbalanced-quotes);
+  duplicate-event-id now reports the id line, not the block start.
+
+## 0.2.0 — Skill core
+
+- `skills/hoi4-modding/`: Agent-Skills-compliant router (core rules,
+  evidence lanes, verification loop, routing table).
+- 4 references (events, national-focus, mod-structure,
+  debugging-and-logs), claims register seeded, event & decision kits.
+- Validator gained base-game awareness (vanilla loc keys accepted,
+  vanilla event re-definition downgraded to warning).
+
+## 0.1.0 — Tools
+
+- `tools/pdx_doc_parser.py`: parser for the game's machine-generated
+  `documentation/*.md`.
+- `tools/extract.py`: version-stamped JSON extraction from the local
+  game install.
+- `tools/validate.py`: static mod lint (braces/quotes, duplicate ids,
+  missing loc keys).
+- `tools/error_triage.py`: error.log parse, classify, diff.
+- Dogfooded against HOI4 1.19.4.1 and a real hand-made mod.
