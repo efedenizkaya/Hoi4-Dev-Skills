@@ -21,6 +21,18 @@ official documentation shipped inside the game install.
   (game dump, game file, or attributed wiki paraphrase) in
   `docs/claims-register.md`.
 
+## Tools (available now)
+
+```bash
+pip install -r requirements-dev.txt   # dev only; the tools themselves are stdlib
+
+python tools/extract.py               # game docs → version-stamped JSON (extracted/)
+python tools/validate.py <mod_dir>    # static mod lint (braces, IDs, loc keys, overrides)
+python tools/error_triage.py logs/error.log --against baseline.log
+```
+
+See [docs/setup-game-data.md](docs/setup-game-data.md).
+
 ## License
 
 [MIT](LICENSE)
