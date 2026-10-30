@@ -220,6 +220,106 @@ def _check_loc_refs(mod_dir: Path, keys: set[str], findings: list[Finding]) -> N
                 )
 
 
+_FOCUS_DEF_RE = re.compile(r"\b(?:focus|shared_focus|joint_focus)\s*=\s*\{")
+_FOCUS_ID_RE = re.compile(r"\bid\s*=\s*([\w.\-]+)")
+_FOCUS_ME_RE = re.compile(r"mutually_exclusive\s*=\s*\{([^{}]*)\}")
+_FOCUS_PREREQ_RE = re.compile(r"prerequisite\s*=\s*\{([^{}]*)\}")
+_FOCUS_POS_RE = re.compile(r"\b([xy])\s*=\s*(-?\d+)")
+_FOCUS_TARGET_RE = re.compile(r"\bfocus\s*=\s*([\w.\-]+)")
+
+
+def _extract_block(text: str, open_brace: int) -> int:
+    """Return the index of the closing brace matching the one at open_brace."""
+    depth = 0
+    for i in range(open_brace, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+    return len(text)
+
+
+def _collect_focuses(mod_dir: Path) -> dict[str, dict]:
+    """Scan common/national_focus/*.txt for focus definitions.
+
+    Returns id -> {x, y, me: set(ids), prereq: set(ids), file, line}.
+    """
+    focuses: dict[str, dict] = {}
+    for path in sorted(mod_dir.glob("common/national_focus/*.txt")):
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _FOCUS_DEF_RE.finditer(masked):
+            end = _extract_block(masked, m.end() - 1)
+            body = masked[m.end():end]
+            id_m = _FOCUS_ID_RE.search(body)
+            if not id_m:
+                continue
+            fid = id_m.group(1)
+            pos = dict(_FOCUS_POS_RE.findall(body))
+            focuses[fid] = {
+                "x": pos.get("x"),
+                "y": pos.get("y"),
+                "me": set(_FOCUS_TARGET_RE.findall(
+                    " ".join(_FOCUS_ME_RE.findall(body)))),
+                "prereq": set(_FOCUS_TARGET_RE.findall(
+                    " ".join(_FOCUS_PREREQ_RE.findall(body)))),
+                "file": rel,
+                "line": masked.count("\n", 0, m.end() + id_m.start()) + 1,
+            }
+    return focuses
+
+
+def _check_focus_tree(mod_dir: Path, findings: list[Finding]) -> None:
+    focuses = _collect_focuses(mod_dir)
+    if not focuses:
+        return
+    for fid, f in focuses.items():
+        for target in sorted(f["prereq"]):
+            if target not in focuses:
+                findings.append(
+                    Finding(
+                        severity="error",
+                        rule="missing-focus-prerequisite",
+                        file=f["file"],
+                        line=f["line"],
+                        message=f"{fid}: prerequisite target '{target}' is not defined",
+                    )
+                )
+        for target in sorted(f["me"]):
+            if target in focuses and fid not in focuses[target]["me"]:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="unidirectional-mutual-exclusive",
+                        file=f["file"],
+                        line=f["line"],
+                        message=(
+                            f"{fid}: mutually exclusive with '{target}', "
+                            f"but '{target}' does not declare it back "
+                            "(vanilla declares both sides)"
+                        ),
+                    )
+                )
+    seen_pos: dict[tuple[str, str], list[str]] = {}
+    for fid, f in focuses.items():
+        if f["x"] is not None and f["y"] is not None:
+            seen_pos.setdefault((f["x"], f["y"]), []).append(fid)
+    for (x, y), ids in sorted(seen_pos.items()):
+        if len(ids) > 1:
+            first = focuses[sorted(ids)[0]]
+            findings.append(
+                Finding(
+                    severity="warning",
+                    rule="focus-position-overlap",
+                    file=first["file"],
+                    line=first["line"],
+                    message=f"focuses share grid position x={x} y={y}: {', '.join(sorted(ids))}",
+                )
+            )
+
+
 def validate_mod(
     mod_dir: Path, data_dir: Path | None = None, game_dir: Path | None = None
 ) -> list[Finding]:
@@ -242,6 +342,7 @@ def validate_mod(
     _check_duplicate_event_ids(mod_dir, findings, game_event_ids)
     keys = _load_loc_keys(mod_dir, findings, game_dir)
     _check_loc_refs(mod_dir, keys, findings)
+    _check_focus_tree(mod_dir, findings)
     return findings
 
 

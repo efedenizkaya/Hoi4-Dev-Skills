@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Usage question
+    url: https://github.com/efedenizkaya/Hoi4-Dev-Skills/discussions
+    about: Ask how to use the skill or tools

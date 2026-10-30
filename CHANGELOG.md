@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.1 — Focus-tree rules, repo polish
+
+- Validator v2 focus rules (grounded in the claims register):
+  `missing-focus-prerequisite` (error), `unidirectional-mutual-exclusive`
+  (warning — vanilla declares both sides), `focus-position-overlap`
+  (warning). Focus line numbers verified against a real 9-file tree.
+- GitHub: repo description + topics set; PR template with claim-
+  verification table; `game update` issue form for patch-drift reports.
+- Note: CI failures on 2026-10-30 were account billing (jobs never
+  started), not test failures.
+
 ## 0.4.0 — Install, CI, tutorial
 
 - `install.sh` / `install.ps1` / `install.cmd`: multi-agent skill install
