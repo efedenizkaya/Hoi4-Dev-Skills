@@ -1,0 +1,42 @@
+###
+# Event kit — replace `mymod` with your mod namespace everywhere.
+# ROOT = country receiving the event.
+###
+
+country_event = {
+	id = mymod.1
+	title = mymod.1.t
+	desc = mymod.1.d
+	picture = GFX_report_event_generic_sign_treaty1
+
+	is_triggered_only = yes
+
+	option = {
+		name = mymod.1.a
+		add_political_power = 50
+		country_event = { id = mymod.2 days = 3 }
+	}
+	option = {
+		name = mymod.1.b
+		trigger = {
+			has_political_power > 100
+		}
+		ai_chance = {
+			factor = 2
+		}
+		add_war_support = 0.05
+	}
+}
+
+country_event = {
+	id = mymod.2
+	title = mymod.2.t
+	desc = mymod.2.d
+	picture = GFX_report_event_generic_sign_treaty1
+
+	is_triggered_only = yes
+
+	option = {
+		name = mymod.2.a
+	}
+}

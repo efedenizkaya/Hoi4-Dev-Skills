@@ -33,6 +33,25 @@ python tools/error_triage.py logs/error.log --against baseline.log
 
 See [docs/setup-game-data.md](docs/setup-game-data.md).
 
+## The skill (available now)
+
+`skills/hoi4-modding/` is an [Agent Skills](https://agentskills.io)-compliant
+skill for Claude Code, Codex, Cursor, Gemini CLI, OpenCode and other agents:
+
+- **Router** (`SKILL.md`): core rules (scope flow, encoding, verification),
+  evidence lanes (lint → log triage → game run), and a routing table.
+- **References** (loaded on demand): [events](skills/hoi4-modding/references/events.md),
+  [national focus trees](skills/hoi4-modding/references/national-focus.md),
+  [mod structure](skills/hoi4-modding/references/mod-structure.md),
+  [debugging and logs](skills/hoi4-modding/references/debugging-and-logs.md).
+- **Asset kits**: copy-paste event and decision file sets that pass the
+  validator out of the box.
+- **Claims register**: [docs/claims-register.md](docs/claims-register.md) —
+  every hard claim tied to game docs, game files, or observed logs.
+
+Install by copying (or linking) `skills/hoi4-modding/` into your agent's
+skills directory, e.g. `.claude/skills/` or `.agents/skills/` in your project.
+
 ## License
 
 [MIT](LICENSE)

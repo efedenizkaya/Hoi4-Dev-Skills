@@ -106,6 +106,16 @@ def _check_balance(rel: str, text: str, findings: list[Finding]) -> None:
         )
 
 
+def _brace_depth_at(text: str, pos: int) -> int:
+    depth = 0
+    for ch in text[:pos]:
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+    return depth
+
+
 def _check_duplicate_event_ids(
     mod_dir: Path, findings: list[Finding], game_event_ids: set[str] | None = None
 ) -> None:
@@ -114,6 +124,10 @@ def _check_duplicate_event_ids(
         text = _read(path)
         masked = mask_comments_and_strings(text)
         for m in _EVENT_ID_RE.finditer(masked):
+            if _brace_depth_at(masked, m.start()) > 0:
+                # inside another block: this is the `country_event` FIRING
+                # effect (e.g. within an option), not an event definition.
+                continue
             event_id = m.group(2)
             line = masked.count("\n", 0, m.start(2)) + 1
             seen.setdefault(event_id, []).append((str(path.relative_to(mod_dir)), line))

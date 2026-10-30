@@ -159,6 +159,26 @@ def test_genuinely_odd_quotes_detected(tmp_path):
     assert hits[0].severity == "error"
 
 
+def test_firing_effect_inside_option_is_not_a_definition(tmp_path):
+    """`country_event = { id = x.y days = 2 }` inside an option fires an
+    event; it must not register a definition (and must not collide with a
+    real definition of the same id)."""
+    (tmp_path / "events").mkdir()
+    (tmp_path / "events" / "ev.txt").write_text(
+        "country_event = {\n"
+        "\tid = mymod.2\n"
+        "\ttitle = mymod.2.t\n"
+        "\toption = {\n"
+        "\t\tname = mymod.2.a\n"
+        "\t\tcountry_event = { id = mymod.2 days = 3 }\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(tmp_path)
+    assert _find(findings, "duplicate-event-id") == []
+
+
 def test_nonexistent_mod_path_exits_2(capsys, tmp_path):
     """A mistyped mod path must never read as a clean bill of health."""
     from tools.validate import main
