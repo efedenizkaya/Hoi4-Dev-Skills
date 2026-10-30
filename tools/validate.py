@@ -49,10 +49,13 @@ def _read(path: Path) -> str:
 
 
 def mask_comments_and_strings(text: str) -> str:
-    """Return text of equal length with comments and quoted strings blanked.
+    """Return text of equal length with comments and string *contents* blanked.
 
-    ``#`` outside a string starts a comment (to end of line); inside a string
-    it is literal. Blanking instead of deleting preserves line/column data.
+    Both quote characters of a string are KEPT, so counting quotes in the
+    masked text counts unclosed strings: a paired string contributes 2, an
+    unclosed one 1 (everything it swallowed was blanked). ``#`` outside a
+    string starts a comment (to end of line); inside a string it is literal.
+    Blanking instead of deleting preserves line/column data.
     """
     out = list(text)
     in_string = False
@@ -63,12 +66,11 @@ def mask_comments_and_strings(text: str) -> str:
         if in_string:
             if ch == '"':
                 in_string = False
-            else:
+            elif ch != "\n":
                 out[i] = " "
         else:
             if ch == '"':
                 in_string = True
-                out[i] = " "
             elif ch == "#":
                 while i < n and text[i] != "\n":
                     out[i] = " "
@@ -113,7 +115,7 @@ def _check_duplicate_event_ids(
         masked = mask_comments_and_strings(text)
         for m in _EVENT_ID_RE.finditer(masked):
             event_id = m.group(2)
-            line = masked.count("\n", 0, m.start()) + 1
+            line = masked.count("\n", 0, m.start(2)) + 1
             seen.setdefault(event_id, []).append((str(path.relative_to(mod_dir)), line))
     for event_id, spots in sorted(seen.items()):
         if len(spots) == 1 and game_event_ids and event_id in game_event_ids:
