@@ -1,0 +1,6 @@
+country_event = {
+	id = ger_test.3
+	title = vanilla.3.t
+	desc = vanilla.3.d
+	option = { name = vanilla.3.a }
+}

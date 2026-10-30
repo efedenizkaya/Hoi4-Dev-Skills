@@ -1,0 +1,20 @@
+country_event = {
+	id = ger_test.1
+	title = ger_test.1.t
+	desc = ger_test.1.d
+
+	option = {
+		name = ger_test.1.a
+		add_political_power = 50
+	}
+}
+
+country_event = {
+	id = ger_test.2
+	title = ger_test.2.t
+	desc = ger_test.2.d
+
+	option = {
+		name = ger_test.2.a
+	}
+}
