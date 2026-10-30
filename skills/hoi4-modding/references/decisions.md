@@ -55,6 +55,7 @@ CLAIM(decision-fields)
 - `cost` is **command power** unless the decision uses a different cost
   field (`political_power` cost variants exist for specific decision
   types) — check the vanilla file nearest to what you are building.
+  CLAIM(decision-cost-command-power)
 - One-shot decisions need `fire_only_once = yes`; without it they come back
   after `days_re_enable` (default 0 → immediately repeatable).
 - Effects in `complete_effect` run in **country scope**; targeted decisions

@@ -31,12 +31,12 @@ function Install-To {
     param([string]$TargetDir)
     $target = Join-Path $TargetDir $skillName
     if (Test-Path $target) {
-        Write-Host "already installed: $target (updating)"
+        Write-Output "already installed: $target (updating)"
         Remove-Item -Recurse -Force $target
     }
     New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
     Copy-Item -Recurse -Force $skillSrc $target
-    Write-Host "installed: $target"
+    Write-Output "installed: $target"
 }
 
 if ($Dest -ne "") {
@@ -56,7 +56,7 @@ foreach ($entry in $agents.GetEnumerator()) {
 }
 
 if ($found -eq 0) {
-    Write-Host "no supported agent directories found under $HomeDir."
-    Write-Host "install manually with -Dest, or name an agent: $($agents.Keys -join ', ')"
+    Write-Output "no supported agent directories found under $HomeDir."
+    Write-Output "install manually with -Dest, or name an agent: $($agents.Keys -join ', ')"
     exit 1
 }

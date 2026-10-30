@@ -23,6 +23,10 @@ jobs:
       - name: Install script smoke (POSIX)
         if: runner.os == 'Linux'
         run: bash tests/test_install.sh
+      - name: Install script smoke (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: tests/test_install.ps1
 
   skill-spec:
     runs-on: ubuntu-latest

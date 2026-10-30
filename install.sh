@@ -74,7 +74,7 @@ for entry in "${AGENTS[@]}"; do
 done
 
 if [[ "$found" -eq 0 ]]; then
-  echo "no supported agent directories found under $BASE."
+  echo "no supported agent directories found under $BASE (or the agent name is unknown)."
   echo "install manually:  ./install.sh --dest <dir>   or  --agent <name>"
   echo "agents known: ${AGENTS[*]%%:*}"
   exit 1

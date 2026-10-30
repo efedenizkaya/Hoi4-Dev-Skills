@@ -21,6 +21,15 @@ def _frontmatter(text: str) -> dict:
     return meta
 
 
+def test_readme_claims_count_matches_register():
+    """The README's claim count must equal the register's row count —
+    derived, so the number cannot drift."""
+    register = (DOCS / "claims-register.md").read_text(encoding="utf-8")
+    count = len(re.findall(r"^\| [\w-]+\s*\|", register, re.M))
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert f"{count} claims" in readme, f"README should say '{count} claims'"
+
+
 def test_every_reference_is_routed():
     """Each references/*.md must appear in the SKILL.md routing table."""
     routing = SKILL_MD.read_text(encoding="utf-8")

@@ -189,6 +189,60 @@ def test_nonexistent_mod_path_exits_2(capsys, tmp_path):
     assert "not a mod directory" in captured.err
 
 
+def test_event_id_after_nested_block_is_found(tmp_path):
+    """`id =` may legally follow a nested block (e.g. immediate). The
+    duplicate check must find it (regression: the old [^{}]*? regex could
+    not cross braces)."""
+    (tmp_path / "events").mkdir()
+    (tmp_path / "events" / "a.txt").write_text(
+        "country_event = {\n"
+        "\timmediate = { set_country_flag = x }\n"
+        "\tid = mymod.7\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "events" / "b.txt").write_text(
+        "country_event = {\n\tid = mymod.7\n}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(tmp_path)
+    hits = _find(findings, "duplicate-event-id")
+    assert len(hits) == 1
+    assert "mymod.7" in hits[0].message
+
+
+def test_nested_events_subdirectories_scanned(tmp_path):
+    (tmp_path / "events" / "sub").mkdir(parents=True)
+    (tmp_path / "events" / "sub" / "deep.txt").write_text(
+        "country_event = {\n\tid = deep.1\n\toption = {\n\t\tname = deep.1.a\n\t}\n}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(tmp_path)
+    hits = [f for f in findings if f.rule == "missing-loc-key"]
+    assert len(hits) == 1
+    assert "deep.1.a" in hits[0].message
+
+
+def test_bad_data_dir_exits_2(capsys, tmp_path):
+    """A mistyped --data path must not silently disable the name check."""
+    from tools.validate import main
+
+    rc = main([str(MINI_MOD), "--data", str(tmp_path / "nope")])
+    captured = capsys.readouterr()
+    assert rc == 2
+    assert "--data" in captured.err
+
+
+def test_bad_game_dir_warns_on_stderr(capsys, tmp_path):
+    """An explicit --game-dir that is not an install must be called out."""
+    from tools.validate import main
+
+    rc = main([str(MINI_MOD), "--game-dir", str(tmp_path / "not_install")])
+    captured = capsys.readouterr()
+    assert rc == 1  # mini_mod still has real errors
+    assert "--game-dir" in captured.err
+
+
 def test_exit_code_error(capsys):
     from tools.validate import main
 

@@ -47,16 +47,22 @@ CLAIM(event-properties-not-triggers)
   `trigger = { }` does nothing.
 - Without `is_triggered_only = yes`, the event's `trigger` block is evaluated
   continuously (on_actions/pulse) — a common cause of "event fires randomly".
+  CLAIM(pulse-trigger-continuous)
+  CLAIM(pulse-trigger-continuous)
 
 ## Namespace and IDs
 
-- `id = <namespace>.<number>`; the namespace must match a `text_icon`-free
-  plain word. Related events share a namespace (`mymod.1`, `mymod.2`).
+- `id = <namespace>.<number>`; the namespace is a plain word without dots.
+  Related events share a namespace (`mymod.1`, `mymod.2`).
 - IDs must be unique across the whole game (mod + vanilla + other mods).
+  CLAIM(event-id-uniqueness)
+  CLAIM(event-id-uniqueness)
   `tools/validate.py` reports duplicates (`duplicate-event-id`) and flags
   single re-definitions of a vanilla id as `vanilla-event-override` — that is
   the standard way to replace a vanilla event; keep it deliberate.
 - News events shown to all countries: `major = yes` on a `news_event`.
+  CLAIM(news-major-all)
+  CLAIM(news-major-all)
 
 ## Localisation contract
 

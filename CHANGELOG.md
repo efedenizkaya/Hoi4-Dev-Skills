@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.5.1 — Audit fix pass
+
+From the whole-project audit (fresh reviewer, 7 dimensions):
+
+- `_EVENT_ID_RE` rewritten: header + balanced-body scan at depth 0, so
+  `id =` after nested blocks is found and firing effects inside options
+  stay excluded; `events/**` subdirectories now scanned for duplicates,
+  loc refs and vanilla overrides.
+- `--data` pointing nowhere exits 2 with a clear message; a bad explicit
+  `--game-dir` warns on stderr instead of silently disabling checks.
+- install.ps1 now smoke-tested (pytest + Windows CI leg); installer
+  messages moved to stdout; idempotency pinned.
+- Vacuous vanilla-focus test replaced with a real pin (fake_game focus
+  tree; garbage ids still flagged).
+- README claim count now derived from the register by a test (cannot
+  drift); register 72 → 81 rows; 8 previously unmarked behavioral claims
+  in references now carry CLAIM markers.
+- national-focus.md no longer overstates validator focus-id coverage;
+  garbled `text_icon` sentence fixed; SKILL.md claims-register link and
+  tool-availability wording corrected for installed copies.
+
 ## 0.5.0 — Data-aware validation
 
 - `validate.py --data <extracted_dir>`: statement names in effect contexts

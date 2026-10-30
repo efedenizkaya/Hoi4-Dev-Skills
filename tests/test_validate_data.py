@@ -153,8 +153,12 @@ FOCUS_A_BODY = (
 
 def test_focus_reference_vanilla_known_with_game_dir(tmp_path, data_dir):
     """With the game dir, vanilla focus ids count as known."""
-    mod = _mod(tmp_path, FOCUS_REF)
+    ref = FOCUS_REF.replace("mod_focus_b", "vanilla_focus_1")
+    mod = _mod(tmp_path, ref)
     findings = validate_mod(mod, data_dir, game_dir=FAKE_GAME)
-    # fake_game defines ger_test.3 as an event, not a focus — so mod_focus_b
-    # is still unknown, but nothing crashes on a game dir without focuses.
-    assert isinstance(findings, list)
+    assert [f for f in findings if f.rule == "unknown-focus-reference"] == []
+    # a garbage id is still caught
+    bad = FOCUS_REF.replace("mod_focus_b", "definitely_not_a_focus")
+    findings = validate_mod(_mod(tmp_path, bad), data_dir, game_dir=FAKE_GAME)
+    assert any("definitely_not_a_focus" in f.message
+               for f in findings if f.rule == "unknown-focus-reference")

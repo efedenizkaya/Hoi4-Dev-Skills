@@ -112,7 +112,7 @@ Read only what the task needs:
 | Debug, crash triage, logs, `-debug` mode | [references/debugging-and-logs.md](references/debugging-and-logs.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
-| Check whether a claim is sourced | [docs/claims-register.md](../../../docs/claims-register.md) |
+| Check whether a claim is sourced | `docs/claims-register.md` in the hoi4-dev-skills repository checkout (not bundled with the installed skill) |
 
 Effect/trigger/modifier lookups: use `extracted/<version>/*.json` (from
 `tools/extract.py`) as the authoritative per-version list. When it does not
@@ -125,5 +125,8 @@ exist, offer to run the extractor before answering from memory.
   references are planned but not yet written; say so when a task needs them.
 - Runtime behavior cannot be tested without the user launching the game;
   never simulate that evidence.
-- This skill ships no tools itself; the verification commands live in this
-  repository's `tools/` and must be available on PATH (run from repo root).
+- This skill ships no tools itself; the verification commands live in the
+  hoi4-dev-skills repository checkout and are run as
+  `python tools/validate.py …` from that repo root. When the checkout is
+  not available, say so and fall back to embedded knowledge + the game's
+  own `-debug` error.log.

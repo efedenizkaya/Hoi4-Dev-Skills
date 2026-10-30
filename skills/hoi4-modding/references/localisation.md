@@ -68,7 +68,7 @@ Game-side formatters (e.g. `advisor_desc`, `idea_name`) are documented in
 
 The default fonts do not cover every script — characters outside the
 language's font set render as boxes; test any non-Latin text in the target
-language folder, not in english.
+language folder, not in english. CLAIM(loc-font-coverage)
 
 ## Verification steps
 

@@ -23,7 +23,7 @@ official documentation shipped inside the game install.
   loop. The skill refuses to claim a mod works without evidence.
 - **Honest claims.** Every hard claim in the skill is tied to a source
   (game docs, game file, or observed log) in
-  [docs/claims-register.md](docs/claims-register.md) — 71 claims and
+  [docs/claims-register.md](docs/claims-register.md) — 81 claims and
   counting.
 - **MIT.** Free to fork, embed and build on (unlike CC-licensed
   alternatives).
@@ -65,7 +65,7 @@ Install details and agent support tiers:
 | Tool | Job |
 |---|---|
 | `tools/extract.py` | game's machine-generated docs → version-stamped JSON (`extracted/<version>/`, git-ignored) |
-| `tools/validate.py` | static lint: braces/quotes, duplicate event ids, missing loc keys, vanilla override awareness |
+| `tools/validate.py` | static lint: braces/quotes, duplicate event ids, missing loc keys, focus-tree rules (prerequisites, bidirectional exclusivity, grid overlap), vanilla override awareness, and — with `--data` — effect/trigger name checks against the extracted database |
 | `tools/error_triage.py` | parse, classify and diff `error.log` between two runs — only deltas matter |
 
 Python 3.10+, stdlib only. Details:

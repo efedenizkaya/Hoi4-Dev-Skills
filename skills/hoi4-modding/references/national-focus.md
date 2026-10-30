@@ -55,7 +55,9 @@ CLAIM(focus-fields)
 ## Common bugs (from real mod triage)
 
 - **Duplicate focus id** across files silently breaks the tree — vanilla ids
-  included (`GER_four_year_plan` etc. are taken).
+  included (`GER_four_year_plan` etc. are taken). The validator checks
+  *event* duplicate ids; focus-id uniqueness is not checked — grep your
+  tree before finishing. CLAIM(focus-dup-silent)
 - `mutually_exclusive` must be declared on **both** focuses — vanilla
   `germany.txt` declares each pair from both sides (99 occurrences, every
   pair bidirectional). CLAIM(mutual-exclusive-both)
@@ -66,17 +68,20 @@ CLAIM(focus-fields)
 
 ## AI weights
 
-`ai_will_do` defaults to factor 1. Use `modifier = { factor = ... }` blocks
-inside for conditions. Weights are relative within the same branch layer.
+`ai_will_do` unset behaves like a low default weight (verify exact value
+against vanilla trees before relying on it). Use `modifier = { factor = ... }`
+blocks inside for conditions. Weights are relative within the same branch
+layer. CLAIM(ai-will-do-default)
 
 ## Worked example
 
-See [../assets/kits/decision-kit/](../assets/kits/decision-kit/MANIFEST) for
-a complete validator-clean file set.
+No focus kit is shipped yet. For the file-set pattern (script + loc +
+verification), see [../assets/kits/decision-kit/](../assets/kits/decision-kit/MANIFEST).
 
 ## Verification steps
 
-1. `python tools/validate.py <mod_dir>` — duplicate ids, balance.
+1. `python tools/validate.py <mod_dir>` — event-id duplicates, balance,
+   focus prerequisite/exclusivity/overlap rules.
 2. In-game: console (needs `-debug`) has `Focus.AutoComplete`,
    `Focus.IgnorePrerequisites`, `Focus.NoChecks` for tree testing; then
    `python tools/error_triage.py logs/error.log` — look for

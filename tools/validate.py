@@ -23,11 +23,26 @@ from pathlib import Path
 SCRIPT_GLOBS = ["**/*.txt"]
 LOC_GLOBS = ["localisation/**/*.yml", "localisation/**/*.yaml"]
 
-_EVENT_ID_RE = re.compile(
-    r"\b(country_event|news_event|state_event|unit_leader_event)"
-    r"\s*=\s*\{[^{}]*?id\s*=\s*([\w.\-]+)",
-    re.S,
+_EVENT_HEADER_RE = re.compile(
+    r"\b(country_event|news_event|state_event|unit_leader_event)\s*=\s*\{"
 )
+_EVENT_BODY_ID_RE = re.compile(r"\bid\s*=\s*([\w.\-]+)")
+
+
+def _event_ids_in(masked: str, header_match: re.Match) -> list[tuple[str, int]]:
+    """`id = X` entries that are direct children of the event block — `id`
+    may legally follow nested blocks (immediate etc.), so search the balanced
+    body at depth 0, but NOT ids inside nested blocks (those belong to
+    firing effects like `country_event = { id = x days = 3 }` in options)."""
+    start = header_match.end()
+    end = _extract_block(masked, header_match.end() - 1)
+    body = masked[start:end]
+    out = []
+    for m in _EVENT_BODY_ID_RE.finditer(body):
+        if body.count("{", 0, m.start()) != body.count("}", 0, m.start()):
+            continue
+        out.append((m.group(1), masked.count("\n", 0, start + m.start()) + 1))
+    return out
 # Loc refs used by events: title/desc/name = <namespace>.<n>[.<letter>]
 _LOC_REF_RE = re.compile(
     r"^\s*(?:title|desc|name)\s*=\s*([A-Za-z][\w]*\.\d+(?:\.[A-Za-z0-9_]+)?)\s*(?:#.*)?$",
@@ -121,17 +136,16 @@ def _check_duplicate_event_ids(
     mod_dir: Path, findings: list[Finding], game_event_ids: set[str] | None = None
 ) -> None:
     seen: dict[str, list[tuple[str, int]]] = {}
-    for path in sorted(mod_dir.glob("events/*.txt")):
+    for path in sorted(mod_dir.glob("events/**/*.txt")):
         text = _read(path)
         masked = mask_comments_and_strings(text)
-        for m in _EVENT_ID_RE.finditer(masked):
+        for m in _EVENT_HEADER_RE.finditer(masked):
             if _brace_depth_at(masked, m.start()) > 0:
                 # inside another block: this is the `country_event` FIRING
                 # effect (e.g. within an option), not an event definition.
                 continue
-            event_id = m.group(2)
-            line = masked.count("\n", 0, m.start(2)) + 1
-            seen.setdefault(event_id, []).append((str(path.relative_to(mod_dir)), line))
+            for event_id, line in _event_ids_in(masked, m):
+                seen.setdefault(event_id, []).append((str(path.relative_to(mod_dir)), line))
     for event_id, spots in sorted(seen.items()):
         if len(spots) == 1 and game_event_ids and event_id in game_event_ids:
             # Redefining a base-game event once is the standard way to
@@ -162,9 +176,10 @@ def _load_event_ids_from(events_dir: Path) -> set[str]:
     ids: set[str] = set()
     if not events_dir.is_dir():
         return ids
-    for path in sorted(events_dir.glob("*.txt")):
+    for path in sorted(events_dir.glob("**/*.txt")):
         masked = mask_comments_and_strings(_read(path))
-        ids.update(m.group(2) for m in _EVENT_ID_RE.finditer(masked))
+        for m in _EVENT_HEADER_RE.finditer(masked):
+            ids.update(event_id for event_id, _ in _event_ids_in(masked, m))
     return ids
 
 
@@ -202,7 +217,7 @@ def _load_loc_keys(
 
 
 def _check_loc_refs(mod_dir: Path, keys: set[str], findings: list[Finding]) -> None:
-    for path in sorted(mod_dir.glob("events/*.txt")):
+    for path in sorted(mod_dir.glob("events/**/*.txt")):
         text = _read(path)
         masked = mask_comments_and_strings(text)
         rel = str(path.relative_to(mod_dir))
@@ -375,7 +390,7 @@ def _load_scripted_names(mod_dir: Path) -> set[str]:
 
 def _check_statement_names(
     mod_dir: Path, findings: list[Finding],
-    known: set[str], scripted: set[str], game_dir: Path | None = None,
+    known: set[str], scripted: set[str],
 ) -> None:
     """Warn on lowercase statement names in effect contexts that are in
     neither the version's effect list nor the mod's scripted effects.
@@ -496,7 +511,7 @@ def validate_mod(
         scripted = _load_scripted_names(mod_dir)
         if game_dir is not None:
             scripted |= _load_scripted_names(game_dir)
-        _check_statement_names(mod_dir, findings, known, scripted, game_dir)
+        _check_statement_names(mod_dir, findings, known, scripted)
     if game_dir is not None:
         _check_focus_references(mod_dir, findings, game_dir)
     return findings
@@ -528,6 +543,20 @@ def main(argv: list[str] | None = None) -> int:
         except ImportError:
             from extract import find_game_dir
         game_dir = find_game_dir()
+    if args.game_dir is not None and not (args.game_dir / "launcher-settings.json").is_file():
+        print(
+            f"warning: --game-dir {args.game_dir} is not a HOI4 install "
+            "(no launcher-settings.json) — vanilla-aware checks are disabled",
+            file=sys.stderr,
+        )
+        game_dir = None
+    if args.data is not None and not (args.data / "effects.json").is_file():
+        print(
+            f"error: --data {args.data} contains no effects.json — run "
+            "tools/extract.py first or fix the path",
+            file=sys.stderr,
+        )
+        return 2
 
     findings = validate_mod(args.mod_dir, args.data, game_dir)
     for f in findings:

@@ -82,3 +82,12 @@ game patch; delete rows that no longer hold.
 | map-csv-risk | map/ CSVs (strategic regions, supply) are high-risk, hard-to-diagnose edits | engine behavior; caution note | 2026-10-30 |
 | unknown-statement-name | Effect-context statement names not in the version's effect list or any scripted definition are flagged (warnings-only, depth-1 scan) | tool (validator rule; name DB from game-doc-derived effects.json/triggers.json) | 2026-10-30 |
 | unknown-focus-reference | has_completed_focus targets must exist in mod or vanilla focus trees (requires game dir) | tool (validator rule) | 2026-10-30 |
+| event-id-uniqueness | Event IDs must be unique across the whole game (mod + vanilla + other mods) | community-standard Clausewitz behavior; validator enforces within mod | 2026-10-31 |
+| pulse-trigger-continuous | Without is_triggered_only, the event trigger is evaluated continuously | community-standard Clausewitz behavior; verify on use | 2026-10-31 |
+| news-major-all | major = yes on news_event shows it to all countries | community-standard; verify on use | 2026-10-31 |
+| character-already-assigned | Assigning one character to two countries logs an explicit rejection | log (real error.log line) | 2026-10-31 |
+| start-year-ai-ordering | tech start_year gates AI research ordering, not availability | community-standard; verify on use | 2026-10-31 |
+| ai-will-do-default | Unset ai_will_do behaves like a low default weight | community-standard; verify on use | 2026-10-31 |
+| loc-font-coverage | Characters outside a language's font set render as boxes | community-standard; verify on use | 2026-10-31 |
+| decision-cost-command-power | Decision cost defaults to command power | community-standard; verify on use | 2026-10-31 |
+| focus-dup-silent | Duplicate focus ids break the tree; validator checks only event ids | tool (validator scope) + community-standard | 2026-10-31 |
