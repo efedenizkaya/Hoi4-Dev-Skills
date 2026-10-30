@@ -28,20 +28,27 @@ try:  # imported as a package module
 except ImportError:  # run as a script: python tools/extract.py
     from pdx_doc_parser import GAME_DOC_FILES, parse_effects_or_triggers, parse_modifiers
 
-DEFAULT_STEAM_PATH = Path(
-    r"C:\Program Files (x86)\Steam\steamapps\common\Hearts of Iron IV"
-)
+def _steam_candidates() -> list[Path]:
+    """Standard Steam library layouts per platform, most common first."""
+    home = Path.home()
+    return [
+        Path(r"C:\Program Files (x86)\Steam\steamapps\common\Hearts of Iron IV"),
+        home / ".steam/steam/steamapps/common/Hearts of Iron IV",
+        home / ".local/share/Steam/steamapps/common/Hearts of Iron IV",
+        home / "Library/Application Support/Steam/steamapps/common/Hearts of Iron IV",
+    ]
 
 
 def find_game_dir() -> Path | None:
-    """Locate a HOI4 install: env var first, then the default Steam path."""
+    """Locate a HOI4 install: env var first, then standard Steam paths."""
     env = os.environ.get("HOI4_GAME_DIR", "").strip()
     if env:
         candidate = Path(env)
         if candidate.is_dir():
             return candidate
-    if DEFAULT_STEAM_PATH.is_dir():
-        return DEFAULT_STEAM_PATH
+    for candidate in _steam_candidates():
+        if candidate.is_dir():
+            return candidate
     return None
 
 

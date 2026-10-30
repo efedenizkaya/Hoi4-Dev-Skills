@@ -147,6 +147,22 @@ def test_paired_strings_produce_no_quote_finding(tmp_path):
     assert not _find(findings, "unbalanced-quotes")
 
 
+def test_escaped_quote_inside_string_is_literal(tmp_path):
+    """`\"` inside a string must not close it (vanilla uses `\"...\"` inside
+    quoted division strings). The brace inside the escaped region is string
+    content — masking must say so, not just even-out the quote count."""
+    (tmp_path / "events").mkdir()
+    (tmp_path / "events" / "esc.txt").write_text(
+        'create_unit = {\n'
+        '\tdivision = "division_template = \\"Fi{rst\\" start_equipment_factor = 1.0"\n'
+        '}\n',
+        encoding="utf-8",
+    )
+    findings = validate_mod(tmp_path)
+    assert _find(findings, "unbalanced-quotes") == []
+    assert _find(findings, "unbalanced-braces") == []
+
+
 def test_genuinely_odd_quotes_detected(tmp_path):
     (tmp_path / "events").mkdir()
     (tmp_path / "events" / "odd.txt").write_text(

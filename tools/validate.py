@@ -80,6 +80,12 @@ def mask_comments_and_strings(text: str) -> str:
     while i < n:
         ch = text[i]
         if in_string:
+            if ch == "\\" and i + 1 < n and text[i + 1] == '"':
+                # escaped quote: string continues; blank both chars
+                out[i] = " "
+                out[i + 1] = " "
+                i += 2
+                continue
             if ch == '"':
                 in_string = False
             elif ch != "\n":
@@ -416,15 +422,17 @@ def _check_statement_names(
                     pos = max(pos, sub_end + 1)
                 cleaned.append(body[pos:])
                 body = "".join(cleaned)
-                for stmt in _STATEMENT_RE.finditer(body):
-                    # depth 1 only: nested blocks (e.g. the argument schema of
-                    # add_building_construction) have their own field grammars
-                    depth = body.count("{", 0, stmt.start()) - body.count(
-                        "}", 0, stmt.start()
-                    )
+                # depth 1 only: nested blocks (e.g. the argument schema of
+                # add_building_construction) have their own field grammars.
+                # One pass with a running depth instead of O(body^2) counts.
+                depth = 0
+                for m in re.finditer(r"([{}])|(?m:^)(\s*)([a-z0-9_]+)(?=\s*=)", body):
+                    if m.group(1):
+                        depth += 1 if m.group(1) == "{" else -1
+                        continue
                     if depth > 0:
                         continue
-                    name = stmt.group(1)
+                    name = m.group(3)
                     if (
                         name in known
                         or name in scripted
@@ -438,7 +446,7 @@ def _check_statement_names(
                             severity="warning",
                             rule="unknown-statement-name",
                             file=rel,
-                            line=masked.count("\n", 0, block.end() + stmt.start()) + 1,
+                            line=masked.count("\n", 0, block.end() + m.start()) + 1,
                             message=(
                                 f"{name}: not an effect in the extracted data "
                                 "for this game version"

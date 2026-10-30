@@ -47,7 +47,7 @@ class DocEntry:
 def _read_text(path: Path) -> str:
     # utf-8-sig strips the BOM the game writes on Windows; universal newlines
     # fold CRLF into LF.
-    return path.read_text(encoding="utf-8-sig")
+    return path.read_text(encoding="utf-8-sig", errors="replace")
 
 
 def _split_entries(text: str) -> list[tuple[str, list[str]]]:

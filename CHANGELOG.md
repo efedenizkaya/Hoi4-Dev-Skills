@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.2 — Portability and robustness
+
+- `find_game_dir()` knows Linux (`~/.steam/steam`, `~/.local/share/Steam`)
+  and macOS (`~/Library/Application Support/Steam`) library layouts, not
+  just Windows — first existing candidate wins.
+- Escaped quotes (`\"`) inside strings are string content, not closers —
+  vanilla division strings contain nested `\"...\"`.
+- `extract`/parser tolerate malformed bytes (`errors="replace"`) instead
+  of aborting with a traceback.
+- Statement scan uses a single running-depth pass (was O(body²) counting).
+- CI: pip cache, concurrency group, read-only permissions.
+
 ## 0.5.1 — Audit fix pass
 
 From the whole-project audit (fresh reviewer, 7 dimensions):

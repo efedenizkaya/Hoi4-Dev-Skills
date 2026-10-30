@@ -73,6 +73,27 @@ def test_cli_missing_documentation_exits_2(capsys, tmp_path):
     assert "documentation" in capsys.readouterr().err
 
 
+def test_steam_candidates_cover_platforms(monkeypatch, tmp_path):
+    """find_game_dir should know Windows, Linux and macOS Steam layouts."""
+    from tools import extract
+
+    candidates = extract._steam_candidates()
+    joined = [str(c) for c in candidates]
+    assert any("Program Files (x86)" in j for j in joined)   # Windows
+    assert any(".steam/steam" in j.replace("\\", "/") for j in joined)  # Linux
+    assert any("Library/Application Support" in j.replace("\\", "/")
+               for j in joined)  # macOS
+
+    # the first existing candidate wins
+    monkeypatch.setattr(
+        extract, "_steam_candidates", lambda: [tmp_path / "fake", tmp_path / "other"]
+    )
+    (tmp_path / "other").mkdir()
+    (tmp_path / "other" / "launcher-settings.json").write_text("{}")
+    (tmp_path / "other" / "documentation").mkdir()
+    assert extract.find_game_dir() == tmp_path / "other"
+
+
 def test_auto_detect_game_dir(monkeypatch, tmp_path):
     # explicit env var wins
     monkeypatch.setenv("HOI4_GAME_DIR", str(FAKE_GAME))
