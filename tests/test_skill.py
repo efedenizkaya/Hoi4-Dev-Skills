@@ -7,6 +7,7 @@ from pathlib import Path
 SKILL_DIR = Path(__file__).resolve().parents[1] / "skills" / "hoi4-modding"
 SKILL_MD = SKILL_DIR / "SKILL.md"
 DOCS = Path(__file__).resolve().parents[1] / "docs"
+ROOT = Path(__file__).resolve().parents[1]
 
 def _frontmatter(text: str) -> dict:
     m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
