@@ -80,3 +80,5 @@ game patch; delete rows that no longer hold.
 | oob-files | Order of battle files in history/units/, referenced by set_oob | game-file history tree | 2026-10-30 |
 | country-tags-file | Tags in common/country_tags/*.txt as TAG = "loc key" | game-file common/country_tags/00_countries.txt | 2026-10-30 |
 | map-csv-risk | map/ CSVs (strategic regions, supply) are high-risk, hard-to-diagnose edits | engine behavior; caution note | 2026-10-30 |
+| unknown-statement-name | Effect-context statement names not in the version's effect list or any scripted definition are flagged (warnings-only, depth-1 scan) | tool (validator rule; name DB from game-doc-derived effects.json/triggers.json) | 2026-10-30 |
+| unknown-focus-reference | has_completed_focus targets must exist in mod or vanilla focus trees (requires game dir) | tool (validator rule) | 2026-10-30 |

@@ -1,0 +1,3 @@
+vanilla_helper = {
+	add_stability = 0.01
+}

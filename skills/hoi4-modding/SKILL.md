@@ -74,7 +74,7 @@ scrapes.
 
 | Lane | When | How |
 |---|---|---|
-| 1. Static lint | any script change | `python tools/validate.py <mod_dir>` — braces/quotes, duplicate IDs, missing loc keys, vanilla overrides |
+| 1. Static lint | any script change | `python tools/validate.py <mod_dir> --data extracted/<version>` — braces/quotes, duplicate IDs, missing loc keys, focus references, effect/trigger name check against the extracted data (with game dir auto-detected; `--data` requires a prior `tools/extract.py` run) |
 | 2. Log triage | after a game run, or when given a crash log | `python tools/error_triage.py logs/error.log --against baseline.log` — only deltas matter |
 | 3. Game run | when lanes 1–2 are insufficient, or for runtime behavior | user launches with `-debug` (Steam launch options), then lane 2 |
 

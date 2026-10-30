@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -320,6 +321,153 @@ def _check_focus_tree(mod_dir: Path, findings: list[Finding]) -> None:
             )
 
 
+# Script block types whose statements are EFFECTS (scripted-GUI and
+# on_action effect bodies use the same grammar).
+_EFFECT_CONTEXT_RE = re.compile(
+    r"\b(?:option|immediate|completion_reward|complete_effect|remove_effect"
+    r"|timeout_effect|on_add|on_remove|on_research_complete|doctrine_effects"
+    r"|hidden_effect|effect)\s*=\s*\{"
+)
+_STATEMENT_RE = re.compile(r"(?m)^\s*([a-z0-9_]+)\s*=")
+# Fields that are structural inside effect contexts, not effect names.
+_EFFECT_CONTEXT_FIELDS = {
+    "name", "trigger", "ai_chance", "limit", "custom_tooltip", "tooltip",
+    "else", "else_if", "text_icon", "id",
+}
+_SCRIPT_GLOB_EFFECT_CONTEXT = [
+    "events/*.txt",
+    "common/scripted_effects/**/*.txt",
+    "common/decisions/**/*.txt",
+    "common/on_actions/**/*.txt",
+    "common/national_focus/**/*.txt",
+    "common/ideas/**/*.txt",
+]
+_HAS_COMPLETED_FOCUS_RE = re.compile(r"\bhas_completed_focus\s*=\s*([\w.\-]+)")
+
+
+_TOP_LEVEL_STMT_RE = re.compile(r"([{}])|^\s*([a-z0-9_]+)\s*=", re.M)
+
+
+def _top_level_names(path: Path) -> set[str]:
+    """Names defined at the top level of a script file (scripted
+    effects/triggers, decision blocks)."""
+    masked = mask_comments_and_strings(_read(path))
+    names: set[str] = set()
+    depth = 0
+    for m in _TOP_LEVEL_STMT_RE.finditer(masked):
+        if m.group(1) == "{":
+            depth += 1
+        elif m.group(1) == "}":
+            depth -= 1
+        elif m.group(2) and depth == 0:
+            names.add(m.group(2))
+    return names
+
+
+def _load_scripted_names(mod_dir: Path) -> set[str]:
+    names: set[str] = set()
+    for pattern in ["common/scripted_effects/**/*.txt",
+                    "common/scripted_triggers/**/*.txt"]:
+        for path in mod_dir.glob(pattern):
+            names |= _top_level_names(path)
+    return names
+
+
+def _check_statement_names(
+    mod_dir: Path, findings: list[Finding],
+    known: set[str], scripted: set[str], game_dir: Path | None = None,
+) -> None:
+    """Warn on lowercase statement names in effect contexts that are in
+    neither the version's effect list nor the mod's scripted effects.
+    Warnings-only: block fields, scope tags (UPPERCASE), aliases (@) and
+    trigger sub-blocks are skipped."""
+    if not known:
+        return
+    for pattern in _SCRIPT_GLOB_EFFECT_CONTEXT:
+        for path in sorted(mod_dir.glob(pattern)):
+            masked = mask_comments_and_strings(_read(path))
+            rel = str(path.relative_to(mod_dir))
+            for block in _EFFECT_CONTEXT_RE.finditer(masked):
+                end = _extract_block(masked, block.end() - 1)
+                body = masked[block.end():end]
+                # cut out trigger/ai_chance sub-blocks (trigger grammar there)
+                cleaned = []
+                pos = 0
+                for sub in re.finditer(r"\b(?:trigger|ai_chance)\s*=\s*\{", body):
+                    sub_end = _extract_block(body, sub.end() - 1)
+                    cleaned.append(body[pos:sub.start()])
+                    # _extract_block returns the index OF the closing brace;
+                    # skip past it or the stray brace corrupts depth counting
+                    pos = max(pos, sub_end + 1)
+                cleaned.append(body[pos:])
+                body = "".join(cleaned)
+                for stmt in _STATEMENT_RE.finditer(body):
+                    # depth 1 only: nested blocks (e.g. the argument schema of
+                    # add_building_construction) have their own field grammars
+                    depth = body.count("{", 0, stmt.start()) - body.count(
+                        "}", 0, stmt.start()
+                    )
+                    if depth > 0:
+                        continue
+                    name = stmt.group(1)
+                    if (
+                        name in known
+                        or name in scripted
+                        or name in _EFFECT_CONTEXT_FIELDS
+                        or name.upper() == name
+                        or name.startswith("@")
+                    ):
+                        continue
+                    findings.append(
+                        Finding(
+                            severity="warning",
+                            rule="unknown-statement-name",
+                            file=rel,
+                            line=masked.count("\n", 0, block.end() + stmt.start()) + 1,
+                            message=(
+                                f"{name}: not an effect in the extracted data "
+                                "for this game version"
+                            ),
+                        )
+                    )
+
+
+def _load_known_names(data_dir: Path | None) -> set[str]:
+    if data_dir is None:
+        return set()
+    known: set[str] = set()
+    for json_name in ("effects.json", "triggers.json"):
+        p = data_dir / json_name
+        if p.is_file():
+            known |= {e["name"] for e in json.loads(p.read_text(encoding="utf-8"))}
+    return known
+
+
+def _check_focus_references(
+    mod_dir: Path, findings: list[Finding], game_dir: Path
+) -> None:
+    """has_completed_focus targets must exist in mod or vanilla trees.
+    Requires the game dir (vanilla ids are legitimate targets)."""
+    known = set(_collect_focuses(mod_dir)) | set(_collect_focuses(game_dir))
+    for path in sorted(mod_dir.glob("**/*.txt")):
+        if not path.is_file():
+            continue
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _HAS_COMPLETED_FOCUS_RE.finditer(masked):
+            token = m.group(1)
+            if token not in known:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="unknown-focus-reference",
+                        file=rel,
+                        line=masked.count("\n", 0, m.start()) + 1,
+                        message=f"{token}: focus id not defined in mod or vanilla trees",
+                    )
+                )
+
+
 def validate_mod(
     mod_dir: Path, data_dir: Path | None = None, game_dir: Path | None = None
 ) -> list[Finding]:
@@ -343,6 +491,14 @@ def validate_mod(
     keys = _load_loc_keys(mod_dir, findings, game_dir)
     _check_loc_refs(mod_dir, keys, findings)
     _check_focus_tree(mod_dir, findings)
+    if data_dir is not None:
+        known = _load_known_names(data_dir)
+        scripted = _load_scripted_names(mod_dir)
+        if game_dir is not None:
+            scripted |= _load_scripted_names(game_dir)
+        _check_statement_names(mod_dir, findings, known, scripted, game_dir)
+    if game_dir is not None:
+        _check_focus_references(mod_dir, findings, game_dir)
     return findings
 
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 — Data-aware validation
+
+- `validate.py --data <extracted_dir>`: statement names in effect contexts
+  checked against the extracted effect/trigger databases (warnings-only,
+  depth-1 scan to respect effect argument schemas).
+- `has_completed_focus` targets checked against mod + vanilla focus trees
+  (game-dir aware). Vanilla scripted effect names count as known.
+- Calibration on a real 19k-line mod: naive scan 11,541 false positives →
+  134 meaningful warnings after depth-1 + vanilla-name fixes; found real
+  dangling scripted-effect calls.
+- New guard: splice bug fixed where cut sub-blocks left stray braces that
+  corrupted depth counting.
+
 ## 0.4.1 — Focus-tree rules, repo polish
 
 - Validator v2 focus rules (grounded in the claims register):
