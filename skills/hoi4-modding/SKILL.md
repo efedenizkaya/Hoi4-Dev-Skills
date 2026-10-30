@@ -98,6 +98,16 @@ Read only what the task needs:
 |---|---|
 | Create/fix events | [references/events.md](references/events.md) |
 | Create/fix focus trees | [references/national-focus.md](references/national-focus.md) |
+| Ideas, national spirits, modifiers | [references/ideas-and-modifiers.md](references/ideas-and-modifiers.md) |
+| Decisions | [references/decisions.md](references/decisions.md) |
+| Characters (leaders, advisors, commanders) | [references/characters.md](references/characters.md) |
+| MIOs / design companies | [references/mio.md](references/mio.md) |
+| Variables, arrays, scripted effects/triggers, on_actions | [references/variables-and-scripting.md](references/variables-and-scripting.md) |
+| Localisation text, keys, commands | [references/localisation.md](references/localisation.md) |
+| Sprites, textures, flags, portraits | [references/gfx-and-assets.md](references/gfx-and-assets.md) |
+| AI behavior and strategy | [references/ai-strategy.md](references/ai-strategy.md) |
+| Technologies and doctrines | [references/tech-tree.md](references/tech-tree.md) |
+| States, country history, tags, map files | [references/map-states-and-history.md](references/map-states-and-history.md) |
 | Set up a mod, .mod files, folders, compatibility | [references/mod-structure.md](references/mod-structure.md) |
 | Debug, crash triage, logs, `-debug` mode | [references/debugging-and-logs.md](references/debugging-and-logs.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |

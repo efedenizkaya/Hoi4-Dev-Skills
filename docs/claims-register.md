@@ -32,3 +32,51 @@ game patch; delete rows that no longer hold.
 | error-log-format | error.log line format incl. optional source group | log (real error.log lines) | 2026-10-30 |
 | var-prefix | `invalid database object ... use var:var_name` means a variable was used without `var:` | log (real error.log lines) | 2026-10-30 |
 | console-list | Focus.AutoComplete / Focus.IgnorePrerequisites / Focus.NoChecks exist | game-doc console_commands_documentation.md | 2026-10-30 |
+| ideas-file-map | Ideas/dynamic modifiers file locations and roles | game-file common/ideas, common/dynamic_modifiers | 2026-10-30 |
+| idea-categories | Categories in common/idea_tags control cost/ledger/type; idea > slot > category override order | game-file common/idea_tags/00_idea.txt (incl. vanilla comment) | 2026-10-30 |
+| idea-body-fields | Idea fields: available, allowed, cancel_if_invalid, modifier, on_add/on_remove | game-file common/ideas/_economic.txt (war_economy) | 2026-10-30 |
+| idea-script-effects | add_ideas/remove_ideas/add_timed_idea/has_idea exist in 1.19.4.1 | tool (extracted effects.json/triggers.json) | 2026-10-30 |
+| dynamic-modifier-syntax | Dynamic modifier definition + add_dynamic_modifier fields incl. variable values and optional scope/days | game-file common/dynamic_modifiers/0_dynamic_modifiers.txt (game's own example) | 2026-10-30 |
+| unknown-modifier-silent | Unknown modifier names are ignored without an error | community-standard Clausewitz behavior; not engine-verified — verify on use | 2026-10-30 |
+| setup-log-idea-counts | setup.log lists per-file idea/category load counts | log (setup.log lines "Ideas loaded ...") | 2026-10-30 |
+| decision-placement | Categories in decisions/categories; decisions flat or category-embedded | game-file common/decisions (fascism_on_the_rise embeds; categories/ flat) | 2026-10-30 |
+| decision-fields | Decision fields: icon, available, visible, activation, cost, days_remove, days_re_enable, fire_only_once, complete_effect, remove_effect, modifier, targeted_modifier, ai_will_do | game-file common/decisions/political_decisions.txt + vanilla patterns | 2026-10-30 |
+| character-files | Characters in common/characters/<TAG>.txt; recruited via history recruit_character | game-file common/characters/ABK.txt, history/countries | 2026-10-30 |
+| character-roles | Role blocks: country_leader, advisor (idea_token), corps_commander, field_marshal, navy_leader, scientist with skill fields | game-file common/characters/GER.txt | 2026-10-30 |
+| portrait-families | Portrait families civilian/army/navy, large required, small optional | game-file common/characters samples | 2026-10-30 |
+| character-scope-rule | Bare character tokens resolve only in countries the character is assigned to; game logs explicit error otherwise | log (error.log "tried to use character ... could not find") | 2026-10-30 |
+| mio-files | MIO folders organizations/policies/ai_bonus_weights with game-shipped _documentation.md | game-file common/military_industrial_organization tree | 2026-10-30 |
+| mio-minimal | MIO fields: allowed (mandatory), visible, available, equipment_type, research_categories, research_bonus, task_capacity, trait/token/parent | game-file organizations/_documentation.md | 2026-10-30 |
+| mio-allowed-at-start | MIO allowed evaluated at game start for every country | game-file organizations/_documentation.md | 2026-10-30 |
+| mio-loc-fallback | Loc/icon fallback chain GFX_TAG_token → GFX_token → GFX_idea_unknown | game-file organizations/_documentation.md | 2026-10-30 |
+| mio-dlc-gate | Vanilla gates every MIO with has_dlc = "Arms Against Tyranny" | game-file organizations (00_DEBUG_organization.txt et al) | 2026-10-30 |
+| script-doc-files | Game ships dynamic_variables/script_concept/script_math/collection docs in documentation/ | game-file documentation/ tree | 2026-10-30 |
+| unset-var-zero | Unset variables read as 0, typos produce no error | engine behavior; verify with log effect on doubt | 2026-10-30 |
+| flags-vs-vars | Flags for boolean state with optional expiry; variables for numbers; arrays per scope with global. prefix | game-doc script docs + vanilla usage | 2026-10-30 |
+| scripted-effect-args | Scripted effects/triggers take no parameters; pass via variables | community-standard engine behavior | 2026-10-30 |
+| on-actions-silent | Misspelled on_actions hooks never fire and log nothing | engine behavior; verify on use | 2026-10-30 |
+| loc-languages | Language folders and _l_<language> suffix requirement | game-file localisation/ tree | 2026-10-30 |
+| loc-file-contract | l_english header, one-space indent, key:version "text", \n, replace/ override dir | game-file vanilla loc files | 2026-10-30 |
+| loc-color-codes | §color ... §! inline color codes | game-file vanilla loc text (germany.60.a.tt) | 2026-10-30 |
+| loc-objects-doc | [Root.GetNameDef], [From.GetLeader] etc.; getters documented in loc_objects_documentation.md | game-doc loc_objects_documentation.md + vanilla loc | 2026-10-30 |
+| loc-variable-syntax | [?var|0] variable display and @token! icons | community-standard; verify on use | 2026-10-30 |
+| scripted-loc | scripted_localisation blocks: name + text{trigger, localisation_key}, first match wins | community-standard; verify with in-game render | 2026-10-30 |
+| image-formats | DDS (DXT) standard for UI/event art, TGA for flags/legacy | game-file gfx/ tree extensions | 2026-10-30 |
+| flag-sizes | Flags need small/medium/full sizes | game-file gfx/flags folder structure | 2026-10-30 |
+| missing-sprite-silent | Missing sprite name renders placeholder without error; missing texture file logs | log (missing entity lines) + engine behavior | 2026-10-30 |
+| gfx-additive | interface/*.gfx files are additive by filename; same-name replaces wholesale | community-standard Clausewitz behavior | 2026-10-30 |
+| ai-strategy-block | ai_strategy block fields: allowed, enable, abort, ai_strategy{type,id,value} | game-file common/ai_strategy/ARG.txt | 2026-10-30 |
+| ai-strategy-types | Type frequency list (role_ratio, unit_ratio, template_prio, alliance, ...) | game-file grep over common/ai_strategy/*.txt | 2026-10-30 |
+| ai-plans-game-rules | Plans gate behavior via is_historical_focus_on and has_game_rule | game-file common/ai_strategy_plans/GER_historical_strategy_plan.txt | 2026-10-30 |
+| ai-debug-logs | ai.log/ai_trace.log record AI activity | log (logs folder listing) | 2026-10-30 |
+| tech-files | Technologies in common/technologies; categories in technology_tags; doctrines in *_doctrines | game-file common tree | 2026-10-30 |
+| tech-fields | Tech fields: enable_equipments, enable_equipment_modules, enable_subunits, path/leads_to_tech, research_cost, start_year, folder position, categories, dependencies | game-file common/technologies/infantry.txt | 2026-10-30 |
+| set-technology-error | Bad tech name in set_technology logs "Invalid tech" with file:line | log (real error.log lines) | 2026-10-30 |
+| doctrine-separate | Doctrines are separate trees, not techs | game-file common/land_doctrines presence | 2026-10-30 |
+| state-file-fields | State fields: id, name, manpower, state_category, history{owner, victory_points, buildings, add_core_of}, provinces, local_supplies | game-file history/states/10-Poland.txt | 2026-10-30 |
+| provinces-from-definition | Province ids come from map/definition.csv; province reassignment ≠ map modding | game-file map/ presence | 2026-10-30 |
+| state-uniqueness | State ids unique; duplicate province ownership is a load error | engine behavior; game.log "Loaded N provinces" as check | 2026-10-30 |
+| country-history-effect-chain | Country history files run as effect chains in country scope; character/tech errors surface with file:line | log (real error.log lines) | 2026-10-30 |
+| oob-files | Order of battle files in history/units/, referenced by set_oob | game-file history tree | 2026-10-30 |
+| country-tags-file | Tags in common/country_tags/*.txt as TAG = "loc key" | game-file common/country_tags/00_countries.txt | 2026-10-30 |
+| map-csv-risk | map/ CSVs (strategic regions, supply) are high-risk, hard-to-diagnose edits | engine behavior; caution note | 2026-10-30 |

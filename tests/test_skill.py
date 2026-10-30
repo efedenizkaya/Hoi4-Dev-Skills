@@ -21,6 +21,13 @@ def _frontmatter(text: str) -> dict:
     return meta
 
 
+def test_every_reference_is_routed():
+    """Each references/*.md must appear in the SKILL.md routing table."""
+    routing = SKILL_MD.read_text(encoding="utf-8")
+    for ref in (SKILL_DIR / "references").glob("*.md"):
+        assert f"references/{ref.name}" in routing, ref.name
+
+
 def test_frontmatter_spec_compliant():
     text = SKILL_MD.read_text(encoding="utf-8")
     meta = _frontmatter(text)

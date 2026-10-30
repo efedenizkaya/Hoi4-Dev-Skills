@@ -40,10 +40,11 @@ skill for Claude Code, Codex, Cursor, Gemini CLI, OpenCode and other agents:
 
 - **Router** (`SKILL.md`): core rules (scope flow, encoding, verification),
   evidence lanes (lint → log triage → game run), and a routing table.
-- **References** (loaded on demand): [events](skills/hoi4-modding/references/events.md),
-  [national focus trees](skills/hoi4-modding/references/national-focus.md),
-  [mod structure](skills/hoi4-modding/references/mod-structure.md),
-  [debugging and logs](skills/hoi4-modding/references/debugging-and-logs.md).
+- **References** (loaded on demand, 14): events, national focus trees,
+  ideas & modifiers, decisions, characters, MIOs, variables & scripting,
+  localisation, gfx & assets, AI strategy, tech tree, map/states/history,
+  mod structure, debugging & logs — see the
+  [skill routing table](skills/hoi4-modding/SKILL.md).
 - **Asset kits**: copy-paste event and decision file sets that pass the
   validator out of the box.
 - **Claims register**: [docs/claims-register.md](docs/claims-register.md) —
