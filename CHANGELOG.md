@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.6.0 — Owner-audit fix pass
+
+The owner ran an independent audit; every factual finding was re-verified
+against the vanilla game files before acting. 11 of 12 P0 findings confirmed
+and fixed; one REJECTED (HOI4 scripted effects have no `$ARG$` parameter
+syntax — that is CK3/Stellaris; vanilla `common/scripted_effects/` contains
+zero `$`).
+
+Content corrections (all now vanilla-sourced in the claims register):
+- Decision `cost` defaults to political power; command-power decisions use
+  `custom_cost_trigger`/`custom_cost_text` (BEL.txt pattern).
+- Focus `cost` is points (define `FOCUS_POINT_DAYS = 7` — one point is a
+  week, not a day); tree selection uses `factor = 0` + per-tag modifiers.
+- Loc icons are `£token` (never `@icon!`); dynamic values `$var$`;
+  language folder is `simp_chinese`; scripted loc roots at `defined_text`.
+- `change_variable` does not exist → `subtract_from_variable`; static
+  modifiers live in `common/modifiers/` (modifier_definitions declares
+  custom types); event files declare namespaces with `add_namespace`.
+- Decision kit rewritten: decisions embedded in the category block
+  (vanilla AFG.txt pattern); event kit declares `add_namespace`.
+
+Tool fixes (audit P1):
+- `duplicate-focus-id` rule added (the game silently keeps one copy).
+- `focus-position-overlap` no longer fires for `relative_position_id`
+  focuses (43 false positives removed on the real mod).
+- Focus prerequisites are vanilla-aware when the game dir is provided.
+- `error_triage --against` now exits 1 on net regressions (CI gate) and
+  reports improvements on a clean current log instead of swallowing them;
+  new classes: `parse-error`, `unknown-modifier`.
+- Event duplicate-id scan is O(n) (was O(n²) per header) and covers
+  `events/**` consistently with the statement-name check.
+
+Honesty engineering (audit P2):
+- Claims register marks `**unverified**` rows explicitly (11) with a
+  reader-facing note; doubled CLAIM markers deduplicated.
+- One rejected audit finding is documented here so it stays rejected.
+
 ## 0.5.2 — Portability and robustness
 
 - `find_game_dir()` knows Linux (`~/.steam/steam`, `~/.local/share/Steam`)

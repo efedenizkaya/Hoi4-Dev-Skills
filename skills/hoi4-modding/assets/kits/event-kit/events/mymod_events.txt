@@ -3,6 +3,11 @@
 # ROOT = country receiving the event.
 ###
 
+add_namespace = {
+	name = mymod
+	icon = GFX_report_event_generic_sign_treaty1
+}
+
 country_event = {
 	id = mymod.1
 	title = mymod.1.t

@@ -27,6 +27,8 @@ CLASSIFICATION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"set_technology: Invalid tech", re.I), "invalid-tech"),
     (re.compile(r"Invalid Scope", re.I), "invalid-scope"),
     (re.compile(r"as scope, but could not find", re.I), "invalid-scope"),
+    (re.compile(r"Unexpected token", re.I), "parse-error"),
+    (re.compile(r"Unknown modifier", re.I), "unknown-modifier"),
     (re.compile(r"does not exist", re.I), "missing-entity"),
     (re.compile(r"localisation|localization", re.I), "loc-error"),
     (re.compile(r"Invalid (?:id|name|key|focus|decision|idea|country tag)", re.I), "invalid-id"),
@@ -109,21 +111,25 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     errors = parse_log(args.log)
-    if not errors:
-        print("no parseable errors found — clean log?")
-        return 0
 
     if args.against:
         baseline = parse_log(args.against)
         delta = diff(baseline, errors)
+        regressions = 0
         print(f"{'class':28s} delta")
         for cls, d in sorted(delta.items(), key=lambda kv: kv[1]):
             print(f"{cls:28s} {d:+d}")
+            regressions += max(d, 0)
         groups = diff_groups(baseline, errors)
         if groups:
             print("\nchanged groups:")
             for (cls, msg), d in sorted(groups.items(), key=lambda kv: kv[1]):
                 print(f"  {d:+d}  [{cls}] {msg[:80]}")
+        # CI/agent gate: any positive delta (new errors) fails the run
+        return 1 if regressions else 0
+
+    if not errors:
+        print("no parseable errors found — clean log?")
         return 0
 
     buckets = classify(errors)

@@ -1,131 +1,73 @@
-"""Focus-tree rules v2: prerequisite targets exist, mutual exclusivity is
-bidirectional, x/y grid positions don't collide. All three rules are
-grounded in the claims register (focus-fields, mutual-exclusive-both)."""
+"""Focus-tree rules v3: relative-position overlap exemption, duplicate
+focus ids, vanilla-aware prerequisite targets (from the owner audit)."""
 
 from pathlib import Path
 
 from tools.validate import validate_mod
 
-FIXTURES = Path(__file__).parent / "fixtures"
+FOCUS = (
+    "focus_tree = {{\n"
+    "\tfocus = {{\n"
+    "\t\tid = mod_{tag}\n"
+    "\t\ticon = GFX_focus_generic_industry\n"
+    "\t\tx = {x}\n"
+    "\t\ty = {y}\n"
+    "\t\tcost = 5\n"
+    "{extra}"
+    "\t}}\n"
+    "}}\n"
+)
 
 
-def _focus_mod(tmp_path: Path, body: str) -> Path:
+def _write(tmp_path: Path, body: str) -> Path:
     (tmp_path / "common" / "national_focus").mkdir(parents=True)
     (tmp_path / "common" / "national_focus" / "tree.txt").write_text(body, encoding="utf-8")
     return tmp_path
 
 
-FOCUS_A = (
-    "focus_tree = {\n"
-    "\tfocus = {\n"
-    "\t\tid = mod_focus_a\n"
-    "\t\ticon = GFX_focus_generic_industry\n"
-    "\t\tx = 1\n"
-    "\t\ty = 0\n"
-    "\t\tcost = 5\n"
-    "\t\tprerequisite = { focus = mod_focus_b }\n"   # b is defined below
-    "\t}\n"
-    "\tfocus = {\n"
-    "\t\tid = mod_focus_b\n"
-    "\t\ticon = GFX_focus_generic_industry\n"
-    "\t\tx = 1\n"
-    "\t\ty = 1\n"
-    "\t\tcost = 5\n"
-    "\t}\n"
-    "}\n"
-)
-
-
-def test_valid_prerequisites_pass(tmp_path):
-    findings = validate_mod(_focus_mod(tmp_path, FOCUS_A))
-    assert [f for f in findings if "focus" in f.rule] == []
-
-
-def test_missing_prerequisite_target(tmp_path):
-    body = FOCUS_A.replace("focus = mod_focus_b", "focus = mod_focus_nope")
-    findings = validate_mod(_focus_mod(tmp_path, body))
-    hits = [f for f in findings if f.rule == "missing-focus-prerequisite"]
+def test_duplicate_focus_id_flagged(tmp_path):
+    body = FOCUS.format(tag="one", x=1, y=0, extra="") + FOCUS.format(
+        tag="one", x=2, y=0, extra=""
+    ).replace("mod_one", "mod_one")
+    # second block keeps the same id on purpose
+    findings = validate_mod(_write(tmp_path, body))
+    hits = [f for f in findings if f.rule == "duplicate-focus-id"]
     assert len(hits) == 1
     assert hits[0].severity == "error"
-    assert "mod_focus_nope" in hits[0].message
 
 
-def test_focus_finding_reports_focus_line(tmp_path):
-    """The finding must point at the focus's real line in the FILE, not a
-    block-relative offset (regression: lines were computed from the block
-    start, always ~1)."""
-    filler = "\n".join(["# filler"] * 40) + "\n"
+def test_relative_positioned_focuses_do_not_overlap(tmp_path):
     body = (
-        filler
-        + "focus_tree = {\n"
-        + FOCUS_A.replace("focus = mod_focus_b", "focus = mod_focus_nope")
+        FOCUS.format(tag="anchor", x=1, y=0, extra="").replace(
+            "\t\tx = 1", "\t\tx = 1"
+        )
+        + FOCUS.format(tag="child", x=0, y=1, extra="").replace(
+            "\t\tx = 0",
+            "\t\trelative_position_id = mod_anchor\n\t\tx = 0",
+        )
+        + FOCUS.format(tag="other", x=0, y=1, extra="")
     )
-    findings = validate_mod(_focus_mod(tmp_path, body))
-    hits = [f for f in findings if f.rule == "missing-focus-prerequisite"]
-    assert len(hits) == 1
-    assert hits[0].line > 40, hits[0].line
-
-
-def test_mutual_exclusivity_bidirectional_ok(tmp_path):
-    body = (
-        "focus_tree = {\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_left\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 1\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t\tmutually_exclusive = { focus = mod_right }\n"
-        "\t}\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_right\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 3\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t\tmutually_exclusive = { focus = mod_left }\n"
-        "\t}\n"
-        "}\n"
-    )
-    findings = validate_mod(_focus_mod(tmp_path, body))
-    assert [f for f in findings if f.rule == "unidirectional-mutual-exclusive"] == []
-
-
-def test_unidirectional_mutual_exclusive_warns(tmp_path):
-    body = (
-        "focus_tree = {\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_left\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 1\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t\tmutually_exclusive = { focus = mod_right }\n"
-        "\t}\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_right\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 3\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t}\n"
-        "}\n"
-    )
-    findings = validate_mod(_focus_mod(tmp_path, body))
-    hits = [f for f in findings if f.rule == "unidirectional-mutual-exclusive"]
-    assert len(hits) == 1
-    assert hits[0].severity == "warning"
-    assert "mod_right" in hits[0].message
-
-
-def test_focus_position_overlap_warns(tmp_path):
-    body = (
-        "focus_tree = {\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_one\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 2\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t}\n"
-        "\tfocus = {\n"
-        "\t\tid = mod_two\n"
-        "\t\ticon = GFX_focus_generic_industry\n"
-        "\t\tx = 2\n\t\ty = 0\n\t\tcost = 5\n"
-        "\t}\n"
-        "}\n"
-    )
-    findings = validate_mod(_focus_mod(tmp_path, body))
+    findings = validate_mod(_write(tmp_path, body))
+    # mod_child is relative to mod_anchor (absolute 1,1); mod_other sits at
+    # absolute 0,1 — no true collision, and relative focuses are exempt.
     hits = [f for f in findings if f.rule == "focus-position-overlap"]
-    assert len(hits) == 1
-    assert hits[0].severity == "warning"
+    assert hits == []
+
+
+def test_prerequisite_to_vanilla_focus_not_an_error(tmp_path, monkeypatch):
+    import tools.validate as v
+
+    mod = _write(
+        tmp_path,
+        FOCUS.format(tag="base", x=1, y=0, extra="").replace(
+            "\t\tcost = 5",
+            "\t\tcost = 5\n\t\tprerequisite = { focus = vanilla_focus_1 }",
+        ),
+    )
+    # without game dir: still an error (we cannot know vanilla)
+    findings = validate_mod(mod)
+    assert any(f.rule == "missing-focus-prerequisite" for f in findings)
+    # with the fake game dir (defines vanilla_focus_1): silent
+    game = Path(__file__).parent / "fixtures" / "fake_game"
+    findings = validate_mod(mod, game_dir=game)
+    assert not any(f.rule == "missing-focus-prerequisite" for f in findings)

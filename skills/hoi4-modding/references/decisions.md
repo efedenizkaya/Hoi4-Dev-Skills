@@ -28,7 +28,7 @@ mymod_boost_morale = {
 	activation = { ... }                # optional: auto-activates when true
 	                                     # (for crisis-style decisions)
 
-	cost = 50                            # command power by default
+	cost = 50                            # POLITICAL POWER by default;
 	days_remove = 14                     # delayed effect phase
 	days_re_enable = 30                  # cooldown after completion
 	fire_only_once = yes                 # one-shot
@@ -52,10 +52,10 @@ CLAIM(decision-fields)
 
 - `available` vs `visible` confusion: invisible decisions that are
   available do nothing visible; the reverse silently misleads the player.
-- `cost` is **command power** unless the decision uses a different cost
-  field (`political_power` cost variants exist for specific decision
-  types) — check the vanilla file nearest to what you are building.
-  CLAIM(decision-cost-command-power)
+- `cost` is **political power** by default. Command-power decisions use
+  `custom_cost_trigger = { command_power > N }` plus
+  `custom_cost_text = <loc key>` instead (vanilla BEL.txt pattern).
+  CLAIM(decision-cost-political-power)
 - One-shot decisions need `fire_only_once = yes`; without it they come back
   after `days_re_enable` (default 0 → immediately repeatable).
 - Effects in `complete_effect` run in **country scope**; targeted decisions

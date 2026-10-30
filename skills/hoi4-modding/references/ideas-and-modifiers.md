@@ -5,8 +5,11 @@ Three related systems, three file locations:
 | System | File | What it is |
 |---|---|---|
 | Ideas / national spirits | `common/ideas/*.txt` | country-level effects: laws, designers, spirits, advisors' tokens |
-| Static modifiers | `common/modifier_definitions/`, referenced from defines/other files | engine-side named modifier bundles |
+| Static modifiers | `common/modifiers/*.txt` (`00_static_modifiers.txt`) | engine-named bundles applied by game features (weather, power balance); names are code-referenced, never remove them |
+| Custom modifier types | `common/modifier_definitions/*.txt` | declarations a custom modifier type needs before static modifiers can use it |
 | Dynamic modifiers | `common/dynamic_modifiers/*.txt` | variable-driven modifier bundles applied via `add_dynamic_modifier` |
+
+CLAIM(static-modifier-paths)
 
 CLAIM(ideas-file-map)
 

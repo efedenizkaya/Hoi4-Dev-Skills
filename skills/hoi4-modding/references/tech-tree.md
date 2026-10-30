@@ -61,7 +61,6 @@ override. CLAIM(set-technology-error)
   the two is the classic "my tech doesn't show" bug. CLAIM(doctrine-separate)
 - `start_year` gates **AI research ordering**, not availability.
   CLAIM(start-year-ai-ordering)
-  CLAIM(start-year-ai-ordering)
 - `x`/`y` in `folder` use the `@year` aliases; a wrong alias (or one
   redefined mid-file) silently misplaces the whole tree.
 - `research_bonus` from MIOs/ideas references `research_categories`

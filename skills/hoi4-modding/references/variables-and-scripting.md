@@ -19,7 +19,7 @@ CLAIM(script-doc-files)
 set_variable = { mymod_strength = 5 }
 add_to_variable = { mymod_strength = 1 }
 multiply_variable = { mymod_strength = 2 }
-change_variable = { mymod_strength = -1 }        # shorthand add
+subtract_from_variable = { mymod_strength = 1 }
 set_temp_variable = { tmp = mymod_strength }     # temp: gone after current effect chain
 ```
 
@@ -65,8 +65,10 @@ mymod_prepare_for_war_effect = {
 mymod_prepare_for_war_effect = yes
 ```
 
-Arguments are passed by setting variables before the call — there is no
-parameter syntax. Prefix names with your mod tag to avoid collisions, and
+Arguments are passed by setting variables before the call — HOI4 has **no
+effect parameter syntax** (`my_effect = { ARG = 5 }` / `$ARG$` is
+CK3/Stellaris, not HOI4; vanilla `common/scripted_effects/` contains no
+`$`). Prefix names with your mod tag to avoid collisions, and
 keep one file per domain. CLAIM(scripted-effect-args)
 
 ## on_actions

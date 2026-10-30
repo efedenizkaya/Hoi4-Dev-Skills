@@ -75,7 +75,7 @@ def test_file_line_churn_still_groups_together():
 def test_cli_runs_on_fixture(capsys):
     rc = main([str(AFTER), "--against", str(BEFORE)])
     out = capsys.readouterr().out
-    assert rc == 0
+    assert rc == 1  # the diff contains net new errors -> CI gate fails
     assert "invalid-tech" in out
     assert "+1" in out
     assert "loc-error" in out and "-1" in out

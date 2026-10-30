@@ -3,7 +3,7 @@
 Files: `localisation/<language>/<anything>_l_<language>.yml` — the
 `_l_<language>` suffix is what registers the file. Languages: `english`,
 `german`, `french`, `spanish`, `russian`, `polish`, `braz_por`, `japanese`,
-`simplified_chinese` (+ `replace/` for vanilla-key overrides).
+`simp_chinese` (+ `replace/` for vanilla-key overrides).
 
 CLAIM(loc-languages)
 
@@ -38,15 +38,19 @@ From vanilla text — the common set:
   `documentation/loc_objects_documentation.md` (Country, State, Character,
   UnitLeader, Faction, …). Use those names, do not invent getters.
   CLAIM(loc-objects-doc)
-- Variables: `[?var_name|0]` (number formatting after `|`), icons:
-  `@icon_token!` from the interface icon sheets. CLAIM(loc-variable-syntax)
+- Icons: `£token` from the interface icon sheets, optional width
+  `£resources_strip|5` — NOT `@icon!` (that is another Paradox game).
+  CLAIM(loc-icon-syntax)
+- Dynamic values: `$variable$` renders a variable/scripted value
+  (vanilla achievements loc: `$upgrade_psycho_warfare$`).
+  CLAIM(loc-dynamic-values)
 
 ## Scripted localisation
 
 `common/scripted_localisation/*.txt` — computed text:
 
 ```txt
-scripted_loc_mymod = {
+defined_text = {
 	name = scripted_loc_mymod_key
 	text = {
 		trigger = { has_war = yes }

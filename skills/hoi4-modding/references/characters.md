@@ -76,7 +76,6 @@ CLAIM(character-roles)
   `cannot be assigned to X as it is already assigned to Y` — give the
   character two entries or use `add_corps_commander_role` with care.
   CLAIM(character-already-assigned)
-  CLAIM(character-already-assigned)
 - Missing `idea_token` on an advisor = invisible in the ledger.
 
 ## Verification steps

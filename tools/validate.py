@@ -145,8 +145,14 @@ def _check_duplicate_event_ids(
     for path in sorted(mod_dir.glob("events/**/*.txt")):
         text = _read(path)
         masked = mask_comments_and_strings(text)
+        # incremental brace depth — _brace_depth_at per header would be O(n^2)
+        # on thousands-of-events files
+        depth = 0
+        last = 0
         for m in _EVENT_HEADER_RE.finditer(masked):
-            if _brace_depth_at(masked, m.start()) > 0:
+            depth += masked.count("{", last, m.start()) - masked.count("}", last, m.start())
+            last = m.start()
+            if depth > 0:
                 # inside another block: this is the `country_event` FIRING
                 # effect (e.g. within an option), not an event definition.
                 continue
@@ -263,13 +269,17 @@ def _extract_block(text: str, open_brace: int) -> int:
     return len(text)
 
 
-def _collect_focuses(mod_dir: Path) -> dict[str, dict]:
-    """Scan common/national_focus/*.txt for focus definitions.
+def _collect_focuses(
+    mod_dir: Path, findings: list[Finding] | None = None
+) -> dict[str, dict]:
+    """Scan common/national_focus/**/*.txt for focus definitions.
 
-    Returns id -> {x, y, me: set(ids), prereq: set(ids), file, line}.
+    Returns id -> {x, y, relative: bool, me, prereq, file, line}.
+    Duplicate ids produce a `duplicate-focus-id` error when `findings` is
+    given (the game silently keeps one, so this is easy to miss).
     """
     focuses: dict[str, dict] = {}
-    for path in sorted(mod_dir.glob("common/national_focus/*.txt")):
+    for path in sorted(mod_dir.glob("common/national_focus/**/*.txt")):
         masked = mask_comments_and_strings(_read(path))
         rel = str(path.relative_to(mod_dir))
         for m in _FOCUS_DEF_RE.finditer(masked):
@@ -280,9 +290,10 @@ def _collect_focuses(mod_dir: Path) -> dict[str, dict]:
                 continue
             fid = id_m.group(1)
             pos = dict(_FOCUS_POS_RE.findall(body))
-            focuses[fid] = {
+            entry = {
                 "x": pos.get("x"),
                 "y": pos.get("y"),
+                "relative": "relative_position_id" in body,
                 "me": set(_FOCUS_TARGET_RE.findall(
                     " ".join(_FOCUS_ME_RE.findall(body)))),
                 "prereq": set(_FOCUS_TARGET_RE.findall(
@@ -290,16 +301,36 @@ def _collect_focuses(mod_dir: Path) -> dict[str, dict]:
                 "file": rel,
                 "line": masked.count("\n", 0, m.end() + id_m.start()) + 1,
             }
+            if fid in focuses and findings is not None:
+                findings.append(
+                    Finding(
+                        severity="error",
+                        rule="duplicate-focus-id",
+                        file=rel,
+                        line=entry["line"],
+                        message=(
+                            f"{fid}: focus id already defined at "
+                            f"{focuses[fid]['file']}:{focuses[fid]['line']}"
+                        ),
+                    )
+                )
+            focuses[fid] = entry
     return focuses
 
 
-def _check_focus_tree(mod_dir: Path, findings: list[Finding]) -> None:
-    focuses = _collect_focuses(mod_dir)
+def _check_focus_tree(
+    mod_dir: Path, findings: list[Finding], game_dir: Path | None = None
+) -> None:
+    focuses = _collect_focuses(mod_dir, findings)
     if not focuses:
         return
+    # vanilla focuses are legitimate prerequisite/exclusivity targets
+    known = set(focuses)
+    if game_dir is not None:
+        known |= set(_collect_focuses(game_dir))
     for fid, f in focuses.items():
         for target in sorted(f["prereq"]):
-            if target not in focuses:
+            if target not in known:
                 findings.append(
                     Finding(
                         severity="error",
@@ -310,7 +341,7 @@ def _check_focus_tree(mod_dir: Path, findings: list[Finding]) -> None:
                     )
                 )
         for target in sorted(f["me"]):
-            if target in focuses and fid not in focuses[target]["me"]:
+            if target in known and fid not in focuses.get(target, {}).get("me", set()):
                 findings.append(
                     Finding(
                         severity="warning",
@@ -326,7 +357,9 @@ def _check_focus_tree(mod_dir: Path, findings: list[Finding]) -> None:
                 )
     seen_pos: dict[tuple[str, str], list[str]] = {}
     for fid, f in focuses.items():
-        if f["x"] is not None and f["y"] is not None:
+        # focuses positioned relative to another focus share no absolute grid
+        # cell with a same-offset sibling under a different anchor
+        if f["x"] is not None and f["y"] is not None and not f["relative"]:
             seen_pos.setdefault((f["x"], f["y"]), []).append(fid)
     for (x, y), ids in sorted(seen_pos.items()):
         if len(ids) > 1:
@@ -356,7 +389,7 @@ _EFFECT_CONTEXT_FIELDS = {
     "else", "else_if", "text_icon", "id",
 }
 _SCRIPT_GLOB_EFFECT_CONTEXT = [
-    "events/*.txt",
+    "events/**/*.txt",
     "common/scripted_effects/**/*.txt",
     "common/decisions/**/*.txt",
     "common/on_actions/**/*.txt",
@@ -513,7 +546,7 @@ def validate_mod(
     _check_duplicate_event_ids(mod_dir, findings, game_event_ids)
     keys = _load_loc_keys(mod_dir, findings, game_dir)
     _check_loc_refs(mod_dir, keys, findings)
-    _check_focus_tree(mod_dir, findings)
+    _check_focus_tree(mod_dir, findings, game_dir)
     if data_dir is not None:
         known = _load_known_names(data_dir)
         scripted = _load_scripted_names(mod_dir)
