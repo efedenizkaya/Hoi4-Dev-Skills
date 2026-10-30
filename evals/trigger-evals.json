@@ -1,0 +1,47 @@
+[
+  {
+    "query": "my focus tree disappeared after i added one focus, can you check the braces and error.log?",
+    "should_trigger": true,
+    "reason": "HOI4 focus-tree debugging with brace/log verification."
+  },
+  {
+    "query": "event says no event with ID abc_reform.4 when my decision fires, what did i break?",
+    "should_trigger": true,
+    "reason": "Namespace/ID collision debugging — find.py + duplicate rules."
+  },
+  {
+    "query": "the game shows ABC_start_reform instead of the focus name, fix the loc",
+    "should_trigger": true,
+    "reason": "Raw loc key visible — localisation reference + validator."
+  },
+  {
+    "query": "make a PER focus branch that adds a national spirit and some political power",
+    "should_trigger": true,
+    "reason": "New HOI4 content creation — national-focus reference + kit."
+  },
+  {
+    "query": "why does my decision never show up in the decisions tab?",
+    "should_trigger": true,
+    "reason": "Decision visibility/availability debugging."
+  },
+  {
+    "query": "error.log says invalid database object for effect/trigger schwerpunk, what does that mean?",
+    "should_trigger": true,
+    "reason": "var: misuse class — variables reference + triage."
+  },
+  {
+    "query": "write me a Python FastAPI endpoint with JWT auth",
+    "should_trigger": false,
+    "reason": "No HOI4 modding content."
+  },
+  {
+    "query": "who won the winter war?",
+    "should_trigger": false,
+    "reason": "History question, not modding."
+  },
+  {
+    "query": "what was the patch 1.18 changelog for the AI?",
+    "should_trigger": false,
+    "reason": "Game knowledge question, not a modding task."
+  }
+]

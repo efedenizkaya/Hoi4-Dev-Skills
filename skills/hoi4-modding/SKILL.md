@@ -145,6 +145,9 @@ Read only what the task needs:
 | Control flow: if/limit, random_list, scope iteration, event targets | [references/control-flow.md](references/control-flow.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
+| Find where an id is defined (event/focus/idea/decision/character, mod or vanilla) | `scripts/find.py <pattern> --mod <dir>` (add `--game-dir` for vanilla coverage, `--duplicates` for collision audit) |
+| New HOI4 patch: what changed for modders | `scripts/version_diff.py <old_extracted> <new_extracted>` — added/removed effects, triggers, modifiers |
+| Start a new MOD from scratch | `python tools/new_mod.py "Mod Title"` from the repo checkout (skeleton + descriptors + BOM loc) |
 | Check whether a claim is sourced | `docs/claims-register.md` in the hoi4-dev-skills repository checkout (not bundled with the installed skill) |
 
 Effect/trigger/modifier lookups: use `extracted/<version>/*.json` (from

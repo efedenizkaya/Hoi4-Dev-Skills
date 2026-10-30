@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.8.0 — Competitive gap pass: searcher, migration, adapters
+
+Gap analysis against eightman999, postigodev and the Agensi/Fostanico
+package — everything adopted is re-implemented in this repo's idiom
+(tools with tests + verification built in), nothing copied:
+
+- `scripts/find.py`: identifier indexer — events, focuses, ideas,
+  decisions, categories, scripted effects/triggers, characters, across
+  mod + vanilla. `find <pattern>`, `--duplicates`, `--json`, exit codes.
+  (Replaces six "searcher" skills and Fostanico's identifier-tracing MCP
+  tool with one tested CLI.)
+- `scripts/version_diff.py`: patch migration — added/removed
+  effects/triggers/modifiers between two extracted versions. Feeds the
+  `game update` workflow.
+- `tools/new_mod.py` now routed in the skill; `new_mod` listed alongside.
+- `adapters/` (Cursor `.mdc`, Cline rules) + repo-root `AGENTS.md` and
+  `CLAUDE.md`.
+- `prompts/`: four task playbooks (event chain, focus branch, error-log
+  debug, mod review) — each ends in a mandatory verification step.
+- `evals/trigger-evals.json`: skill-trigger regression data.
+- `SECURITY.md`: no network, no auto-download, no game assets, no
+  prompt-injection acceptance.
+
 ## 0.7.0 — Third-audit pass: distribution, scaffolding, broken cases
 
 From the third independent audit (three-project competitive review):
