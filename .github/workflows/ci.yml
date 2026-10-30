@@ -32,8 +32,6 @@ jobs:
         with:
           python-version: "3.12"
       # Agent Skills reference validator (frontmatter conventions)
-      - run: pipx install skills-ref || pip install skills-ref
+      - run: pip install skills-ref
       - name: Validate skill frontmatter
-        run: |
-          skills-ref validate skills/hoi4-modding 2>/dev/null \
-            || python -c "print('skills-ref unavailable; structural lint covered by pytest')"
+        run: python -m skills_ref.cli validate skills/hoi4-modding
