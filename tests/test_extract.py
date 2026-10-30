@@ -86,7 +86,9 @@ def test_steam_candidates_cover_platforms(monkeypatch, tmp_path):
 
     # the first existing candidate wins
     monkeypatch.setattr(
-        extract, "_steam_candidates", lambda: [tmp_path / "fake", tmp_path / "other"]
+        extract._impl_module,
+        "_steam_candidates",
+        lambda: [tmp_path / "fake", tmp_path / "other"],
     )
     (tmp_path / "other").mkdir()
     (tmp_path / "other" / "launcher-settings.json").write_text("{}")

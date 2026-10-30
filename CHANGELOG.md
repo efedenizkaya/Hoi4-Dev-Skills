@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.7.0 — Third-audit pass: distribution, scaffolding, broken cases
+
+From the third independent audit (three-project competitive review):
+
+- **Tools now ship inside the skill** (`skills/hoi4-modding/scripts/`) —
+  an installed skill can validate mods standalone. Repo-root `tools/`
+  became thin compatibility wrappers (imports and CLI keep working).
+- **`tools/new_mod.py` scaffold**: descriptor pair, folder tree, BOM'd
+  localisation, an event file with `add_namespace` declared — output
+  passes the validator out of the box (mutation-tested).
+- **Broken-case regression suite** (`tests/fixtures/broken/`): five
+  broken minis with expected validator output, plus one documented gap
+  (decision placement is not caught yet) that fails loudly when a rule
+  starts catching it.
+- **`missing-add-namespace` validator rule** (vanilla census: 128/128
+  event files declare it) and **`--json`** output for agent/CI reads.
+- **SKILL.md working agreement**: first-use discovery, review-vs-modify
+  authority boundary, finding classification (definite/probable/
+  heuristic/intentional), proportionate verification, response template.
+- New references: `symptoms.md` (symptom-first troubleshooting) and
+  `control-flow.md` (if/limit, iteration families, random_list, event
+  targets, loops) — grounded in the game's script docs and vanilla usage.
+  LIOS/FIOS + alphabetical load order documented in mod-structure.md.
+- Register honesty: `[unverified]` tags now appear in reference text at
+  the 9 unverified claim sites (93 claims total).
+- Audit items REJECTED with evidence: `common/static_modifiers/` folder
+  does not exist (static modifiers live in `common/modifiers/`);
+  `>=`/`<=` comparison operators are not used anywhere in vanilla
+  common/ scripts (no rule added).
+
 ## 0.6.0 — Owner-audit fix pass
 
 The owner ran an independent audit; every factual finding was re-verified

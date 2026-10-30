@@ -96,7 +96,7 @@ Valid modifier names for the current patch are in
 `<Building>_output` are patterns, e.g. `arms_factory_output`). Picking a
 name from an older patch is a classic silent-no-op bug: the game ignores
 unknown modifiers **without an error** — validate the exact name exists in
-the scope you apply it to. CLAIM(unknown-modifier-silent)
+the scope you apply it to. CLAIM(unknown-modifier-silent) `[unverified]`
 
 ## Verification steps
 

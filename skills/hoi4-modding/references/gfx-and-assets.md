@@ -52,7 +52,7 @@ list them via `grep GFX_report_event <game>/interface/eventpictures.gfx`.
 `interface/` files are additive: your `mymod_gfx.gfx` adds sprites; a file
 with the same name as a vanilla one replaces it wholesale (see
 [mod-structure.md](mod-structure.md)). Font/`fonts.gfx` overrides are the
-usual way to change fonts. CLAIM(gfx-additive)
+usual way to change fonts. CLAIM(gfx-additive) `[unverified]`
 
 ## Verification steps
 

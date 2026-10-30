@@ -1,16 +1,11 @@
 ###
-# Decision kit — replace `mymod` with your mod namespace everywhere.
-# Decisions live INSIDE their category block (vanilla pattern, e.g.
-# common/decisions/AFG.txt).
+# Decision kit — decisions live in common/decisions/, re-opening the
+# category block (vanilla pattern, e.g. common/decisions/AFG.txt).
+# The category DEFINITION itself lives in common/decisions/categories/.
+# Replace `mymod` everywhere. `cost` is political power by default.
 ###
 
 mymod_category = {
-	icon = generic_political_actions
-
-	visible = {
-		always = yes
-	}
-
 	mymod_boost_morale = {
 		icon = generic_national_unity
 

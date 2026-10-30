@@ -102,3 +102,9 @@ game patch; delete rows that no longer hold.
 | scripted-effect-no-params | HOI4 scripted effects have no parameter syntax ($ARG$ is CK3/Stellaris) | game-file grep: zero $ in vanilla common/scripted_effects | 2026-10-31 |
 | focus-cost-weeks | Focus cost unit is points; define FOCUS_POINT_DAYS = 7 (1 point = 1 week) | game-file common/defines/00_defines.lua (FOCUS_POINT_DAYS = 7) | 2026-10-31 |
 | focus-tree-selection | Standard tree selection: country factor = 0 + modifier add per tag; tree-level default flag | game-file vanilla national_focus (poland.txt factor = 0; germany.txt default = no) | 2026-10-31 |
+| if-limit | if/else_if take their condition in a limit TRIGGER block; effects go outside it | game-doc script_concept_documentation.md (control flow statements take limit blocks) | 2026-10-31 |
+| iteration-families | every_/random_ are effects; any_ are triggers used in limit blocks | game-file vanilla events + extracted effects/triggers JSON split | 2026-10-31 |
+| event-targets | save_event_target_as (local) / save_global_event_target_as (persistent, must be cleared) | game-file vanilla events (BBA_Switzerland.txt et al) | 2026-10-31 |
+| loops | for_each_loop/while_loop exist; wrong limit freezes the game | game-doc script_concept_documentation.md (collection iterators); verify exact fields per patch | 2026-10-31 |
+| alphabetical-load-order | common/ files load in alphabetical filename order (00_/zz_ prefixes control it) | **unverified** (community knowledge) — verify with a load-order experiment | 2026-10-31 |
+| missing-add-namespace | Every vanilla event file declares add_namespace (128/128); a mod event file without one gets a validator warning | tool (validator rule; vanilla census 128/128) | 2026-10-31 |

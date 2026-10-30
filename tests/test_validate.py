@@ -259,6 +259,39 @@ def test_bad_game_dir_warns_on_stderr(capsys, tmp_path):
     assert "--game-dir" in captured.err
 
 
+def test_event_file_without_add_namespace_warns(tmp_path):
+    """All 128 vanilla event files declare add_namespace; a mod file that
+    does not is warned about (short form `add_namespace = NAME` counts)."""
+    (tmp_path / "events").mkdir()
+    (tmp_path / "events" / "declared.txt").write_text(
+        'add_namespace = mymod\ncountry_event = {\n\tid = mymod.1\n}\n',
+        encoding="utf-8",
+    )
+    (tmp_path / "events" / "undeclared.txt").write_text(
+        'country_event = {\n\tid = other.1\n}\n',
+        encoding="utf-8",
+    )
+    findings = validate_mod(tmp_path)
+    hits = _find(findings, "missing-add-namespace")
+    assert len(hits) == 1
+    assert "undeclared.txt" in hits[0].file
+    assert hits[0].severity == "warning"
+
+
+def test_validate_json_output(capsys, tmp_path):
+    """--json prints a machine-readable finding list, same exit code."""
+    from tools.validate import main
+
+    rc = main(["--json", str(MINI_MOD)])
+    import json
+
+    out = capsys.readouterr().out
+    findings = json.loads(out)
+    assert isinstance(findings, list)
+    assert {"rule", "severity", "file", "message"} <= set(findings[0])
+    assert rc == 1  # mini_mod has real errors
+
+
 def test_exit_code_error(capsys):
     from tools.validate import main
 

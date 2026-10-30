@@ -1,0 +1,4 @@
+add_namespace = mymod
+country_event = {
+	id = mymod.1
+}

@@ -74,7 +74,7 @@ CLAIM(focus-fields)
 `ai_will_do` unset behaves like a low default weight (verify exact value
 against vanilla trees before relying on it). Use `modifier = { factor = ... }`
 blocks inside for conditions. Weights are relative within the same branch
-layer. CLAIM(ai-will-do-default)
+layer. CLAIM(ai-will-do-default) `[unverified]`
 
 ## Worked example
 

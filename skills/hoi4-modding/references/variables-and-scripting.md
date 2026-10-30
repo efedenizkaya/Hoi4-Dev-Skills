@@ -69,7 +69,7 @@ Arguments are passed by setting variables before the call — HOI4 has **no
 effect parameter syntax** (`my_effect = { ARG = 5 }` / `$ARG$` is
 CK3/Stellaris, not HOI4; vanilla `common/scripted_effects/` contains no
 `$`). Prefix names with your mod tag to avoid collisions, and
-keep one file per domain. CLAIM(scripted-effect-args)
+keep one file per domain. CLAIM(scripted-effect-args) `[unverified]`
 
 ## on_actions
 

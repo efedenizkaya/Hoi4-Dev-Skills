@@ -1,0 +1,5 @@
+{
+ "expect_rules": [],
+ "expect_absent_rules": [],
+ "uncaught": "decision-placement rule not implemented yet \u2014 see CHANGELOG 0.7.0"
+}

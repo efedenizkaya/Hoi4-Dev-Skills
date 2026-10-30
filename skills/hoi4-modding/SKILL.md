@@ -14,8 +14,8 @@ description: >
   non-modding HOI4 questions (strategy, lore).
 license: MIT
 compatibility: >
-  Works best with the local tools in this repository (tools/extract.py,
-  tools/validate.py, tools/error_triage.py — Python 3.10+). Reference data is
+  Works best with the local tools in this repository (scripts/extract.py,
+  scripts/validate.py, scripts/error_triage.py — Python 3.10+). Reference data is
   extracted from the user's own game install; without it the skill still
   works from embedded knowledge but marks exhaustive lists as potentially
   stale.
@@ -37,9 +37,9 @@ scrapes.
 > current data instead of trusting it:
 >
 > ```bash
-> python tools/extract.py        # game docs -> extracted/<version>/*.json
-> python tools/validate.py <mod_dir>
-> python tools/error_triage.py <log> --against <baseline>
+> python scripts/extract.py        # game docs -> extracted/<version>/*.json
+> python scripts/validate.py <mod_dir>
+> python scripts/error_triage.py <log> --against <baseline>
 > ```
 
 ## Core rules (always apply)
@@ -49,7 +49,7 @@ scrapes.
 2. **Check the name against the game, not memory.** Effect/trigger/modifier
    availability changes every patch. When unsure a name exists in the
    user's version, check `extracted/<version>/{effects,triggers,modifiers}.json`
-   (create it with `tools/extract.py` if missing) and say so when you could
+   (create it with `scripts/extract.py` if missing) and say so when you could
    not check.
 3. **Scope flow is the #1 source of bugs.** Know where you are:
    - `ROOT` = the scope the effect/trigger block was entered from (event
@@ -70,12 +70,43 @@ scrapes.
 6. **Never commit game-derived data** into a mod repo or this one; extract
    it locally.
 
+## Working agreement (how to behave on any task)
+
+**First-use discovery — before editing anything in an unfamiliar mod:**
+1. Read the `.mod` descriptor and `descriptor.mod` (name, tags,
+   supported_version, replace_path).
+2. Note the id prefix/namespace convention already in use (grep a few ids).
+3. Check the localisation layout (languages present, BOM state).
+4. Identify load-order risks (does the mod replace whole vanilla files?).
+Report these four, then ask before changing anything. Do not scan the whole
+mod for a small request — proportionate verification only.
+
+**Authority boundary:** a request to review, explain, or diagnose
+authorizes READ-ONLY investigation. Enter the fix lane only when asked to
+change the mod. Never delete or rename files without explicit approval.
+
+**Finding classification — label every finding as one of:**
+- `definite` — tool-verified or game-log-backed (error.log class, validator
+  error)
+- `probable` — matches a known failure pattern, not yet run against the
+  game
+- `heuristic` — experience-based suspicion (label these honestly)
+- `intentional` — looks wrong but is a deliberate override (e.g. a
+  vanilla-event redefinition; validator already downgrades these)
+
+**Response template for changes:**
+1. Files changed, with one line each on why.
+2. Identifiers added (event/focus/idea ids, loc keys) — so the user can
+   spot collisions.
+3. Verification performed: which lane, what it showed — and say explicitly
+   whether evidence is static-only or game-verified.
+
 ## Evidence lanes (cheapest lane that answers the request)
 
 | Lane | When | How |
 |---|---|---|
-| 1. Static lint | any script change | `python tools/validate.py <mod_dir> --data extracted/<version>` — braces/quotes, duplicate IDs, missing loc keys, focus references, effect/trigger name check against the extracted data (with game dir auto-detected; `--data` requires a prior `tools/extract.py` run) |
-| 2. Log triage | after a game run, or when given a crash log | `python tools/error_triage.py logs/error.log --against baseline.log` — only deltas matter |
+| 1. Static lint | any script change | `python scripts/validate.py <mod_dir> --data extracted/<version>` — braces/quotes, duplicate IDs, missing loc keys, focus references, effect/trigger name check against the extracted data (with game dir auto-detected; `--data` requires a prior `scripts/extract.py` run) |
+| 2. Log triage | after a game run, or when given a crash log | `python scripts/error_triage.py logs/error.log --against baseline.log` — only deltas matter |
 | 3. Game run | when lanes 1–2 are insufficient, or for runtime behavior | user launches with `-debug` (Steam launch options), then lane 2 |
 
 For a one-symptom question read only the matching reference section; do not
@@ -110,12 +141,14 @@ Read only what the task needs:
 | States, country history, tags, map files | [references/map-states-and-history.md](references/map-states-and-history.md) |
 | Set up a mod, .mod files, folders, compatibility | [references/mod-structure.md](references/mod-structure.md) |
 | Debug, crash triage, logs, `-debug` mode | [references/debugging-and-logs.md](references/debugging-and-logs.md) |
+| Player-visible symptom, cause unknown ("X shows raw", "tree missing", "icon ?") | [references/symptoms.md](references/symptoms.md) |
+| Control flow: if/limit, random_list, scope iteration, event targets | [references/control-flow.md](references/control-flow.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
 | Check whether a claim is sourced | `docs/claims-register.md` in the hoi4-dev-skills repository checkout (not bundled with the installed skill) |
 
 Effect/trigger/modifier lookups: use `extracted/<version>/*.json` (from
-`tools/extract.py`) as the authoritative per-version list. When it does not
+`scripts/extract.py`) as the authoritative per-version list. When it does not
 exist, offer to run the extractor before answering from memory.
 
 ## Known gaps (honesty)
@@ -127,6 +160,6 @@ exist, offer to run the extractor before answering from memory.
   never simulate that evidence.
 - This skill ships no tools itself; the verification commands live in the
   hoi4-dev-skills repository checkout and are run as
-  `python tools/validate.py …` from that repo root. When the checkout is
+  `python scripts/validate.py …` from that repo root. When the checkout is
   not available, say so and fall back to embedded knowledge + the game's
   own `-debug` error.log.
