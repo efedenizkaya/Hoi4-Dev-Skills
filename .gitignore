@@ -13,3 +13,6 @@ extracted/
 # OS / editor
 Thumbs.db
 .DS_Store
+
+# Internal working docs (never publish)
+docs/superpowers/
