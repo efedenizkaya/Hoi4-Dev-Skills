@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.14.0 — Peace conference + small systems
+
+- `references/peace-conference.md`: the FROM/FROM.FROM/FROM.FROM.FROM
+  scope contract, multiplied cost modifiers (game doc advises 0.4-3.0),
+  pc_* live-conference triggers — grounded in the game's own
+  `cost_modifiers/_documentation.md`.
+- `references/small-systems.md`: game rules (self-documented format),
+  ideologies (family vs sub-ideology), buildings (modifier scope split,
+  enable_for_controllers).
+- Coverage map: peace_conference, buildings, game_rules, ideologies move
+  to covered. Remaining uncovered: intelligence_agencies, names,
+  autonomous_states, opinion_modifiers, wargoals, occupation_laws,
+  medals, continuous_focus, combat_tactics, terrain, map_modes,
+  difficulty_settings, defines.
+- Register 134 claims; 22 references.
+
 ## 0.13.0 — Core references deepened to production depth
 
 Goal: an AI can write complete, correct code for the five core systems

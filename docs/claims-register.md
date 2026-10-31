@@ -141,3 +141,11 @@ game patch; delete rows that no longer hold.
 | loc-display-traps | GetName vs GetNameDef (definite form) distinction; character access via GetLeader | game-file vanilla loc usage | 2026-10-31 |
 | sprite-census | SpriteType fields: name/texturefile plus noOfFrames, effectFile, 11-field animation family | game-file interface/*.gfx census (8951 sprites) | 2026-10-31 |
 | sprite-strips | noOfFrames strips pair with £token|frame in loc; whole-strip display = frame/frames mismatch | game-file goals.gfx noOfFrames + £resources_strip|5 usage | 2026-10-31 |
+| pc-files | peace_conference layout: categories/, cost_modifiers/, ai_peace/; actions are engine-defined | game-file common/peace_conference tree | 2026-10-31 |
+| pc-scope-contract | ROOT=negotiator, FROM=taker, FROM.FROM=giver, FROM.FROM.FROM=state | game-file cost_modifiers/_documentation.md | 2026-10-31 |
+| pc-multiplied-costs | Active cost modifiers multiply together; doc advises values near 1.0 (0.4-3.0), cost_multiplier > 0 | game-file cost_modifiers/_documentation.md | 2026-10-31 |
+| pc-triggers-live | Conference-time changes need pc_* triggers; normal triggers read pre/post-conference state | game-file cost_modifiers/_documentation.md | 2026-10-31 |
+| game-rules-format | Game rule format (name/desc/group/option/default/allow_achievements); first option defaults | game-file common/game_rules/00_game_rules.txt header | 2026-10-31 |
+| ideology-types | has_government compares the ideology FAMILY; types are sub-ideologies | game-file common/ideologies/00_ideologies.txt structure | 2026-10-31 |
+| buildings-fields | Building fields: show_on_map, base_cost(_conversion), province_max, level_cap, icon_frame | game-file common/buildings/00_buildings.txt (arms_factory) | 2026-10-31 |
+| buildings-modifier-split | country_modifiers vs state_modifiers split; enable_for_controllers restricts by controller | game-file common/buildings/00_buildings.txt header comments | 2026-10-31 |

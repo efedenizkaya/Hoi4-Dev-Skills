@@ -25,6 +25,8 @@ so contributors can pick work and users can check before trusting.
 | `bop` (Balance of Power) | [balance-of-power.md](../skills/hoi4-modding/references/balance-of-power.md) |
 | `raids` | [raids.md](../skills/hoi4-modding/references/raids.md) |
 | `operations` | [operations.md](../skills/hoi4-modding/references/operations.md) |
+| `peace_conference` (35 files) | [peace-conference.md](../skills/hoi4-modding/references/peace-conference.md) |
+| `game_rules`, `ideologies`, `buildings` | [small-systems.md](../skills/hoi4-modding/references/small-systems.md) |
 | `.mod` descriptors, load order, overrides | [mod-structure.md](../skills/hoi4-modding/references/mod-structure.md) |
 | debugging, `-debug`, logs | [debugging-and-logs.md](../skills/hoi4-modding/references/debugging-and-logs.md) |
 | control flow, iteration, event targets | [control-flow.md](../skills/hoi4-modding/references/control-flow.md) |
@@ -40,14 +42,12 @@ so contributors can pick work and users can check before trusting.
 
 | Files | System | Notes |
 |---|---|---|
-| 35 | `peace_conference` | complex, rarely modded by beginners |
 
 
 
 | 6 | `abilities` | unit leader abilities |
-| 2 | `buildings` | small; commonly modded |
 | 2 | `bookmarks` | 1936 start bookmarks |
-| 1 each | `game_rules`, `ideologies`, `intelligence_agencies`, `names`, `autonomous_states`, `opinion_modifiers`, `wargoals`, `occupation_laws`, `medals`, `continuous_focus`, `combat_tactics.txt`, `terrain`, `map_modes`, `difficulty_settings`, `defines` | mostly single-file systems |
+| 1 each | `intelligence_agencies`, `names`, `autonomous_states`, `opinion_modifiers`, `wargoals`, `occupation_laws`, `medals`, `continuous_focus`, `combat_tactics.txt`, `terrain`, `map_modes`, `difficulty_settings`, `defines` | mostly single-file systems |
 
 Plus non-`common` surfaces: `map/` modding (provinces, terrain, supply),
 `gfx/` pipelines, `sound/`/`music/`, `tutorial/` — out of scope for now,

@@ -148,6 +148,8 @@ Read only what the task needs:
 | Balance of Power (BoP) | [references/balance-of-power.md](references/balance-of-power.md) |
 | Raids (air/naval/land strikes) | [references/raids.md](references/raids.md) |
 | Intelligence agency operations | [references/operations.md](references/operations.md) |
+| Peace conference (categories, cost modifiers) | [references/peace-conference.md](references/peace-conference.md) |
+| Game rules, ideologies, buildings | [references/small-systems.md](references/small-systems.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
