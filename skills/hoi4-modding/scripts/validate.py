@@ -233,6 +233,9 @@ def _load_loc_keys(
     return keys
 
 
+_DESC_BLOCK_RE = re.compile(r"\bdesc\s*=\s*\{")
+
+
 def _check_loc_refs(mod_dir: Path, keys: set[str], findings: list[Finding]) -> None:
     for path in sorted(mod_dir.glob("events/**/*.txt")):
         text = _read(path)
@@ -251,6 +254,24 @@ def _check_loc_refs(mod_dir: Path, keys: set[str], findings: list[Finding]) -> N
                         message=f"{key}: not found in any localisation file",
                     )
                 )
+        # conditional descriptions: desc = { text = key trigger = {...} }
+        # (512 uses in vanilla events)
+        for m in _DESC_BLOCK_RE.finditer(masked):
+            end = _extract_block(masked, m.end() - 1)
+            body = masked[m.end():end]
+            for tm in re.finditer(r"(?m)^\s*text\s*=\s*([\w.\-]+)", body):
+                key = tm.group(1)
+                if key not in keys:
+                    line = masked.count("\n", 0, m.end() + tm.start()) + 1
+                    findings.append(
+                        Finding(
+                            severity="error",
+                            rule="missing-loc-key",
+                            file=rel,
+                            line=line,
+                            message=f"{key}: not found in any localisation file",
+                        )
+                    )
 
 
 _FOCUS_DEF_RE = re.compile(r"\b(?:focus|shared_focus|joint_focus)\s*=\s*\{")
@@ -294,7 +315,17 @@ def _collect_focuses(
             if not id_m:
                 continue
             fid = id_m.group(1)
-            pos = dict(_FOCUS_POS_RE.findall(body))
+            # grid x/y must come from the focus's own top level — an
+            # `offset = { x y trigger }` block is a conditional pixel nudge
+            # and its values must NOT overwrite the grid position
+            depth = 0
+            pos: dict[str, str] = {}
+            for km in re.finditer(r"([{}])|(?m:^[ \t]*)([xy])\s*=\s*(-?\d+)", body):
+                if km.group(1):
+                    depth += 1 if km.group(1) == "{" else -1
+                    continue
+                if depth == 0:
+                    pos[km.group(2)] = km.group(3)
             entry = {
                 "x": pos.get("x"),
                 "y": pos.get("y"),
@@ -740,6 +771,44 @@ def _check_on_actions(
                     )
 
 
+_LOC_HEADER_RE = re.compile(r"(?m)^\s*l_([a-z_]+)\s*:")
+
+
+def _check_loc_hygiene(mod_dir: Path, findings: list[Finding]) -> None:
+    """Per-file localisation hygiene: the `l_<lang>:` header must match the
+    folder the file lives in, and duplicate keys within one file are almost
+    always an overwrite bug."""
+    for path in sorted(mod_dir.glob("localisation/**/*.yml")):
+        rel = str(path.relative_to(mod_dir))
+        folder_lang = path.parent.name
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        headers = _LOC_HEADER_RE.findall(text)
+        if headers and folder_lang != "replace" and headers[0] != folder_lang:
+            findings.append(
+                Finding(
+                    severity="warning",
+                    rule="loc-language-mismatch",
+                    file=rel,
+                    line=None,
+                    message=f"header l_{headers[0]}: but file lives in localisation/{folder_lang}",
+                )
+            )
+        seen: set[str] = set()
+        for km in _LOC_KEY_RE.finditer(text):
+            key = km.group(1)
+            if key in seen:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="duplicate-loc-key",
+                        file=rel,
+                        line=text.count("\n", 0, km.start()) + 1,
+                        message=f"{key}: defined more than once in this file",
+                    )
+                )
+            seen.add(key)
+
+
 def validate_mod(
     mod_dir: Path, data_dir: Path | None = None, game_dir: Path | None = None
 ) -> list[Finding]:
@@ -764,6 +833,7 @@ def validate_mod(
     _check_loc_refs(mod_dir, keys, findings)
     _check_focus_tree(mod_dir, findings, game_dir)
     _check_event_namespaces(mod_dir, findings)
+    _check_loc_hygiene(mod_dir, findings)
     if data_dir is not None:
         known = _load_known_names(data_dir)
         scripted = _load_scripted_names(mod_dir)

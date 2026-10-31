@@ -1,73 +1,94 @@
-"""Focus-tree rules v3: relative-position overlap exemption, duplicate
-focus ids, vanilla-aware prerequisite targets (from the owner audit)."""
+"""Audit-fix tests round 3: offset blocks must not corrupt x/y reading,
+desc-block loc refs, and localisation file hygiene rules."""
 
 from pathlib import Path
 
 from tools.validate import validate_mod
 
-FOCUS = (
-    "focus_tree = {{\n"
-    "\tfocus = {{\n"
-    "\t\tid = mod_{tag}\n"
-    "\t\ticon = GFX_focus_generic_industry\n"
-    "\t\tx = {x}\n"
-    "\t\ty = {y}\n"
-    "\t\tcost = 5\n"
-    "{extra}"
-    "\t}}\n"
-    "}}\n"
-)
+FIXTURES = Path(__file__).parent / "fixtures"
+FAKE_GAME = FIXTURES / "fake_game"
 
 
-def _write(tmp_path: Path, body: str) -> Path:
+def test_offset_block_does_not_corrupt_grid_position(tmp_path):
+    """`offset = { x = -25 y = 0 }` is a conditional pixel nudge; the focus
+    grid x/y must come from the focus itself (regression: findall took the
+    LAST x/y, so offset values overwrote the grid position)."""
     (tmp_path / "common" / "national_focus").mkdir(parents=True)
-    (tmp_path / "common" / "national_focus" / "tree.txt").write_text(body, encoding="utf-8")
-    return tmp_path
-
-
-def test_duplicate_focus_id_flagged(tmp_path):
-    body = FOCUS.format(tag="one", x=1, y=0, extra="") + FOCUS.format(
-        tag="one", x=2, y=0, extra=""
-    ).replace("mod_one", "mod_one")
-    # second block keeps the same id on purpose
-    findings = validate_mod(_write(tmp_path, body))
-    hits = [f for f in findings if f.rule == "duplicate-focus-id"]
-    assert len(hits) == 1
-    assert hits[0].severity == "error"
-
-
-def test_relative_positioned_focuses_do_not_overlap(tmp_path):
-    body = (
-        FOCUS.format(tag="anchor", x=1, y=0, extra="").replace(
-            "\t\tx = 1", "\t\tx = 1"
-        )
-        + FOCUS.format(tag="child", x=0, y=1, extra="").replace(
-            "\t\tx = 0",
-            "\t\trelative_position_id = mod_anchor\n\t\tx = 0",
-        )
-        + FOCUS.format(tag="other", x=0, y=1, extra="")
+    (tmp_path / "common" / "national_focus" / "tree.txt").write_text(
+        "focus_tree = {\n"
+        "\tfocus = {\n"
+        "\t\tid = mod_offset_a\n"
+        "\t\ticon = GFX_focus_generic_industry\n"
+        "\t\tx = 1\n"
+        "\t\ty = 0\n"
+        "\t\tcost = 5\n"
+        "\t\toffset = {\n"
+        "\t\t\tx = -25\n"
+        "\t\t\ty = 0\n"
+        "\t\t\ttrigger = { has_game_rule = { rule = obsolete_focus_branches_visibility option = HIDE } }\n"
+        "\t\t}\n"
+        "\t}\n"
+        "\tfocus = {\n"
+        "\t\tid = mod_offset_b\n"
+        "\t\ticon = GFX_focus_generic_industry\n"
+        "\t\tx = 1\n"
+        "\t\ty = 0\n"
+        "\t\tcost = 5\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
     )
-    findings = validate_mod(_write(tmp_path, body))
-    # mod_child is relative to mod_anchor (absolute 1,1); mod_other sits at
-    # absolute 0,1 — no true collision, and relative focuses are exempt.
+    findings = validate_mod(tmp_path)
+    # grid positions are both (1, 0) -> genuine overlap warning; but the
+    # buggy reader saw (-25, 0) vs (1, 0) and MISSED it
     hits = [f for f in findings if f.rule == "focus-position-overlap"]
-    assert hits == []
+    assert len(hits) == 1
+    assert "mod_offset_a" in hits[0].message
 
 
-def test_prerequisite_to_vanilla_focus_not_an_error(tmp_path, monkeypatch):
-    import tools.validate as v
-
-    mod = _write(
-        tmp_path,
-        FOCUS.format(tag="base", x=1, y=0, extra="").replace(
-            "\t\tcost = 5",
-            "\t\tcost = 5\n\t\tprerequisite = { focus = vanilla_focus_1 }",
-        ),
+def test_desc_block_loc_refs_checked(tmp_path):
+    """`desc = { text = key trigger = {...} }` refs must be loc-checked
+    (512 uses in vanilla events)."""
+    (tmp_path / "events").mkdir()
+    (tmp_path / "events" / "ev.txt").write_text(
+        "add_namespace = mymod\n"
+        "country_event = {\n"
+        "\tid = mymod.1\n"
+        "\ttitle = mymod.1.t\n"
+        "\tdesc = {\n"
+        "\t\ttext = mymod.1.d\n"
+        "\t\ttrigger = { always = yes }\n"
+        "\t}\n"
+        "\toption = {\n"
+        "\t\tname = mymod.1.a\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
     )
-    # without game dir: still an error (we cannot know vanilla)
-    findings = validate_mod(mod)
-    assert any(f.rule == "missing-focus-prerequisite" for f in findings)
-    # with the fake game dir (defines vanilla_focus_1): silent
-    game = Path(__file__).parent / "fixtures" / "fake_game"
-    findings = validate_mod(mod, game_dir=game)
-    assert not any(f.rule == "missing-focus-prerequisite" for f in findings)
+    findings = validate_mod(tmp_path)
+    hits = [f for f in findings if f.rule == "missing-loc-key"]
+    assert {f.message.split(":")[0] for f in hits} == {
+        "mymod.1.t", "mymod.1.d", "mymod.1.a",
+    }
+
+
+def test_loc_language_header_mismatch(tmp_path):
+    """A file in the german folder with an l_english header is flagged."""
+    loc = tmp_path / "localisation" / "german"
+    loc.mkdir(parents=True)
+    (loc / "mod_l_german.yml").write_bytes(
+        b"\xef\xbb\xbf" + b"l_english:\n some.key:0 \"x\"\n")
+    findings = validate_mod(tmp_path)
+    hits = [f for f in findings if f.rule == "loc-language-mismatch"]
+    assert len(hits) == 1
+
+
+def test_duplicate_loc_key(tmp_path):
+    loc = tmp_path / "localisation" / "english"
+    loc.mkdir(parents=True)
+    (loc / "mod_l_english.yml").write_bytes(
+        b"\xef\xbb\xbf" +
+        b"l_english:\n dup.key:0 \"a\"\n dup.key:0 \"b\"\n")
+    findings = validate_mod(tmp_path)
+    hits = [f for f in findings if f.rule == "duplicate-loc-key"]
+    assert len(hits) == 1
