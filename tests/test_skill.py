@@ -26,7 +26,7 @@ def test_readme_claims_count_matches_register():
     """The README's claim count must equal the register's row count —
     derived, so the number cannot drift."""
     register = (DOCS / "claims-register.md").read_text(encoding="utf-8")
-    count = len(re.findall(r"^\| [a-z][\w-]*\s*\|", register, re.M))
+    count = len(re.findall(r"^\| [a-z]", register, re.M))
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert f"{count} claims" in readme, f"README should say '{count} claims'"
 

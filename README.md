@@ -49,10 +49,9 @@ skill:
 
 - **Router** (`SKILL.md`): core rules (scope flow, encoding, verification),
   evidence lanes (lint → log triage → game run), and a routing table.
-- **14 references** (loaded on demand): events, focus trees, ideas &
-  modifiers, decisions, characters, MIOs, variables & scripting,
-  localisation, gfx & assets, AI strategy, tech tree, map/states/history,
-  mod structure, debugging & logs.
+- **27 references** (loaded on demand): every `common/` system from AI
+  strategy and characters through peace conferences, special projects and
+  map orientation — full map in [docs/coverage.md](docs/coverage.md).
 - **Asset kits**: copy-paste event and decision file sets that pass the
   validator out of the box.
 - **Claims register**: every hard claim sourced and version-stamped.

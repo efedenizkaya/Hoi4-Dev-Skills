@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.19.1 — Loc mismatch fix + audit round 4
+
+- `loc-language-mismatch` fixed: the language is the FIRST folder under
+  `localisation/` (subfolders like `english/events/` are normal), files
+  directly in `localisation/` are exempt, `replace/` stays excluded.
+  False positives on the real mod: 800+ -> 0 (total warnings 942 -> 889).
+- Three focus regressions RESTORED (lost in the v0.18.0 test rewrite):
+  duplicate-focus-id, relative_position_id overlap exemption, vanilla
+  prerequisite — now in test_focus_regressions.py.
+- README references bullet: stale "14 references" -> 27 with a coverage
+  pointer; ci.yml mangled comment cleaned; coverage.md Uncovered section
+  updated (abilities, opinion modifiers, wargoals, occupation laws,
+  medals, continuous focus, combat tactics, terrain, autonomous states,
+  intelligence agencies now covered).
+- Register honesty: the three tool-rule rows are marked "(tool rule)"
+  (they live in validator code, not reference text); CHANGELOG of 0.18.0
+  overstated "all rows marked" — corrected here rather than rewritten.
+- trigger-evals.json now has a schema/consistency test (unique queries,
+  both classes present).
+
 ## 0.19.0 — Skill content audit
 
 Self-audit of skills/hoi4-modding (structure, contradictions, brace

@@ -43,17 +43,13 @@ so contributors can pick work and users can check before trusting.
 ## Uncovered (ranked by vanilla file count — pick from here)
 
 | Files | System | Notes |
-|---|---|---|
+|---|---|---|| 2 | `bookmarks` | 1936 start bookmarks |
+| 1 each | `names`, `difficulty_settings`, `map_modes` | single-file systems |
+| — | `defines` | covered as a blast-radius warning in misc-systems.md |
 
-
-
-| 6 | `abilities` | unit leader abilities |
-| 2 | `bookmarks` | 1936 start bookmarks |
-| 1 each | `intelligence_agencies`, `names`, `autonomous_states`, `opinion_modifiers`, `wargoals`, `occupation_laws`, `medals`, `continuous_focus`, `combat_tactics.txt`, `terrain`, `map_modes`, `difficulty_settings`, `defines` | mostly single-file systems |
-
-Plus non-`common` surfaces: `map/` modding (provinces, terrain, supply),
-`gfx/` pipelines, `sound/`/`music/`, `tutorial/` — out of scope for now,
-documented as risky in map-states-and-history.md.
+Non-`common` surfaces: `map/` deep-editing has an orientation page
+([map-modding.md](../skills/hoi4-modding/references/map-modding.md));
+`gfx/` pipelines, `sound/`/`music/`, `tutorial/` remain out of scope.
 
 ## Tooling coverage
 

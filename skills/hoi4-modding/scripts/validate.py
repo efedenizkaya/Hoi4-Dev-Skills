@@ -776,14 +776,21 @@ _LOC_HEADER_RE = re.compile(r"(?m)^\s*l_([a-z_]+)\s*:")
 
 def _check_loc_hygiene(mod_dir: Path, findings: list[Finding]) -> None:
     """Per-file localisation hygiene: the `l_<lang>:` header must match the
-    folder the file lives in, and duplicate keys within one file are almost
-    always an overwrite bug."""
+    FIRST folder under localisation/ (subfolders beneath it like
+    `english/events/` are normal), and duplicate keys within one file are
+    almost always an overwrite bug. Files directly inside localisation/
+    have no language folder and are exempt."""
     for path in sorted(mod_dir.glob("localisation/**/*.yml")):
         rel = str(path.relative_to(mod_dir))
-        folder_lang = path.parent.name
+        parts = path.relative_to(mod_dir / "localisation").parts
+        if len(parts) < 2:
+            continue  # directly in localisation/ — no language folder
+        folder_lang = parts[0]
+        if folder_lang == "replace":
+            continue  # replace/ overrides every language by design
         text = path.read_text(encoding="utf-8-sig", errors="replace")
         headers = _LOC_HEADER_RE.findall(text)
-        if headers and folder_lang != "replace" and headers[0] != folder_lang:
+        if headers and headers[0] != folder_lang:
             findings.append(
                 Finding(
                     severity="warning",

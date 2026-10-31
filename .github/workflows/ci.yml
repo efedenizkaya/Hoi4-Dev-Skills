@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
   # pull_request intentionally absent: this workflow runs on a self-hosted
   # runner. If the repo ever goes public, foreign PR code would execute on
-  # the maintainer's machine.   # manual run after billing issues are resolved
+  # the maintainer's machine.
+  workflow_dispatch:   # manual run
 
 permissions:
   contents: read
