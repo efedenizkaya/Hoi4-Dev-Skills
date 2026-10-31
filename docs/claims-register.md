@@ -108,3 +108,9 @@ game patch; delete rows that no longer hold.
 | loops | for_each_loop/while_loop exist; wrong limit freezes the game | game-doc script_concept_documentation.md (collection iterators); verify exact fields per patch | 2026-10-31 |
 | alphabetical-load-order | common/ files load in alphabetical filename order (00_/zz_ prefixes control it) | **unverified** (community knowledge) — verify with a load-order experiment | 2026-10-31 |
 | missing-add-namespace | Every vanilla event file declares add_namespace (128/128); a mod event file without one gets a validator warning | tool (validator rule; vanilla census 128/128) | 2026-10-31 |
+| sgui-files | Scripted GUIs = common/scripted_guis script + interface/*.gui window; game ships _documentation.md | game-file common/scripted_guis/_documentation.md | 2026-10-31 |
+| sgui-minimal | Minimal scripted GUI pair: context_type + window_name + visible/effects/triggers/properties | game-file _documentation.md + vanilla GER_monroe_doctrine_scripted_gui.txt | 2026-10-31 |
+| sgui-context-types | context_type list (player_context, decision_category, mapicons, ...) | game-file _documentation.md (verbatim list) + vanilla census (19/20 decision_category) | 2026-10-31 |
+| sgui-anchoring | parent_window_token tokens, parent_window_window, parent_scripted_gui, map_mode | game-file _documentation.md | 2026-10-31 |
+| sgui-binding-silent | effects/triggers/properties bind by .gui element name; mismatches do nothing silently | game-file _documentation.md + community knowledge | 2026-10-31 |
+| sgui-context | scripted_guis context anchors: decision_category dominant in vanilla (19/20) | game-file vanilla census + _documentation.md | 2026-10-31 |

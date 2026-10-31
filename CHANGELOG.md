@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.0 — Scripted GUI reference, loc coverage tool, focus kit
+
+- `references/scripted-gui.md`: the largest content gap, grounded in the
+  game's own `common/scripted_guis/_documentation.md` (context types,
+  anchoring, effects/triggers/properties binding) plus a vanilla census.
+- `scripts/loc_report.py`: per-language localisation coverage vs english —
+  the game falls back silently, so missing translations are invisible.
+  On the dogfood mod (5 languages): surfaced 213 missing German keys out
+  of 2244. No competitor has this.
+- `assets/kits/focus-kit/`: third kit (mutual exclusion + shared
+  prerequisite), validator-clean — and the new sprite rule immediately
+  caught a nonexistent sprite name in its first draft, then validated
+  0/0 against the real game dir.
+- SKILL routing updated for all three.
+
 ## 0.9.1 — Adopted patterns from Fostanico v1.8.0
 
 Ideas only — no CC BY-SA text or data copied, everything re-implemented in

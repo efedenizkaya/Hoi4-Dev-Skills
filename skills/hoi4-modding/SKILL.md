@@ -143,9 +143,11 @@ Read only what the task needs:
 | Debug, crash triage, logs, `-debug` mode | [references/debugging-and-logs.md](references/debugging-and-logs.md) |
 | Player-visible symptom, cause unknown ("X shows raw", "tree missing", "icon ?") | [references/symptoms.md](references/symptoms.md) |
 | Control flow: if/limit, random_list, scope iteration, event targets | [references/control-flow.md](references/control-flow.md) |
+| Custom UIs (scripted GUIs, .gui windows) | [references/scripted-gui.md](references/scripted-gui.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
+| Start a new focus tree from a template | [assets/kits/focus-kit/](assets/kits/focus-kit/MANIFEST) |
 | Find where an id is defined (event/focus/idea/decision/character, mod or vanilla) | `scripts/find.py <pattern> --mod <dir>` (add `--game-dir` for vanilla coverage, `--duplicates` for collision audit) |
 | New HOI4 patch: what changed for modders | `scripts/version_diff.py <old_extracted> <new_extracted>` — added/removed effects, triggers, modifiers |
 | Which mod files shadow vanilla files (patch-breakage risk) | `scripts/override_audit.py --mod <dir> --game-dir <game>` |
