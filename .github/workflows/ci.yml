@@ -40,6 +40,18 @@ jobs:
         run: tests/test_install.ps1
         shell: powershell
 
+  package:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package the skill (.skill = zip of the skill dir)
+        run: python -c "import shutil; shutil.make_archive('hoi4-modding', 'zip', 'skills', 'hoi4-modding')"
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hoi4-modding-skill
+          path: hoi4-modding.zip
+
   skill-spec:
     runs-on: self-hosted
     steps:

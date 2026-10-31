@@ -51,6 +51,22 @@ cp -R /path/to/Hoi4-Dev-Skills/skills/hoi4-modding .agents/skills/
 
 Commit it — the skill is data, not code that could diverge.
 
+## Codex / one-line install
+
+Codex (and any shell-capable agent) can install everything itself:
+
+```bash
+git clone https://github.com/efedenizkaya/Hoi4-Dev-Skills.git &&
+  cd Hoi4-Dev-Skills && ./install.sh --agent codex
+```
+
+## Templates for your mod repository
+
+`templates/` holds `mod-AGENTS.md` and `mod-CLAUDE.md` — copy the one
+matching your agent into your mod repository so the agent that opens it
+knows the verification rules (validate after every change, review ≠
+modify, sourced claims).
+
 ## Set up the verification tools
 
 The skill tells your agent to run the tools; make them reachable:

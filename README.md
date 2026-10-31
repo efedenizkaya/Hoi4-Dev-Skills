@@ -48,6 +48,18 @@ python tools/error_triage.py logs/error.log --against baseline.log
 Full walkthrough: [docs/tutorial.md](docs/tutorial.md) — from zero to a
 verified event in ~15 minutes.
 
+### First things to try
+
+Paste any of these to an agent with the skill installed:
+
+- *"Run the doctor on my mod at `<path>` and give me the top 5 findings."*
+- *"Add a decision that gives 5% stability for 50 political power to my
+  mod at `<path>` — then prove it validates."*
+- *"Where is `GER_four_year_plan` defined, and what references it?"*
+- *"My event shows raw text like `myevent.1.t` — find out why."*
+- *"We just got patch 1.20 — diff the extracted data and tell me what
+  broke."*
+
 ## The skill
 
 `skills/hoi4-modding/` is an [Agent Skills](https://agentskills.io)-compliant
@@ -81,6 +93,22 @@ and versions are untested. Details:
 Why plain CLIs instead of an MCP server: they run in any agent loop with
 zero setup, and every one of them is covered by the test suite. A
 read-only MCP wrapper can sit on top of these same binaries later.
+
+## Asset and legal posture
+
+- This repository contains **only** original text, tested Python tooling
+  and synthetic fixtures. No HOI4 game files, DLC assets, workshop mods,
+  wiki text or CC BY-SA content from other projects is committed — ever.
+- Reference data is extracted **on the user's own machine** from their
+  own game install (`extracted/`, git-ignored). Nothing game-derived
+  leaves that machine through this project.
+- The only game-derived data in the repo is counts-only metadata
+  (`docs/data-summaries/*.json`: version + how many effects/triggers
+  exist) — facts about numbers, not content.
+- Ideas adopted from competitor projects are re-implemented from scratch
+  in this repo's idiom; no text, code or data is copied.
+- Steam Workshop content found on disk is used only as local read-only
+  reference during development and never redistributed.
 
 ## Contributing
 
