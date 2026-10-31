@@ -23,7 +23,7 @@ official documentation shipped inside the game install.
   loop. The skill refuses to claim a mod works without evidence.
 - **Honest claims.** Every hard claim in the skill is tied to a source
   (game docs, game file, or observed log) in
-  [docs/claims-register.md](docs/claims-register.md) — 98 claims and
+  [docs/claims-register.md](docs/claims-register.md) — 99 claims and
   counting.
 - **MIT.** Free to fork, embed and build on (unlike CC-licensed
   alternatives).
