@@ -50,7 +50,8 @@ CLAIM(focus-fields)
 
 ## Positioning rules
 
-- `x`/`y` are grid coordinates on the tree; `y = 0` is the 1936 column.
+- `x`/`y` are grid coordinates on the tree: `x` = column, `y` = row
+  (top row is 0). Neither relates to a year.
   Overlapping same-row focuses need distinct x.
 - `relative_position_id = <focus id>` makes x/y relative to that focus —
   the standard way to keep branches together when inserting focuses later.
@@ -81,8 +82,8 @@ layer. CLAIM(ai-will-do-default) `[unverified]`
 
 ## Worked example
 
-No focus kit is shipped yet. For the file-set pattern (script + loc +
-verification), see [../assets/kits/decision-kit/](../assets/kits/decision-kit/MANIFEST).
+See [../assets/kits/focus-kit/](../assets/kits/focus-kit/MANIFEST) — a
+validator-clean tree with mutual exclusion and a shared prerequisite.
 
 ## Verification steps
 

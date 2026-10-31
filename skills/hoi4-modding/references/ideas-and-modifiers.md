@@ -113,8 +113,10 @@ the scope you apply it to. CLAIM(unknown-modifier-silent) `[unverified]`
 **Slot/category level** (`common/idea_tags/00_idea.txt`): `slot`,
 `cost`, `removal_cost`, `ledger`, `type = national_spirit|designer|law...`,
 `character_slot`, `politics_tab`, `hidden`. Special slots: `designer`
-(161 uses — MIO-era design teams still register through ideas),
-`law`, `use_list_view`. CLAIM(idea-slot-fields)
+(161 uses — MIO-era design teams still register through ideas) and
+`law`. **The slot blocks themselves live in `common/ideas/*.txt`**
+(e.g. `_economic.txt`) and carry their own fields like
+`use_list_view = yes` and `picture`. CLAIM(idea-slot-fields)
 
 **Idea body** (inside a slot):
 

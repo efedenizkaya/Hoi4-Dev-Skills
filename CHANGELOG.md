@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.19.0 — Skill content audit
+
+Self-audit of skills/hoi4-modding (structure, contradictions, brace
+balance, vanilla spot-checks):
+
+- national-focus.md: stale "`y = 0` is the 1936 column" removed (x =
+  column, y = row — neither is a year); stale "no focus kit shipped yet"
+  replaced with a pointer to the (existing) focus-kit.
+- ideas-and-modifiers.md: `use_list_view` moved to the right home — slot
+  blocks live in `common/ideas/*.txt` themselves, not idea_tags (vanilla
+  _economic.txt verified).
+- Vanilla spot-checks on risky field names: days_re_enable (43 files),
+  select_effect (15), noOfFrames (89) — all confirmed; use_list_view
+  relocated as above.
+- All reference code blocks brace-balanced; kits re-validated 0/0 with
+  the real game dir.
+
 ## 0.18.0 — Audit-fix round 3
 
 - Validator: `offset` blocks no longer corrupt focus grid positions
