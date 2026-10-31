@@ -26,7 +26,7 @@ focus_tree = {
 
 	focus = {
 		id = mymod_rearm
-		icon = GFX_focus_generic_industry
+		icon = GFX_focus_generic_industry_3
 		x = 5                          # grid position, see below
 		y = 0                          # row (0 = first row); x is the column
 		cost = 5                       # in POINTS; define FOCUS_POINT_DAYS = 7,

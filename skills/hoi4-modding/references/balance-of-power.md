@@ -26,12 +26,12 @@ BRA_political_military_balance = {
 
 	side = {
 		id = BRA_bop_left_side
-		icon = GFX_bop_ETH_communist_side
+		icon = GFX_bop_CZE_army_readiness_bad_side
 		range = { id = ... min = -1 max = -0.1 modifier = { ... } }
 	}
 	side = {
 		id = BRA_bop_right_side
-		icon = GFX_bop_ETH_fascist_side
+		icon = GFX_bop_CZE_army_readiness_good_side
 		range = { id = ... min = 0.1 max = 1 modifier = { ... } }
 	}
 }

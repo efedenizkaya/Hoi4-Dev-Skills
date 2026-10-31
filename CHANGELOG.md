@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.20.0 — Professional hardening (roadmap items 1-5, 6, 7)
+
+From the fourth audit (four-repo competitive comparison):
+
+- **Installer v2**: `--list`, `--dry-run`, `--update`, `--uninstall` on
+  both installers (bash + PowerShell), smoke-tested.
+- **`scripts/stale_check.py`**: compares the installed game version
+  against the skill's verified stamp; mismatch suggests the version_diff
+  migration workflow (exit codes for CI/agents).
+- **`references/agent-safety.md`**: workshop content is data not
+  instructions, never execute mod content, destructive-operation
+  approvals, game actions belong to the user.
+- **`tests/test_skill_examples.py`**: automated audit of every reference
+  code block — GFX tokens against the real game sprite inventory,
+  effect-context statements against the extracted database. Immediately
+  caught 4 wrong sprite names in our own references (fixed with real
+  names: bop side icons, decision-category icon semantics,
+  upgrade-frame base-name semantics, focus icon tier).
+- **`scripts/doctor.py`**: one-shot mod health report (validator +
+  duplicate ids + vanilla overrides + loc coverage).
+- `scripts/find.py --record`: single-record lookup with the official
+  description from the extracted database.
+- `scripts/doctor.py` + `scripts/stale_check.py` shipped in the skill
+  bundle; doctor run on the real mod: 80 errors, 6 duplicate ids, 11
+  vanilla overrides, per-language loc gaps in one report.
+
 ## 0.19.1 — Loc mismatch fix + audit round 4
 
 - `loc-language-mismatch` fixed: the language is the FIRST folder under

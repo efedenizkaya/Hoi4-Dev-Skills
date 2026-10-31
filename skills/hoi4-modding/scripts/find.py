@@ -166,7 +166,43 @@ def main(argv: list[str] | None = None) -> int:
                         help="filter: event|focus|idea|decision|...")
     parser.add_argument("--duplicates", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--record", type=str, default=None, metavar="NAME",
+        help="print the full official record (description, scopes) for one "
+             "effect/trigger/modifier NAME from the extracted database",
+    )
+    parser.add_argument(
+        "--data", type=Path, default=None,
+        help="extracted dir for --record (default: ../extracted relative to cwd)")
+
     args = parser.parse_args(argv)
+
+    if args.record:
+        data_dir = args.data or Path("extracted/1.19.4.1")
+        if not data_dir.is_dir():
+            print(f"error: no extracted data at {data_dir} — run "
+                  "scripts/extract.py first (or pass --data)", file=sys.stderr)
+            return 2
+        record = None
+        for kind, fname in (("effect", "effects.json"), ("trigger", "triggers.json")):
+            for e in json.loads((data_dir / fname).read_text(encoding="utf-8")):
+                if e["name"] == args.record:
+                    record = {"kind": kind, **e}
+                    break
+            if record:
+                break
+        else:
+            for scope, names in json.loads(
+                    (data_dir / "modifiers.json").read_text(encoding="utf-8")).items():
+                if args.record in names:
+                    record = {"kind": "modifier", "name": args.record, "scope": scope}
+                    break
+        if record is None:
+            print(f"error: '{args.record}' not found in the extracted database",
+                  file=sys.stderr)
+            return 1
+        print(json.dumps(record, indent=1, ensure_ascii=False))
+        return 0
 
     index = index_mod(args.mod, args.game_dir)
     if args.kind:

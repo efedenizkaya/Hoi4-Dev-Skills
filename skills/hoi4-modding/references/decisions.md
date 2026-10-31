@@ -9,8 +9,7 @@ patterns (e.g. `fascism_on_the_rise` nests its decisions). CLAIM(decision-placem
 
 ```txt
 mymod_category = {
-	icon = generic_political_actions
-	picture = GFX_decision_cat_generic_political_actions   # optional
+	icon = generic_political_actions   # icon token, not a GFX sprite
 
 	allowed = { ... }    # which countries get the category at all
 	visible = { ... }    # when the tab shows

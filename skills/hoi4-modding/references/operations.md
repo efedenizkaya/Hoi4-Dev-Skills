@@ -54,7 +54,8 @@ Branch upgrade trees for the agency (economy/navy/army departments...):
 branch_intelligence = {
 	upgrade_economy_civilian = {
 		picture = GFX_agency_economy_department
-		frame = GFX_upgrade_frame_economy   # _available/_completed/_unavailable suffixes
+		frame = GFX_upgrade_frame_army   # BASE name: the game appends
+		                                 # _available/_completed/_unavailable
 		sound = Spy_Agency_Intel_Upgrades_Confirm
 		ai_will_do = { ... }
 		# effect/allow blocks — see the folder's _documentation.info

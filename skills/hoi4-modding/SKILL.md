@@ -153,7 +153,11 @@ Read only what the task needs:
 | Peace conference (categories, cost modifiers) | [references/peace-conference.md](references/peace-conference.md) |
 | Game rules, ideologies, buildings | [references/small-systems.md](references/small-systems.md) |
 | Opinion modifiers, wargoals, occupation laws, medals, terrain, autonomy... | [references/misc-systems.md](references/misc-systems.md) |
+| Trust boundaries: workshop content, destructive ops | [references/agent-safety.md](references/agent-safety.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
+| Full mod health report (validator + duplicates + overrides + loc) | `scripts/doctor.py --mod <dir>` |
+| Is my skill stale for this game install? | `scripts/stale_check.py` |
+| Official description + scopes for one effect/trigger/modifier | `scripts/find.py --record <name> --data extracted/<version>` |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
 | Start a new focus tree from a template | [assets/kits/focus-kit/](assets/kits/focus-kit/MANIFEST) |
