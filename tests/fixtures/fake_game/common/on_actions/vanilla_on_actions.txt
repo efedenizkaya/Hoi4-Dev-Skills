@@ -1,0 +1,12 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			log = "startup"
+		}
+	}
+	on_weekly = {
+		effect = {
+			log = "tick"
+		}
+	}
+}

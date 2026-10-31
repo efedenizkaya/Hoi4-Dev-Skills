@@ -15,3 +15,7 @@ globals().update({k: v for k, v in vars(_mod).items() if not k.startswith("__")}
 
 # direct handle to the implementation module (for monkeypatching)
 _impl_module = _mod
+
+
+if __name__ == "__main__":
+    raise SystemExit(_mod.main())

@@ -546,6 +546,200 @@ def _check_event_namespaces(mod_dir: Path, findings: list[Finding]) -> None:
             )
 
 
+# ---- silent-failure rules: things the game ignores WITHOUT an error ----
+
+_STRUCTURAL_MODIFIER_FIELDS = {
+    "custom_modifier_tooltip", "add", "tag", "hidden_modifier", "has_variable",
+}
+_WEIGHT_CONTEXT_RE = re.compile(
+    r"\b(?:ai_will_do|ai_chance|mean_time_to_happen)\s*=\s*\{"
+)
+_MODIFIER_BLOCK_RE = re.compile(r"\bmodifier\s*=\s*\{")
+_MODIFIER_CONTEXT_GLOBS = [
+    "common/ideas/**/*.txt",
+    "common/dynamic_modifiers/**/*.txt",
+    "common/military_industrial_organization/**/*.txt",
+    "common/decisions/**/*.txt",
+]
+_SPRITE_DEF_RE = re.compile(r'name\s*=\s*"(GFX_[\w.\-]+)"')
+_SPRITE_REF_RE = re.compile(r"\b(?:icon|picture|background)\s*=\s*(GFX_[\w.\-]+)")
+_ON_ACTIONS_RE = re.compile(r"\bon_actions\s*=\s*\{")
+_HOOK_NAME_RE = re.compile(r"([{}])|(?m:^)\s*([a-z0-9_]+)\s*=")
+
+
+def _load_modifier_db(data_dir: Path) -> set[str]:
+    if data_dir is None:
+        return set()
+    p = data_dir / "modifiers.json"
+    if not p.is_file():
+        return set()
+    db = json.loads(p.read_text(encoding="utf-8"))
+    known: set[str] = set()
+    for names in db.values():
+        known.update(names)
+    return known
+
+
+def _modifier_matches(name: str, known: set[str]) -> bool:
+    if name in known:
+        return True
+    # templated names: <Building>_output matches arms_factory_output
+    for k in known:
+        if "<" in k:
+            rx = re.sub(r"<[A-Za-z]+>", "[a-z0-9_]+", re.escape(k))
+            if re.fullmatch(rx, name):
+                return True
+    return False
+
+
+def _check_modifier_names(
+    mod_dir: Path, findings: list[Finding], data_dir: Path | None
+) -> None:
+    """Modifier keys inside idea/dynamic-modifier/MIO blocks against the
+    extracted modifiers database. The game silently ignores unknown names.
+    Weight-grammar blocks (ai_will_do, tree country factors) are excluded."""
+    known = _load_modifier_db(data_dir)
+    if not known:
+        return
+    for pattern in _MODIFIER_CONTEXT_GLOBS:
+        for path in sorted(mod_dir.glob(pattern)):
+            masked = mask_comments_and_strings(_read(path))
+            rel = str(path.relative_to(mod_dir))
+            excluded = [
+                (w.start(), _extract_block(masked, w.end() - 1))
+                for w in _WEIGHT_CONTEXT_RE.finditer(masked)
+            ]
+            for m in _MODIFIER_BLOCK_RE.finditer(masked):
+                if any(a <= m.start() < b for a, b in excluded):
+                    continue
+                end = _extract_block(masked, m.end() - 1)
+                body = masked[m.end():end]
+                depth = 0
+                keys: list[str] = []
+                for km in re.finditer(r"([{}])|(?m:^)\s*([a-z0-9_]+)\s*=", body):
+                    if km.group(1):
+                        depth += 1 if km.group(1) == "{" else -1
+                        continue
+                    if depth == 0:
+                        keys.append(km.group(2))
+                if keys and keys[0] in ("factor", "add"):
+                    continue  # weight-style body
+                for key in keys:
+                    if key in _STRUCTURAL_MODIFIER_FIELDS:
+                        continue
+                    if _modifier_matches(key, known):
+                        continue
+                    findings.append(
+                        Finding(
+                            severity="warning",
+                            rule="unknown-modifier-name",
+                            file=rel,
+                            line=masked.count("\n", 0, m.start()) + 1,
+                            message=(
+                                f"{key}: not a modifier name in the extracted "
+                                "data — the game ignores it silently"
+                            ),
+                        )
+                    )
+
+
+def _load_sprite_names(mod_dir: Path, game_dir: Path) -> set[str]:
+    names: set[str] = set()
+    roots = [mod_dir / "interface", game_dir / "interface", game_dir / "dlc"]
+    for root in roots:
+        if root.is_dir():
+            for path in root.glob("**/*.gfx"):
+                names.update(_SPRITE_DEF_RE.findall(_read(path)))
+    return names
+
+
+def _check_sprite_references(
+    mod_dir: Path, findings: list[Finding], game_dir: Path
+) -> None:
+    """icon/picture/background GFX references must be declared in some
+    interface/*.gfx. A missing SPRITE NAME renders a placeholder with no
+    error; only a missing texture file logs."""
+    known = _load_sprite_names(mod_dir, game_dir)
+    for path in sorted(mod_dir.glob("**/*.txt")):
+        if not path.is_file():
+            continue
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _SPRITE_REF_RE.finditer(masked):
+            if m.group(1) not in known:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="unknown-sprite",
+                        file=rel,
+                        line=masked.count("\n", 0, m.start()) + 1,
+                        message=(
+                            f"{m.group(1)}: sprite not declared in any mod or "
+                            "vanilla .gfx — renders as placeholder, silently"
+                        ),
+                    )
+                )
+
+
+def _load_on_action_names(game_dir: Path) -> set[str]:
+    names: set[str] = set()
+    root = game_dir / "common" / "on_actions"
+    if not root.is_dir():
+        return names
+    for path in root.glob("**/*.txt"):
+        masked = mask_comments_and_strings(_read(path))
+        m = _ON_ACTIONS_RE.search(masked)
+        if not m:
+            continue
+        end = _extract_block(masked, m.end() - 1)
+        body = masked[m.end():end]
+        depth = 0
+        for sm in _HOOK_NAME_RE.finditer(body):
+            if sm.group(1):
+                depth += 1 if sm.group(1) == "{" else -1
+                continue
+            if depth == 0:
+                names.add(sm.group(2))
+    return names
+
+
+def _check_on_actions(
+    mod_dir: Path, findings: list[Finding], game_dir: Path
+) -> None:
+    """Mod on_action hook names must exist in the vanilla hook list — a
+    misspelled hook never fires and never logs."""
+    known = _load_on_action_names(game_dir)
+    if not known:
+        return
+    for path in sorted(mod_dir.glob("common/on_actions/**/*.txt")):
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _ON_ACTIONS_RE.finditer(masked):
+            end = _extract_block(masked, m.end() - 1)
+            body = masked[m.end():end]
+            depth = 0
+            for sm in _HOOK_NAME_RE.finditer(body):
+                if sm.group(1):
+                    depth += 1 if sm.group(1) == "{" else -1
+                    continue
+                if depth != 0:
+                    continue
+                hook = sm.group(2)
+                if hook not in known:
+                    findings.append(
+                        Finding(
+                            severity="warning",
+                            rule="unknown-on-action",
+                            file=rel,
+                            line=masked.count("\n", 0, m.start()) + 1,
+                            message=(
+                                f"{hook}: not a vanilla on_action hook — it "
+                                "would never fire, silently"
+                            ),
+                        )
+                    )
+
+
 def validate_mod(
     mod_dir: Path, data_dir: Path | None = None, game_dir: Path | None = None
 ) -> list[Finding]:
@@ -576,8 +770,11 @@ def validate_mod(
         if game_dir is not None:
             scripted |= _load_scripted_names(game_dir)
         _check_statement_names(mod_dir, findings, known, scripted)
+        _check_modifier_names(mod_dir, findings, data_dir)
     if game_dir is not None:
         _check_focus_references(mod_dir, findings, game_dir)
+        _check_sprite_references(mod_dir, findings, game_dir)
+        _check_on_actions(mod_dir, findings, game_dir)
     return findings
 
 

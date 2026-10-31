@@ -97,6 +97,79 @@ def test_vanilla_scripted_effects_are_known_with_game_dir(tmp_path, data_dir):
     assert not any("vanilla_helper" in f.message for f in with_game)
 
 
+def test_unknown_modifier_name_warned(tmp_path, data_dir):
+    """Modifier keys inside idea/dynamic-modifier blocks are checked against
+    the extracted modifiers database (templated names match)."""
+    (tmp_path / "common" / "ideas").mkdir(parents=True)
+    (tmp_path / "common" / "ideas" / "mod_ideas.txt").write_text(
+        "mymod_spirit = {\n"
+        "\tmodifier = {\n"
+        "\t\tpolitical_power_gain = 0.5\n"   # real template name? verify below
+        "\t\tnot_a_real_modifier_xyz = 1\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(_mod(tmp_path, EVENT), data_dir)
+    hits = [f for f in findings if f.rule == "unknown-modifier-name"]
+    assert [h.message.split(":")[0] for h in hits] == ["not_a_real_modifier_xyz"]
+
+
+def test_weight_modifier_blocks_stay_silent(tmp_path, data_dir):
+    """ai_will_do / tree-country `modifier = { factor/add }` blocks are
+    weight grammar, not modifier-name lists."""
+    (tmp_path / "common" / "ideas").mkdir(parents=True)
+    (tmp_path / "common" / "ideas" / "mod_ideas.txt").write_text(
+        "mymod_spirit = {\n"
+        "\tai_will_do = {\n"
+        "\t\tmodifier = { factor = 2 totally_bogus_key = 1 }\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(_mod(tmp_path, EVENT), data_dir)
+    assert [f for f in findings if f.rule == "unknown-modifier-name"] == []
+
+
+def test_unknown_sprite_warned_with_game_dir(tmp_path, data_dir):
+    """icon/picture/background GFX references must exist in mod or vanilla
+    interface/*.gfx (game_dir required — DLC sprites live there)."""
+    (tmp_path / "common" / "national_focus").mkdir(parents=True)
+    (tmp_path / "common" / "national_focus" / "tree.txt").write_text(
+        "focus_tree = {\n"
+        "\tfocus = {\n"
+        "\t\tid = mod_f\n"
+        "\t\ticon = GFX_focus_generic_industry\n"   # declared in fake_game gfx
+        "\t\tx = 1\n\t\ty = 0\n\t\tcost = 5\n"
+        "\t}\n"
+        "\tfocus = {\n"
+        "\t\tid = mod_g\n"
+        "\t\ticon = GFX_focus_totally_made_up\n"
+        "\t\tx = 2\n\t\ty = 0\n\t\tcost = 5\n"
+        "\t}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(_mod(tmp_path, EVENT), data_dir, game_dir=FAKE_GAME)
+    hits = [f for f in findings if f.rule == "unknown-sprite"]
+    assert [h.message.split(":")[0] for h in hits] == ["GFX_focus_totally_made_up"]
+
+
+def test_unknown_on_action_warned_with_game_dir(tmp_path, data_dir):
+    """Mod on_action hook names must exist in the vanilla hook list."""
+    (tmp_path / "common" / "on_actions").mkdir(parents=True)
+    (tmp_path / "common" / "on_actions" / "mod_hooks.txt").write_text(
+        "on_actions = {\n"
+        "\ton_startup = { effect = { mymod_init = yes } }\n"
+        "\ton_totally_bogus_hook = { effect = { x = yes } }\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    findings = validate_mod(_mod(tmp_path, EVENT), data_dir, game_dir=FAKE_GAME)
+    hits = [f for f in findings if f.rule == "unknown-on-action"]
+    assert [h.message.split(":")[0] for h in hits] == ["on_totally_bogus_hook"]
+
+
 def test_without_data_no_statement_warnings(tmp_path):
     findings = validate_mod(_mod(tmp_path, EVENT))
     assert [f for f in findings if f.rule == "unknown-statement-name"] == []

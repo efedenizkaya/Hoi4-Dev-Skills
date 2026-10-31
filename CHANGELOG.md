@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.9.0 — Silent-failure rules
+
+Three validator rules targeting behaviors the game ignores WITHOUT an
+error (calibrated on vanilla + a real 19k-line mod; zero false positives):
+
+- `unknown-modifier-name`: keys inside idea/dynamic-modifier/MIO modifier
+  blocks checked against the extracted modifiers database, with template
+  matching (`<Ideology>_drift` → `communism_drift`). Weight-grammar blocks
+  (ai_will_do/ai_chance/mtth, tree country factors) are excluded.
+- `unknown-sprite`: icon/picture/background GFX references must be declared
+  in some mod or vanilla .gfx (interface + dlc scanned). Found 18 real
+  dangling sprites in the dogfood mod.
+- `unknown-on-action`: mod on_action hooks must exist in the vanilla hook
+  list — a misspelled hook never fires, silently.
+- Wrapper CLIs (`python tools/*.py`) now forward to the skill
+  implementations correctly (regression: wrappers ran but never invoked
+  main).
+- `docs/cwtools.md`: CWTools documented as the complementary deep
+  validator, with maintenance status (action stale since 2023-03) and an
+  optional CI recipe.
+
 ## 0.8.0 — Competitive gap pass: searcher, migration, adapters
 
 Gap analysis against eightman999, postigodev and the Agensi/Fostanico
