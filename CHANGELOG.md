@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.16.0 — Special projects, map orientation, abilities
+
+- `references/special-projects.md`: grounded in the game's own
+  `special_projects_documentation.md` (13 vanilla files); loc/icon
+  fallback chain like MIOs, mandatory project types.
+- `references/map-modding.md`: HIGH-RISK orientation for the `map/`
+  folder — load-bearing files table, risk tiers, limited verification.
+  Errors here crash at startup; the game is the only oracle.
+- characters.md gained unit-leader abilities; operations.md gained
+  agency upgrades (both vanilla-grounded).
+- Coverage: every `common/` system plus the map/ folder now has at least
+  an orientation entry. Register 153 claims; 25 references.
+
 ## 0.15.0 — Misc systems + eval harness v2
 
 - `references/misc-systems.md`: the remaining single-file systems

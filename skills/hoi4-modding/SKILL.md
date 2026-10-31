@@ -139,6 +139,8 @@ Read only what the task needs:
 | AI behavior and strategy | [references/ai-strategy.md](references/ai-strategy.md) |
 | Technologies and doctrines | [references/tech-tree.md](references/tech-tree.md) |
 | States, country history, tags, map files | [references/map-states-and-history.md](references/map-states-and-history.md) |
+| Map/ folder itself (provinces, supply, railways) — HIGH RISK | [references/map-modding.md](references/map-modding.md) |
+| Special projects and research facilities | [references/special-projects.md](references/special-projects.md) |
 | Set up a mod, .mod files, folders, compatibility | [references/mod-structure.md](references/mod-structure.md) |
 | Debug, crash triage, logs, `-debug` mode | [references/debugging-and-logs.md](references/debugging-and-logs.md) |
 | Player-visible symptom, cause unknown ("X shows raw", "tree missing", "icon ?") | [references/symptoms.md](references/symptoms.md) |

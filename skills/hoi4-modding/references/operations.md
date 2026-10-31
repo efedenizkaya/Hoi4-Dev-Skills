@@ -45,3 +45,22 @@ CLAIM(operations-anatomy)
 
 1. Validator; 2. in-game: agency panel → operations list (requires an
    agency + La Résistance); 3. triage for loc/`invalid-scope` classes.
+
+## Agency upgrades (`common/intelligence_agency_upgrades/*.txt`)
+
+Branch upgrade trees for the agency (economy/navy/army departments...):
+
+```txt
+branch_intelligence = {
+	upgrade_economy_civilian = {
+		picture = GFX_agency_economy_department
+		frame = GFX_upgrade_frame_economy   # _available/_completed/_unavailable suffixes
+		sound = Spy_Agency_Intel_Upgrades_Confirm
+		ai_will_do = { ... }
+		# effect/allow blocks — see the folder's _documentation.info
+	}
+}
+```
+
+- Upgrade names unique ACROSS branches; descriptions need only
+  `<name>_desc` in loc (no desc field). CLAIM(agency-upgrades)

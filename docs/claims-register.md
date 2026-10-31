@@ -159,3 +159,12 @@ game patch; delete rows that no longer hold.
 | terrain | terrain categories with colors; adding terrain touches map files | game-file common/terrain/00_terrain.txt | 2026-10-31 |
 | autonomous-states | autonomy_state fields: id, is_puppet, min_freedom_level, manpower_influence, use_overlord_color, rule | game-file common/autonomous_states | 2026-10-31 |
 | defines-blast-radius | defines are engine constants (Lua); overrides change global behavior | game-file common/defines/00_defines.lua | 2026-10-31 |
+| sp-files | special_projects tree + game-shipped special_projects_documentation.md | game-file common/special_projects | 2026-10-31 |
+| sp-anatomy | Project fields: narrative, icon, special_project_parent, mandatory special_project_type list, allowed | game-file special_projects_documentation.md | 2026-10-31 |
+| sp-type-mandatory | special_project_type controls facility compatibility and art | game-file special_projects_documentation.md | 2026-10-31 |
+| sp-script-surface | special_project effect/trigger names exist in extracted JSON and grow per patch | tool (extracted effects.json grep) | 2026-10-31 |
+| map-warning-first | map/ errors crash at startup with unhelpful logs; game is the only oracle for most of it | community knowledge, high consensus | 2026-10-31 |
+| map-load-bearing | Load-bearing map files table (definition.csv, provinces.bmp, positions.txt, strategicregions, railways...) | game-file map/ tree | 2026-10-31 |
+| map-risk-tiers | Risk tiers: state reassignment low, region/supply medium, province add high, default.map extreme | community knowledge | 2026-10-31 |
+| abilities | Unit leader ability fields: name/desc/icon/sound_effect/type (army|navy_leader)/allowed with OWNER | game-file common/abilities sample | 2026-10-31 |
+| agency-upgrades | Agency upgrade: branch block, unique names across branches, frame suffixes, loc via <name>_desc | game-file intelligence_agency_upgrades/_documentation.info | 2026-10-31 |

@@ -85,3 +85,24 @@ CLAIM(character-roles)
    classes: `invalid-scope`, "cannot be assigned", "could not find this
    character".
 3. In game: politics view for leaders/advisors; leader list for commanders.
+
+## Unit leader abilities (`common/abilities/*.txt`)
+
+Commander activated abilities (force attack, logistics wizard...):
+
+```txt
+ability = {
+	CHI_force_attack = {
+		name = ABILITY_FORCE_ATTACK        # loc keys name/_desc
+		desc = ABILITY_FORCE_ATTACK_DESC
+		icon = GFX_ability_chi_force_attack
+		sound_effect = command_power_ability_offensive
+		type = army_leader                 # army_leader | navy_leader
+		allowed = { ... }                  # OWNER = { ... } for the country
+		# cost/duration/cooldown blocks — check vanilla file for the shape
+	}
+}
+```
+
+Tied to traits via the ability's `allowed`/trait conditions. 6 vanilla
+files. CLAIM(abilities)

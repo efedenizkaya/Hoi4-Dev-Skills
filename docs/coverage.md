@@ -27,6 +27,8 @@ so contributors can pick work and users can check before trusting.
 | `operations` | [operations.md](../skills/hoi4-modding/references/operations.md) |
 | `peace_conference` (35 files) | [peace-conference.md](../skills/hoi4-modding/references/peace-conference.md) |
 | `game_rules`, `ideologies`, `buildings` | [small-systems.md](../skills/hoi4-modding/references/small-systems.md) |
+| `special_projects` (13 files) | [special-projects.md](../skills/hoi4-modding/references/special-projects.md) |
+| `map/` (high-risk orientation) | [map-modding.md](../skills/hoi4-modding/references/map-modding.md) |
 | `.mod` descriptors, load order, overrides | [mod-structure.md](../skills/hoi4-modding/references/mod-structure.md) |
 | debugging, `-debug`, logs | [debugging-and-logs.md](../skills/hoi4-modding/references/debugging-and-logs.md) |
 | control flow, iteration, event targets | [control-flow.md](../skills/hoi4-modding/references/control-flow.md) |
