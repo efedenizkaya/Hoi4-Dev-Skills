@@ -158,6 +158,7 @@ Read only what the task needs:
 | Full mod health report (validator + duplicates + overrides + loc) | `scripts/doctor.py --mod <dir>` |
 | Is my skill stale for this game install? | `scripts/stale_check.py` |
 | Official description + scopes for one effect/trigger/modifier | `scripts/find.py --record <name> --data extracted/<version>` |
+| Which events fire which (chain graph, dangling targets) | `scripts/chain_map.py <mod_dir> --show-undefined` |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
 | Start a new focus tree from a template | [assets/kits/focus-kit/](assets/kits/focus-kit/MANIFEST) |

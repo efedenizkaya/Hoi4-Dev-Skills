@@ -182,3 +182,4 @@ game patch; delete rows that no longer hold.
 | unknown-idea-reference | Idea tokens in add/remove_ideas and has_idea must resolve to mod or vanilla ideas; idea tokens are depth-1/2 names in common/ideas | tool (validator rule; spot-verified true positives) | 2026-10-31 |
 | unused-loc-key | Event-pattern loc keys (ns.N[.letter]) referenced by no event file are leftovers; general unused-loc is unreliable due to dynamic keys | tool (validator rule, scoped) | 2026-10-31 |
 | periodic-effect-performance | on_daily/on_hourly hooks run every hour/day per country — heavy effects hurt late-game performance (heuristic) | **unverified** (community knowledge) | 2026-10-31 |
+| chain-map | Firing effects inside event definitions form a from->to graph; dangling targets are detectable | tool (chain_map; real mod: 34 undefined targets) | 2026-10-31 |

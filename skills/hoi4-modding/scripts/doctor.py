@@ -36,6 +36,42 @@ except ImportError:
     from loc_report import report as loc_report
 
 
+def _markdown(report: dict, mod_dir: Path) -> str:
+    lines = [f"# Mod Doctor report", "", f"mod: `{mod_dir}`",
+             f"health score: {report['health_score']}/100", ""]
+    bd = report["score_breakdown"]
+    if any(bd.values()):
+        lines.append("score breakdown (penalties): " +
+                     ", ".join(f"{k} -{v}" for k, v in bd.items() if v) + "")
+        lines.append("")
+    v = report["validator"]
+    lines.append(f"## Validator — {v['errors']} error(s), {v['warnings']} warning(s)")
+    lines.append("")
+    for f in v["findings"][:40]:
+        loc = f"{f['file']}:{f['line']}" if f["line"] is not None else f["file"]
+        lines.append(f"- `[{f['severity'].upper()}] {f['rule']}` {loc}: {f['message']}")
+    if v["warnings"] + v["errors"] > 40:
+        lines.append(f"- … {v['errors'] + v['warnings'] - 40} more")
+    if report["duplicate_ids"]:
+        lines.append("")
+        lines.append("## Duplicate identifiers")
+        for d in report["duplicate_ids"]:
+            lines.append(f"- [{d['kind']}] {d['id']}: {', '.join(d['definitions'])}")
+    if report["vanilla_overrides"]:
+        lines.append("")
+        lines.append("## Vanilla overrides (refresh on patch)")
+        for r in report["vanilla_overrides"]:
+            lines.append(f"- {r['file']}")
+    if report["loc_coverage"].get("languages"):
+        lines.append("")
+        lines.append("## Localisation coverage (vs english)")
+        base = report["loc_coverage"]["english_keys"]
+        for lang, data in sorted(report["loc_coverage"]["languages"].items()):
+            lines.append(f"- {lang}: missing {data['missing_count']}/{base}")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Mod health report")
     parser.add_argument("--mod", type=Path, required=True)
@@ -81,11 +117,33 @@ def main(argv: list[str] | None = None) -> int:
         "loc_coverage": loc,
     }
 
+    # health score: 100 minus weighted penalties, floored at 0
+    err_pen = min(len(errors) * 8, 60)
+    warn_pen = min(len(warnings) * 2, 30)
+    dup_pen = min(len(dup_ids) * 10, 40)
+    ovr_pen = min(len(overrides) * 4, 30)
+    loc_pen = 0
+    for lang, data in loc.get("languages", {}).items():
+        if loc.get("english_keys"):
+            ratio = data["missing_count"] / loc["english_keys"]
+            loc_pen += 10 if ratio > 0.5 else (5 if ratio > 0.25 else 0)
+    loc_pen = min(loc_pen, 20)
+    score = max(0, 100 - err_pen - warn_pen - dup_pen - ovr_pen - loc_pen)
+    report["health_score"] = score
+    report["score_breakdown"] = {
+        "errors": err_pen, "warnings": warn_pen, "duplicates": dup_pen,
+        "overrides": ovr_pen, "loc": loc_pen,
+    }
+
     if args.out:
-        args.out.write_text(json.dumps(report, indent=1, ensure_ascii=False),
-                            encoding="utf-8")
+        if args.out.suffix == ".md":
+            args.out.write_text(_markdown(report, args.mod), encoding="utf-8")
+        else:
+            args.out.write_text(json.dumps(report, indent=1, ensure_ascii=False),
+                                encoding="utf-8")
 
     print(f"Mod Doctor — {args.mod}")
+    print(f"  health score: {score}/100")
     print(f"  validator : {len(errors)} error(s), {len(warnings)} warning(s)")
     print(f"  duplicate ids: {len(dup_ids)}")
     if game_dir:

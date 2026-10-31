@@ -1,0 +1,26 @@
+add_namespace = mymod
+country_event = {
+	id = mymod.1
+	option = {
+		name = mymod.1.a
+		country_event = { id = mymod.2 days = 3 }
+	}
+}
+country_event = {
+	id = mymod.2
+	immediate = {
+		country_event = { id = mymod.3 }
+	}
+	option = { name = mymod.2.a }
+}
+country_event = {
+	id = mymod.3
+	option = { name = mymod.3.a }
+}
+country_event = {
+	id = mymod.4
+	option = {
+		name = mymod.4.a
+		country_event = { id = ghost.9 }
+	}
+}

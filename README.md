@@ -23,10 +23,16 @@ official documentation shipped inside the game install.
   loop. The skill refuses to claim a mod works without evidence.
 - **Honest claims.** Every hard claim in the skill is tied to a source
   (game docs, game file, or observed log) in
-  [docs/claims-register.md](docs/claims-register.md) — 167 claims and
+  [docs/claims-register.md](docs/claims-register.md) — 168 claims and
   counting.
 - **MIT.** Free to fork, embed and build on (unlike CC-licensed
   alternatives).
+- **Battle-tested on a real mod.** See the failure census in
+  [docs/dogfood-lessons.md](docs/dogfood-lessons.md) — 833 duplicate
+  loc keys, 34 dangling event targets and 18 phantom sprites found in
+  one actively-played hand-made mod.
+
+[Türkçe README](README_tr.md)
 
 ## Quick start
 

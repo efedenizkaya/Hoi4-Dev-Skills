@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.23.0 — Health score, chain map, dogfood lessons, Turkish README
+
+- `doctor.py`: health score (0-100, weighted penalties: errors 8, warnings
+  2, duplicate ids 10, overrides 4, loc gaps up to 20) and markdown
+  report output (`--out report.md`).
+- `scripts/chain_map.py`: event firing graph — which events fire which,
+  with dangling-target detection. Real mod: 295 defined events, 34
+  undefined targets surfaced.
+- `docs/dogfood-lessons.md`: the real-mod failure census and the
+  meta-lesson (the game forgives everything except parse errors —
+  tooling is the only way to see silent no-ops). Unique content no
+  competitor has.
+- `README_tr.md`: Turkish README with language link.
+- Register 168 claims; tool count 13.
+
 ## 0.20.0 — Professional hardening (roadmap items 1-5, 6, 7)
 
 From the fourth audit (four-repo competitive comparison):
