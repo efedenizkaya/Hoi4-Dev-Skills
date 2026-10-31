@@ -33,7 +33,7 @@ jobs:
         shell: bash
       - name: Install script smoke (PowerShell)
         run: tests/test_install.ps1
-        shell: pwsh
+        shell: powershell
 
   skill-spec:
     runs-on: self-hosted
