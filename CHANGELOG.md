@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.15.0 — Misc systems + eval harness v2
+
+- `references/misc-systems.md`: the remaining single-file systems
+  (opinion modifiers, wargoals, occupation laws, continuous focus, medals,
+  intelligence agencies, combat tactics, terrain, autonomous states,
+  defines-blast-radius). Reference count: 23.
+- **Eval harness v2**: `scripts/run_evals.py` + `evals/task-evals.json` —
+  each eval = task prompt + mod dir + validator gates (max_errors,
+  forbidden_rules). `--self-test` proves the shipped kits satisfy their
+  own gates (CI step added); agent mode grades agent output. Deterministic:
+  vanilla awareness is opt-in via `--game-dir`.
+- Coverage map: every single-file `common/` system is now covered; the
+  only remaining uncovered item is `map_modes` (map-adjacent).
+- Register 144 claims; 23 references.
+
 ## 0.14.0 — Peace conference + small systems
 
 - `references/peace-conference.md`: the FROM/FROM.FROM/FROM.FROM.FROM

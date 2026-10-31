@@ -149,3 +149,13 @@ game patch; delete rows that no longer hold.
 | ideology-types | has_government compares the ideology FAMILY; types are sub-ideologies | game-file common/ideologies/00_ideologies.txt structure | 2026-10-31 |
 | buildings-fields | Building fields: show_on_map, base_cost(_conversion), province_max, level_cap, icon_frame | game-file common/buildings/00_buildings.txt (arms_factory) | 2026-10-31 |
 | buildings-modifier-split | country_modifiers vs state_modifiers split; enable_for_controllers restricts by controller | game-file common/buildings/00_buildings.txt header comments | 2026-10-31 |
+| opinion-modifiers | Opinion modifiers: value +/-, trade = yes splits into trade channel | game-file common/opinion_modifiers | 2026-10-31 |
+| wargoals | Wargoal fields: allowed/available, peace-action blocks, generate costs; PREV=target ROOT=owner | game-file common/wargoals/00_invasion.txt header | 2026-10-31 |
+| occupation-laws | Occupation law fields: tooltip, icon strip frame, sound_effect | game-file common/occupation_laws template header | 2026-10-31 |
+| continuous-focus | continuous_focus_palette with country factor + default + reset_on_civilwar | game-file common/continuous_focus | 2026-10-31 |
+| medals | Medals: name/description loc + ribbon frames/colors | game-file common/medals/00_medals.txt | 2026-10-31 |
+| intelligence-agencies | Custom agencies: picture + names list + default/available; mechanics live elsewhere | game-file common/intelligence_agencies header + USA entry | 2026-10-31 |
+| combat-tactics | Tactic names must start with tactic_; phases list defines order | game-file common/combat_tactics.txt header note | 2026-10-31 |
+| terrain | terrain categories with colors; adding terrain touches map files | game-file common/terrain/00_terrain.txt | 2026-10-31 |
+| autonomous-states | autonomy_state fields: id, is_puppet, min_freedom_level, manpower_influence, use_overlord_color, rule | game-file common/autonomous_states | 2026-10-31 |
+| defines-blast-radius | defines are engine constants (Lua); overrides change global behavior | game-file common/defines/00_defines.lua | 2026-10-31 |

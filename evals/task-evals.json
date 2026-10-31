@@ -1,0 +1,40 @@
+[
+ {
+  "name": "event-chain-gold",
+  "task": "Create a two-event chain (second fires 3 days later) with full localisation, in a mod named 'mymod'.",
+  "mod_dir": "skills/hoi4-modding/assets/kits/event-kit",
+  "expect": {
+   "max_errors": 0,
+   "forbidden_rules": [
+    "missing-add-namespace",
+    "missing-loc-key"
+   ]
+  }
+ },
+ {
+  "name": "decision-gold",
+  "task": "Add a decision category with two decisions (one repeatable, one one-shot) with localisation.",
+  "mod_dir": "skills/hoi4-modding/assets/kits/decision-kit",
+  "expect": {
+   "max_errors": 0,
+   "forbidden_rules": [
+    "duplicate-event-id",
+    "missing-loc-key"
+   ]
+  }
+ },
+ {
+  "name": "focus-tree-gold",
+  "task": "Add a focus tree with a mutual-exclusion pair and a shared prerequisite, with localisation.",
+  "mod_dir": "skills/hoi4-modding/assets/kits/focus-kit",
+  "expect": {
+   "max_errors": 0,
+   "forbidden_rules": [
+    "duplicate-focus-id",
+    "unidirectional-mutual-exclusive",
+    "focus-position-overlap",
+    "unknown-sprite"
+   ]
+  }
+ }
+]

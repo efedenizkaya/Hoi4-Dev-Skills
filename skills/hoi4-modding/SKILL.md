@@ -150,6 +150,7 @@ Read only what the task needs:
 | Intelligence agency operations | [references/operations.md](references/operations.md) |
 | Peace conference (categories, cost modifiers) | [references/peace-conference.md](references/peace-conference.md) |
 | Game rules, ideologies, buildings | [references/small-systems.md](references/small-systems.md) |
+| Opinion modifiers, wargoals, occupation laws, medals, terrain, autonomy... | [references/misc-systems.md](references/misc-systems.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
