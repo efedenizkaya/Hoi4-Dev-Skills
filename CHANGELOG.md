@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.11.0 — Census-driven: units reference + coverage map
+
+- Census of all 94 `common/` systems vs reference coverage (the honest
+  gap list, kept as a permanent document).
+- `references/units-and-equipment.md`: the biggest uncovered system (296
+  vanilla files) — sub_units / equipment types / templates layers,
+  grounded in the game's own `units/equipment/_documentation.md` and
+  vanilla infantry.txt.
+- `docs/coverage.md`: the coverage map itself — contributors pick work
+  from the ranked uncovered list (peace_conference, bop, raids next),
+  users check before trusting.
+- Register 105 claims; 18 references.
+
 ## 0.10.0 — Scripted GUI reference, loc coverage tool, focus kit
 
 - `references/scripted-gui.md`: the largest content gap, grounded in the

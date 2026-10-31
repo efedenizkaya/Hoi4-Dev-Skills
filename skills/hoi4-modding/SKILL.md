@@ -144,6 +144,7 @@ Read only what the task needs:
 | Player-visible symptom, cause unknown ("X shows raw", "tree missing", "icon ?") | [references/symptoms.md](references/symptoms.md) |
 | Control flow: if/limit, random_list, scope iteration, event targets | [references/control-flow.md](references/control-flow.md) |
 | Custom UIs (scripted GUIs, .gui windows) | [references/scripted-gui.md](references/scripted-gui.md) |
+| Units, battalions, equipment, division designer | [references/units-and-equipment.md](references/units-and-equipment.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |

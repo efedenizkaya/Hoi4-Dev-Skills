@@ -114,3 +114,9 @@ game patch; delete rows that no longer hold.
 | sgui-anchoring | parent_window_token tokens, parent_window_window, parent_scripted_gui, map_mode | game-file _documentation.md | 2026-10-31 |
 | sgui-binding-silent | effects/triggers/properties bind by .gui element name; mismatches do nothing silently | game-file _documentation.md + community knowledge | 2026-10-31 |
 | sgui-context | scripted_guis context anchors: decision_category dominant in vanilla (19/20) | game-file vanilla census + _documentation.md | 2026-10-31 |
+| units-files | Units system = common/units (sub_units) + units/equipment + templates; game ships equipment/_documentation.md | game-file common/units tree (296 files) | 2026-10-31 |
+| units-layers | sub_units consume equipment; templates combine sub_units; renaming equipment ids breaks stockpiles silently | game-file common/units structure + save semantics (community knowledge) | 2026-10-31 |
+| sub-unit-fields | sub_unit fields: abbreviation, sprite, map_icon_category, priority, ai_priority, active, type, group, categories | game-file common/units/infantry.txt | 2026-10-31 |
+| equipment-fields | Equipment fields: year, is_archetype, archetype, parent, is_frame, type families, max_military_factories, ai_type, module_slots | game-file common/units/equipment/_documentation.md | 2026-10-31 |
+| unit-needs-tech | New battalion needs sub_unit + equipment + tech enable_subunits/enable_equipments or stays invisible | game-file techs reference pattern (infantry.txt enable_subunits) | 2026-10-31 |
+| template-rename-breaks-oob | Renaming division_template names breaks history/units OOB references | community knowledge — verify on use | 2026-10-31 |
