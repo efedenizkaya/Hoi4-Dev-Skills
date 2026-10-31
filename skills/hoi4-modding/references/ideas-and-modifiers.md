@@ -107,3 +107,36 @@ the scope you apply it to. CLAIM(unknown-modifier-silent) `[unverified]`
    of that list. CLAIM(setup-log-idea-counts)
 3. In-game politics view shows spirits/laws; ledger placement wrong =
    category `ledger` misconfigured.
+
+## Complete idea field reference (vanilla census, 1.19.4.1)
+
+**Slot/category level** (`common/idea_tags/00_idea.txt`): `slot`,
+`cost`, `removal_cost`, `ledger`, `type = national_spirit|designer|law...`,
+`character_slot`, `politics_tab`, `hidden`. Special slots: `designer`
+(161 uses — MIO-era design teams still register through ideas),
+`law`, `use_list_view`. CLAIM(idea-slot-fields)
+
+**Idea body** (inside a slot):
+
+| Field | Notes |
+|---|---|
+| `available` / `allowed` / `visible` | take / exist-at-all / show |
+| `modifier` | the passive bonuses (see modifier DB) |
+| `on_add` / `on_remove` | effects on gain/loss |
+| `rule = { can_send_volunteers = yes ... }` | grants RULES to the country (vanilla afghanistan.txt) — rules are a separate keyword space from modifiers! |
+| `targeted_modifier = { tag = SOV ... }` | penalties/bonuses applied TO another country (license_purchase_cost etc.) |
+| `equipment_bonus = { ... }` | buffs a specific equipment type |
+| `research_bonus` | research speed for categories |
+| `cost` / `removal_cost` | override the slot's |
+| `picture` | idea GFX |
+| `cancel_if_invalid` / `cancelable` | invalid-handling |
+| `allowed_civil_war` | survives civil war? |
+
+CLAIM(idea-body-full)
+
+### The three keyword spaces (classic mixup)
+
+Inside an idea: `modifier` keys = **modifier names** (from modifiers.json),
+`rule` keys = **rules** (a separate engine list), and effect blocks
+(`on_add`) = **effects**. An AI mixing these three produces ideas that
+load fine and do nothing. CLAIM(idea-keyword-spaces)

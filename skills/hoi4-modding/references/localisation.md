@@ -83,3 +83,30 @@ language folder, not in english. CLAIM(loc-font-coverage) `[unverified]`
 3. In-game: open the event/idea; `[Root.GetNameDef]` wrong scope shows a
    literal tag like `GER` instead of "Germany" — a scoping bug, not a loc
    bug.
+
+## Scope object getter census (vanilla english loc, 1.19.4.1)
+
+Frequency of `[Scope.Getter]` usage across vanilla english files:
+
+| Getter | Freq | Returns |
+|---|---|---|
+| `[Root.GetName]` / `[From.GetName]` | 289 | country/state name |
+| `[Root.GetAdjective]` | 241 | adjectival form ("German") |
+| `[Root.GetLeader]` | 200 | leader name |
+| `[Root.GetNameDef]` | 133 | definite-form name ("Germany") |
+| `[Root.GetNameDefCap]` | 81 | capitalized definite form |
+| `[Root.GetRulingParty]` | 50 | ruling party name |
+| `[Root.GetFactionName]` | 42 | faction name |
+| `[Root.GetCallsign]`, `GetMissionRegion`, `GetRulingIdeology`, `GetFullName`, `GetHerHis`, `GetCommunistParty`, loyalty-level getters | rare | characters and ideologies included |
+
+Full object→getter tables: the game's
+`documentation/loc_objects_documentation.md`. Use only getters listed
+there; a wrong getter renders literally. CLAIM(loc-getter-census)
+
+### The two display traps
+
+- `[Root.GetName]` on a country gives the short name; `[Root.GetNameDef]`
+  gives the grammatical definite form — vanilla alternates them constantly.
+- Character loc uses the character object: `[Root.GetLeader]` is the safe
+  accessor; `[CHARACTER_token.GetName]` also works after the character is
+  in scope. CLAIM(loc-display-traps)

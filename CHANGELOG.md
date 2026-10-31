@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.13.0 — Core references deepened to production depth
+
+Goal: an AI can write complete, correct code for the five core systems
+from a single reference read. Every table below is a vanilla census, not
+memory:
+
+- `events.md`: complete event field table (frequency-ranked, 24 fields
+  incl. hidden, fire_for_sender, timeout_days, months), conditional
+  multi-desc syntax, complete option field set.
+- `national-focus.md`: complete focus field table (29 fields with vanilla
+  frequencies, incl. will_lead_to_war_with, allow_branch, dynamic,
+  enable_automatic_bypass).
+- `ideas-and-modifiers.md`: slot-level fields (designer/law slots, ledger,
+  politics_tab), full idea body incl. `rule` grants and
+  `targeted_modifier`; the "three keyword spaces" (modifiers vs rules vs
+  effects) trap documented.
+- `localisation.md`: scope-getter census (GetName 289, GetAdjective 241,
+  GetLeader 200, GetNameDef 133...) and the two display traps.
+- `gfx-and-assets.md`: complete SpriteType fields (noOfFrames icon strips
+  + 11-field animation family + effectFile), the £-strip connection.
+- Register 126 claims; all references stay under the 400-line limit.
+
 ## 0.12.0 — Three 1.14+ systems: BoP, raids, operations
 
 - `references/balance-of-power.md`: bands, sides, static-modifier

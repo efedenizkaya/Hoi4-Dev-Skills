@@ -129,3 +129,48 @@ localisation file, and the exact commands to verify.
    completion; then `python tools/error_triage.py logs/error.log` — no new
    `invalid-scope` / missing-loc classes.
 3. For scheduled events confirm the `immediate` effects ran (flag/variable).
+
+## Complete event field reference (vanilla census, 1.19.4.1)
+
+Frequency = occurrences across all vanilla `events/*.txt`:
+
+| Field | Freq | Notes |
+|---|---|---|
+| `option` | 11565 | at least one required |
+| `id` | 11212 | `namespace.number` |
+| `desc`, `title` | ~7000 | loc keys, or multi-desc block (below) |
+| `picture` | 6783 | `GFX_report_event_*` sprite |
+| `is_triggered_only` | 6581 | block property, not a trigger |
+| `fire_only_once` | 1398 | block property |
+| `hours` / `days` | 1164 / 848 | on the FIRING effect (`country_event = { id = x hours = 6 }`) |
+| `immediate` | 961 | effects run at fire time, before display |
+| `trigger` | 714 | pulse conditions (omit with `is_triggered_only`) |
+| `major` | 627 | news_event shown to everyone |
+| `mean_time_to_happen` | 377 | pulse alternative; `days = N` + `modifier = { factor }` |
+| `random_days` / `random_hours` | 311 / 238 | random extra delay on the firing effect |
+| `hidden` | 239 | player sees nothing; options still required |
+| `fire_for_sender` | 36 | news/country events also shown to the sender |
+| `timeout_days` | 6 | for event menus with expiry |
+| `months` / `random` | rare | delay variants |
+| `show_major` / `minor_flavor` / `after` | rare | |
+
+### Conditional description (vanilla WTT_Germany.txt)
+
+```txt
+desc = {
+	text = wtt_germany.28.d
+	trigger = { NOT = { ... } }
+}
+desc = {
+	text = wtt_germany.28.d.2
+	trigger = { ... }
+}
+```
+
+The FIRST block whose trigger passes wins. CLAIM(multi-desc)
+
+### Complete option field set (census)
+
+`name` (always), `ai_chance` (6270), `trigger` (3279), `hidden_effect`
+(2047 — effects run but show no tooltip), `custom_effect_tooltip`
+(1558), `effect_tooltip` (1205), plus any effects. CLAIM(option-census)

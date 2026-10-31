@@ -131,3 +131,13 @@ game patch; delete rows that no longer hold.
 | operations-files | Operations in common/operations; vanilla sorts by operatives then network strength | game-file common/operations/00_operations.txt header | 2026-10-31 |
 | operations-anatomy | Operation fields: icon, map_icon, name/desc, priority, days, network_strength, operatives, visible/available | game-file common/operations/00_operations.txt (operation_rescue_operative) | 2026-10-31 |
 | operations-from-target | Operation visible/available run with FROM = target country | game-file operation_rescue_operative visible block | 2026-10-31 |
+| multi-desc | desc = { text = key trigger = {...} } blocks; first passing trigger wins | game-file vanilla events (WTT_Germany.txt) | 2026-10-31 |
+| option-census | Option field set: name, ai_chance, trigger, hidden_effect, custom_effect_tooltip, effect_tooltip + effects | game-file vanilla events census (11565 options) | 2026-10-31 |
+| focus-census | Full focus field inventory with vanilla frequencies (prerequisite 11268, relative_position_id 10473, ...) | game-file vanilla national_focus census | 2026-10-31 |
+| idea-slot-fields | Idea slot fields: slot, cost, removal_cost, ledger, type, character_slot, politics_tab, hidden; designer/law special slots | game-file common/idea_tags/00_idea.txt census | 2026-10-31 |
+| idea-body-full | Idea body fields incl. rule, targeted_modifier, equipment_bonus, research_bonus | game-file vanilla ideas (afghanistan.txt) | 2026-10-31 |
+| idea-keyword-spaces | modifier keys / rule keys / effects are three separate keyword spaces inside ideas | game-file vanilla ideas (rule = can_send_volunteers vs modifier keys) | 2026-10-31 |
+| loc-getter-census | [Scope.Getter] frequency list (GetName 289, GetAdjective 241, GetLeader 200, GetNameDef 133, ...) | game-file vanilla english loc census | 2026-10-31 |
+| loc-display-traps | GetName vs GetNameDef (definite form) distinction; character access via GetLeader | game-file vanilla loc usage | 2026-10-31 |
+| sprite-census | SpriteType fields: name/texturefile plus noOfFrames, effectFile, 11-field animation family | game-file interface/*.gfx census (8951 sprites) | 2026-10-31 |
+| sprite-strips | noOfFrames strips pair with £token|frame in loc; whole-strip display = frame/frames mismatch | game-file goals.gfx noOfFrames + £resources_strip|5 usage | 2026-10-31 |

@@ -61,3 +61,23 @@ usual way to change fonts. CLAIM(gfx-additive) `[unverified]`
    sprite-name typos do NOT appear there — check the UI visually.
 3. DDS conversion: any image editor with the DDS plugin; use DXT1 for
    opaque, DXT5 when alpha is needed.
+
+## Complete SpriteType field reference (vanilla census, 1.19.4.1)
+
+8951 `name` / 8816 `texturefile` pairs across `interface/*.gfx`, plus:
+
+| Field | Freq | Notes |
+|---|---|---|
+| `noOfFrames` | in goals.gfx | icon STRIPS: one texture, N frames; loc picks with `£icon|frameNo` |
+| `effectFile` | 3416 | `.fxh` shader attachment (PDX FX system) |
+| `animation` family | 6347 | `animation`, `animationmaskfile`, `animationtexturefile`, `animationrotation`, `animationlooping`, `animationtime`, `animationdelay`, `animationblendmode`, `animationtype`, `animationrotationoffset`, `animationtexturescale` — animated sprites (radar pings, shimmering focuses) |
+
+Other sprite kinds in .gfx: `corneredTileSpriteType` (9-slice panels),
+`progressBarType` (e.g. powerbalanceview.gfx), `bitmapfonts`/font blocks
+separately. CLAIM(sprite-census)
+
+### Icon strips (the £ connection)
+
+A `noOfFrames = 5` sprite feeds `£token|3` in localisation (frame 3 of 5).
+When a modded icon shows the WHOLE strip, the frame index or noOfFrames is
+wrong — this pairs with `loc-icon-syntax`. CLAIM(sprite-strips)

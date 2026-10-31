@@ -90,3 +90,31 @@ verification), see [../assets/kits/decision-kit/](../assets/kits/decision-kit/MA
    `python tools/error_triage.py logs/error.log` — look for
    `invalid-database-object` and `invalid-scope` classes.
 3. Visual check: tree renders, branches lock correctly, no orphan branches.
+
+## Complete focus field reference (vanilla census, 1.19.4.1)
+
+Frequency across all vanilla `common/national_focus/*.txt`:
+
+| Field | Freq | Notes |
+|---|---|---|
+| `prerequisite` | 11268 | AND groups; `{ focus = a focus = b }` = OR inside |
+| `cost`, `id`, `icon`, `x`, `y` | ~10676 | |
+| `completion_reward` | 10676 | effects in owner country scope |
+| `relative_position_id` | 10473 | x/y relative to another focus |
+| `available` | 10063 | can it START |
+| `search_filters` | 9225 | `FOCUS_FILTER_*` tokens |
+| `ai_will_do` | 7391 | |
+| `bypass` | 6160 | auto-complete condition |
+| `available_if_capitulated` | 5734 | |
+| `cancel_if_invalid` / `continue_if_invalid` | ~4000 | invalid-handling pair |
+| `mutually_exclusive` | 2759 | both sides (see above) |
+| `will_lead_to_war_with = TAG` | 786 | flags war intent to the AI/target |
+| `offset` | 737 | |
+| `allow_branch` | 543 | trigger gating a whole branch |
+| `complete_tooltip` | 374 | |
+| `dynamic = yes` (tree-level) | 153 | tree re-evaluated (formable nations) |
+| `select_effect`, `overlay`, `text_icon`, `enable_automatic_bypass`, `alternate_icon`, `cancel`, `bypass_effect`, `historical_ai` | rare | |
+
+Tree-level fields: `default`, `country` (factor pattern), `dynamic`,
+`continuous_focus_position`, plus `shared_focus`/`joint_focus` headers for
+shared trees. CLAIM(focus-census)
