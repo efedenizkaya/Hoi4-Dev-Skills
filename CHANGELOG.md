@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.24.0 — Distribution groundwork (no release yet)
+
+- README: "First things to try" prompts, "Asset and legal posture"
+  section (no game assets ever committed; extracted locally; competitor
+  ideas re-implemented, never copied).
+- `templates/mod-AGENTS.md` + `templates/mod-CLAUDE.md`: drop into your
+  mod repository so any agent knows the verification rules.
+- INSTALLATION.md: Codex one-line install.
+- CI `package` job: every push produces a downloadable
+  `hoi4-modding-skill` zip artifact (release-ready packaging without a
+  release).
+
 ## 0.23.0 — Health score, chain map, dogfood lessons, Turkish README
 
 - `doctor.py`: health score (0-100, weighted penalties: errors 8, warnings

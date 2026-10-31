@@ -2,7 +2,7 @@
   "name": "hoi4-dev-skills",
   "description": "Verified, game-derived Agent Skill and tooling for AI-assisted Hearts of Iron IV modding.",
   "license": "MIT",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "gameVersion": "1.19.4.1",
   "spec": "https://agentskills.io/specification",
   "repository": "https://github.com/efedenizkaya/Hoi4-Dev-Skills"
