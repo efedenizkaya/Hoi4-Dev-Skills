@@ -170,3 +170,6 @@ game patch; delete rows that no longer hold.
 | agency-upgrades | Agency upgrade: branch block, unique names across branches, frame suffixes, loc via <name>_desc | game-file intelligence_agency_upgrades/_documentation.info | 2026-10-31 |
 | pc-ai-desires-summed | AI peace desires are summed; <= 0 total means the AI skips the action | game-file ai_peace/_documentation.md | 2026-10-31 |
 | pc-ai-desire-percent | ai_desire is a percentage modifier (100 = double), not a weight | game-file ai_peace/_documentation.md | 2026-10-31 |
+| desc-block-loc | Conditional descriptions (desc = { text = key trigger }) exist (512 vanilla uses) and their text keys are loc refs | game-file vanilla events census | 2026-10-31 |
+| loc-hygiene | l_<lang> header must match the folder; duplicate keys in one file are overwrite bugs (last wins) | tool (validator rules) + game-file vanilla loc conventions | 2026-10-31 |
+| focus-offset | focus offset = { x y trigger } is a conditional pixel nudge, not grid position | game-file vanilla germany.txt offset blocks | 2026-10-31 |

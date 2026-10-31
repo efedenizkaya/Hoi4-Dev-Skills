@@ -60,7 +60,7 @@ CLAIM(folder-map)
    singleton file types — and inside `common/`, files load in ALPHABETICAL
    filename order (`00_`, `01_`, … prefixes exist to control this; use
    `zz_` to sort last). When two of your files define the same id, the
-   alphabetical winner silently wins. CLAIM(alphabetical-load-order)
+   alphabetical winner silently wins. CLAIM(alphabetical-load-order) `[unverified]`
 2. `common/` **subfolders are additive by filename**: `common/ideas/
    mymod_ideas.txt` adds new entries without touching vanilla files — until
    a filename collides, then rule 1 applies. CLAIM(additive-subfolders)

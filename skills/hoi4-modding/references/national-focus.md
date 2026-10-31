@@ -18,6 +18,8 @@ focus_tree = {
 	default = no                       # not the fallback tree for everyone
 	country = {
 		factor = 0                      # vanilla pattern: base 0, add per tag
+		factor = 0                      # vanilla pattern: base 0, add per tag
+		                                   CLAIM(focus-tree-selection)
 		modifier = { add = 10 tag = GER }
 	}
 
@@ -29,6 +31,7 @@ focus_tree = {
 		y = 0                          # row (0 = first row); x is the column
 		cost = 5                       # in POINTS; define FOCUS_POINT_DAYS = 7,
 		                               # so 1 point = 1 week of progress
+		                               CLAIM(focus-cost-weeks)
 		available = { has_idea = mymod_mobilization }   # can it START
 		bypass = { has_war_with = POL }                 # auto-complete condition
 		mutually_exclusive = { focus = mymod_alt_path }

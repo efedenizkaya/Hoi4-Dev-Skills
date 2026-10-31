@@ -23,7 +23,7 @@ official documentation shipped inside the game install.
   loop. The skill refuses to claim a mod works without evidence.
 - **Honest claims.** Every hard claim in the skill is tied to a source
   (game docs, game file, or observed log) in
-  [docs/claims-register.md](docs/claims-register.md) — 155 claims and
+  [docs/claims-register.md](docs/claims-register.md) — 158 claims and
   counting.
 - **MIT.** Free to fork, embed and build on (unlike CC-licensed
   alternatives).
@@ -68,7 +68,9 @@ Install details and agent support tiers:
 | `tools/validate.py` | static lint: braces/quotes, duplicate event ids, missing loc keys, focus-tree rules (prerequisites, bidirectional exclusivity, grid overlap), vanilla override awareness, and — with `--data` — effect/trigger name checks against the extracted database |
 | `tools/error_triage.py` | parse, classify and diff `error.log` between two runs — only deltas matter |
 
-Python 3.10+, stdlib only. Details:
+Python 3.10+, stdlib only — CI exercises it on the maintainer's
+self-hosted Windows runner (Python 3.14) via `ci.yml`; other platforms
+and versions are untested. Details:
 [docs/setup-game-data.md](docs/setup-game-data.md).
 
 Why plain CLIs instead of an MCP server: they run in any agent loop with

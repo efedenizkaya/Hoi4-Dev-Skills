@@ -55,6 +55,8 @@ From the game's own doc (verbatim list): `player_context` (scope = player),
 `diplomatic_action`, `national_focus_context`, `country_mapicon`,
 `state_mapicon`. Vanilla census: `decision_category` dominates (19 of 20
 scripted GUIs). CLAIM(sgui-context-types)
+Vanilla census: `decision_category` dominates (19 of 20
+scripted GUIs). CLAIM(sgui-context-types) CLAIM(sgui-context)
 
 ## Anchoring
 

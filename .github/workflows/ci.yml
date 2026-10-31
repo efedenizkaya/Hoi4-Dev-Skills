@@ -3,8 +3,10 @@ name: CI
 on:
   push:
     branches: [main]
-  pull_request:
-  workflow_dispatch:   # manual run after billing issues are resolved
+  workflow_dispatch:
+  # pull_request intentionally absent: this workflow runs on a self-hosted
+  # runner. If the repo ever goes public, foreign PR code would execute on
+  # the maintainer's machine.   # manual run after billing issues are resolved
 
 permissions:
   contents: read
@@ -22,6 +24,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+      - name: Install pinned dev deps
+        run: python -m pip install -r requirements-dev.txt "skills-ref==0.1.1"
+        shell: bash
       - name: Run test suite
         run: python -m pytest -v
         shell: bash
@@ -39,6 +44,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+      - name: Install pinned dev deps
+        run: python -m pip install -r requirements-dev.txt "skills-ref==0.1.1"
+        shell: bash
       - name: Validate skill frontmatter
         run: python -m skills_ref.cli validate skills/hoi4-modding
         shell: bash

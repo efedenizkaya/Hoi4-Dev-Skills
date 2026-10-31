@@ -170,12 +170,10 @@ exist, offer to run the extractor before answering from memory.
 ## Known gaps (honesty)
 
 - Exhaustive effect/trigger semantics beyond what the game's own doc files
-  state are NOT embedded here — complex scripted-GUI and variable-lane
-  references are planned but not yet written; say so when a task needs them.
+  state are NOT embedded here — the per-version JSON from `scripts/extract.py`
+  is the exhaustive list; semantics come from the references.
 - Runtime behavior cannot be tested without the user launching the game;
   never simulate that evidence.
-- This skill ships no tools itself; the verification commands live in the
-  hoi4-dev-skills repository checkout and are run as
-  `python scripts/validate.py …` from that repo root. When the checkout is
-  not available, say so and fall back to embedded knowledge + the game's
-  own `-debug` error.log.
+- `docs/coverage.md` tracks exactly which of the game's `common/` systems
+  are covered and which are deferred (map/ deep-editing, sound/music,
+  tutorial, peace AI scoring details).

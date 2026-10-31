@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.18.0 — Audit-fix round 3
+
+- Validator: `offset` blocks no longer corrupt focus grid positions
+  (overlap detection was missing real collisions); conditional
+  `desc = { text = ... }` loc refs now checked (512 vanilla uses);
+  localisation hygiene rules added (`loc-language-mismatch`,
+  `duplicate-loc-key`) — the real dogfood mod surfaced 833 genuine
+  duplicate loc keys.
+- `new_mod.py` moved into the installed skill bundle (last tool living
+  outside it); repo-root wrapper added.
+- Claims: all 158 rows are now marked in the skill text (0 unused);
+  `[unverified]` tagging complete including alphabetical-load-order.
+- Docs: README references count corrected (14 -> 27) and derived note for
+  the tested Python version; SKILL.md Known gaps rewritten (points to
+  docs/coverage.md); CI `pull_request` trigger REMOVED — the workflow
+  runs on a self-hosted runner and foreign PR code must never execute on
+  the maintainer's machine; dev deps pinned in CI
+  (requirements-dev.txt + skills-ref==0.1.1).
+- Register rows added for the three new tool rules.
+
 ## 0.17.0 — Deepest static kit verification + peace AI
 
 - All three kits passed the deepest static verification possible without

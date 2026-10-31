@@ -55,6 +55,12 @@ CLAIM(error-log-format)
      graphics db expectations)
    - `loc-error`: missing/invalid localisation
 5. Repeat until the delta against baseline is clean.
+5. Repeat until the delta against baseline is clean.
+
+The validator's data-aware rules (`unknown-statement-name`,
+`unknown-focus-reference`, `missing-add-namespace`) exist to catch these
+before a game run: CLAIM(unknown-statement-name)
+CLAIM(unknown-focus-reference) CLAIM(missing-add-namespace)
 
 ## Reading crash logs
 
