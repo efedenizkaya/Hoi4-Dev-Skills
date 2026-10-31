@@ -13,40 +13,32 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Runs on the maintainer's self-hosted Windows runner: GitHub-hosted
+# runners were blocked by an account billing flag (private repo), and the
+# maintainer chose not to make the repo public. The machine has Python
+# 3.14, pytest, skills-ref, Git Bash and PowerShell preinstalled.
 jobs:
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-      - run: pip install pytest
       - name: Run test suite
         run: python -m pytest -v
+        shell: bash
       - name: Eval self-test (kits satisfy their gates)
         run: python tools/run_evals.py --evals evals/task-evals.json --self-test
+        shell: bash
       - name: Install script smoke (POSIX)
-        if: runner.os == 'Linux'
         run: bash tests/test_install.sh
-      - name: Install script smoke (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
+        shell: bash
+      - name: Install script smoke (PowerShell)
         run: tests/test_install.ps1
+        shell: pwsh
 
   skill-spec:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      # Agent Skills reference validator (frontmatter conventions)
-      - run: pip install skills-ref
       - name: Validate skill frontmatter
         run: python -m skills_ref.cli validate skills/hoi4-modding
+        shell: bash
