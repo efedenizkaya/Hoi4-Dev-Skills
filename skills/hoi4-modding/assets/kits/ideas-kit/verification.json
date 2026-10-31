@@ -1,0 +1,22 @@
+{
+  "target_contract": "HOI4 1.19.4.1 (Operation Postern)",
+  "method": "Structural lint via scripts/validate.py with --data and --game-dir (statement names, sprites, idea/event references)",
+  "checks": [
+    {
+      "tool": "validate.py --data + --game-dir",
+      "result": "0 errors, 0 warnings"
+    },
+    {
+      "tool": "claims-register.md",
+      "result": "idea-slot-fields, idea-body-full, idea-keyword-spaces verified 2026-10-31"
+    }
+  ],
+  "native_game_tested": false,
+  "not_established": [
+    "in-game rendering (politics view / leader list)",
+    "live AI interaction"
+  ],
+  "external_inputs": [
+    "User's mod namespace and tags"
+  ]
+}

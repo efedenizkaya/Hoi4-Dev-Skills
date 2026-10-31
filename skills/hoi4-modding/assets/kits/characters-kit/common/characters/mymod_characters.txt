@@ -1,0 +1,35 @@
+###
+# Characters kit — one character with three roles.
+# Replace `mymod` / the token everywhere. Recruit via a country history
+# file: recruit_character = mymod_leader
+###
+
+characters = {
+	mymod_leader = {
+		name = mymod_leader_name
+		portraits = {
+			civilian = {
+				large = GFX_portrait_default3
+			}
+		}
+		country_leader = {
+			ideology = neutrality
+			traits = { }
+		}
+		advisor = {
+			slot = political_advisor
+			idea_token = mymod_leader_advisor
+			allowed = {
+				original_tag = GER
+			}
+		}
+		corps_commander = {
+			traits = { }
+			skill = 3
+			attack_skill = 3
+			defense_skill = 3
+			planning_skill = 3
+			logistics_skill = 2
+		}
+	}
+}

@@ -161,6 +161,11 @@ Read only what the task needs:
 | Start a new event from a template | [assets/kits/event-kit/](assets/kits/event-kit/MANIFEST) |
 | Start a new decision from a template | [assets/kits/decision-kit/](assets/kits/decision-kit/MANIFEST) |
 | Start a new focus tree from a template | [assets/kits/focus-kit/](assets/kits/focus-kit/MANIFEST) |
+| Start new ideas / national spirits from a template | [assets/kits/ideas-kit/](assets/kits/ideas-kit/MANIFEST) |
+| Start a multi-role character from a template | [assets/kits/characters-kit/](assets/kits/characters-kit/MANIFEST) |
+| Start a scripted GUI panel from a template | [assets/kits/scripted-gui-kit/](assets/kits/scripted-gui-kit/MANIFEST) |
+| End-to-end traces: request → routing → verification | [references/worked-examples.md](references/worked-examples.md) |
+| Broken patterns and what the validator says | [examples/broken-cases.md](examples/broken-cases.md) |
 | Find where an id is defined (event/focus/idea/decision/character, mod or vanilla) | `scripts/find.py <pattern> --mod <dir>` (add `--game-dir` for vanilla coverage, `--duplicates` for collision audit) |
 | New HOI4 patch: what changed for modders | `scripts/version_diff.py <old_extracted> <new_extracted>` — added/removed effects, triggers, modifiers |
 | Which mod files shadow vanilla files (patch-breakage risk) | `scripts/override_audit.py --mod <dir> --game-dir <game>` |

@@ -1,0 +1,12 @@
+###
+# Ideas kit — category (slot) definition. Replace `mymod` everywhere.
+###
+
+idea_categories = {
+	mymod_spirits = {
+		type = national_spirit
+		cost = 0
+		removal_cost = -1
+		ledger = hidden
+	}
+}
