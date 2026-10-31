@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.12.0 — Three 1.14+ systems: BoP, raids, operations
+
+- `references/balance-of-power.md`: bands, sides, static-modifier
+  contracts, full effect/trigger surface (verified in extracted JSON).
+- `references/raids.md`: category + type databases, icon fallback chain,
+  entity resolution order — grounded in the game's own
+  `common/raids/_documentation.md`.
+- `references/operations.md`: operation fields and the FROM = target
+  scope contract.
+- Coverage map updated: three systems move to covered; remaining
+  uncovered leaders are peace_conference (35 files) then buildings.
+- Register 116 claims; 20 references.
+
 ## 0.11.0 — Census-driven: units reference + coverage map
 
 - Census of all 94 `common/` systems vs reference coverage (the honest

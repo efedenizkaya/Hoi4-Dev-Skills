@@ -22,6 +22,9 @@ so contributors can pick work and users can check before trusting.
 | `scripted_localisation` | [localisation.md](../skills/hoi4-modding/references/localisation.md) |
 | `technologies`, `technology_tags`, `land_doctrines` | [tech-tree.md](../skills/hoi4-modding/references/tech-tree.md) |
 | `units` (sub_units + equipment, 296 files) | [units-and-equipment.md](../skills/hoi4-modding/references/units-and-equipment.md) |
+| `bop` (Balance of Power) | [balance-of-power.md](../skills/hoi4-modding/references/balance-of-power.md) |
+| `raids` | [raids.md](../skills/hoi4-modding/references/raids.md) |
+| `operations` | [operations.md](../skills/hoi4-modding/references/operations.md) |
 | `.mod` descriptors, load order, overrides | [mod-structure.md](../skills/hoi4-modding/references/mod-structure.md) |
 | debugging, `-debug`, logs | [debugging-and-logs.md](../skills/hoi4-modding/references/debugging-and-logs.md) |
 | control flow, iteration, event targets | [control-flow.md](../skills/hoi4-modding/references/control-flow.md) |
@@ -38,9 +41,9 @@ so contributors can pick work and users can check before trusting.
 | Files | System | Notes |
 |---|---|---|
 | 35 | `peace_conference` | complex, rarely modded by beginners |
-| 10 | `bop` (Balance of Power) | 1.14+ system, small and well-shaped — good first target |
-| 9 | `raids` | 1.14+ naval raids |
-| 6 | `operations` | intelligence agency ops |
+
+
+
 | 6 | `abilities` | unit leader abilities |
 | 2 | `buildings` | small; commonly modded |
 | 2 | `bookmarks` | 1936 start bookmarks |

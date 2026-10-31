@@ -120,3 +120,14 @@ game patch; delete rows that no longer hold.
 | equipment-fields | Equipment fields: year, is_archetype, archetype, parent, is_frame, type families, max_military_factories, ai_type, module_slots | game-file common/units/equipment/_documentation.md | 2026-10-31 |
 | unit-needs-tech | New battalion needs sub_unit + equipment + tech enable_subunits/enable_equipments or stays invisible | game-file techs reference pattern (infantry.txt enable_subunits) | 2026-10-31 |
 | template-rename-breaks-oob | Renaming division_template names breaks history/units OOB references | community knowledge — verify on use | 2026-10-31 |
+| bop-files | BoP files in common/bop; 9 vanilla country files + _test.txt syntax sheet | game-file common/bop | 2026-10-31 |
+| bop-anatomy | BoP anatomy: initial_value, left/right_side, decision_category, range bands with min/max/modifier/on_activate | game-file common/bop/BRA.txt | 2026-10-31 |
+| bop-static-modifiers | BoP band modifier blocks hold static modifiers, not effects | game-file common/bop/BRA.txt (commented examples) | 2026-10-31 |
+| bop-script-surface | BoP effects (add_power_balance_value, set_power_balance, ...) and triggers all exist in 1.19.4.1 | tool (extracted effects/triggers JSON) | 2026-10-31 |
+| raids-files | Raids in common/raids (+ categories/); game ships _documentation.md | game-file common/raids tree | 2026-10-31 |
+| raids-anatomy | Raid category (intel_source, free_targeting) + type (category, days_to_prepare, command_power, arrow, unit_model, icon trio) | game-file common/raids/_documentation.md + facility_strike | 2026-10-31 |
+| raids-icon-fallback | Icon fallback GFX_raid_type_icon_{raid_name} unless custom_map_icon set | game-file common/raids/_documentation.md | 2026-10-31 |
+| raids-entity-lookup | unit_model entity resolution: country-specific -> culture -> base -> default | game-file common/raids/_documentation.md | 2026-10-31 |
+| operations-files | Operations in common/operations; vanilla sorts by operatives then network strength | game-file common/operations/00_operations.txt header | 2026-10-31 |
+| operations-anatomy | Operation fields: icon, map_icon, name/desc, priority, days, network_strength, operatives, visible/available | game-file common/operations/00_operations.txt (operation_rescue_operative) | 2026-10-31 |
+| operations-from-target | Operation visible/available run with FROM = target country | game-file operation_rescue_operative visible block | 2026-10-31 |
