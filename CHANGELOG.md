@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.17.0 — Deepest static kit verification + peace AI
+
+- All three kits passed the deepest static verification possible without
+  launching the game: statement names vs the extracted effects/triggers
+  database, sprites vs the real interface+dlc gfx inventory, namespaces,
+  focus rules, loc BOM — 0 errors, 0 warnings each. Recorded in every
+  kit's verification.json (`static_verified_against: 1.19.4.1`).
+- peace-conference.md completed with AI peace desires (`ai_peace/`):
+  summed desires, percentage semantics, same pc_* trigger caveat.
+- CI: `workflow_dispatch` added — a manual run is possible the moment the
+  account's billing issue is resolved. (Note: the CI failures are purely
+  billing — GitHub never starts the jobs.)
+
 ## 0.16.0 — Special projects, map orientation, abilities
 
 - `references/special-projects.md`: grounded in the game's own

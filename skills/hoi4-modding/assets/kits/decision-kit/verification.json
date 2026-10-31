@@ -2,8 +2,18 @@
   "target_contract": "HOI4 1.19.4.1 (Operation Postern)",
   "method": "Structural lint via scripts/validate.py; category placement and cost semantics sourced from vanilla common/decisions (AFG.txt, BEL.txt patterns)",
   "checks": [
-    {"tool": "validate.py", "result": "0 errors, 0 warnings (kit as shipped, with base-game awareness)"},
-    {"tool": "claims-register.md", "result": "decision-placement, decision-fields, decision-cost-political-power rows verified 2026-10-30/31"}
+    {
+      "tool": "validate.py",
+      "result": "0 errors, 0 warnings (kit as shipped, with base-game awareness)"
+    },
+    {
+      "tool": "claims-register.md",
+      "result": "decision-placement, decision-fields, decision-cost-political-power rows verified 2026-10-30/31"
+    },
+    {
+      "tool": "validate.py --data extracted/1.19.4.1 --game-dir <install>",
+      "result": "0 errors, 0 warnings \u2014 statement names vs extracted DB; sprite check vs real game gfx; category-in-categories placement matches vanilla AFG.txt pattern"
+    }
   ],
   "native_game_tested": false,
   "not_established": [
@@ -13,5 +23,6 @@
   "external_inputs": [
     "User's mod namespace (replace `mymod`)",
     "User's localisation language folders"
-  ]
+  ],
+  "static_verified_against": "1.19.4.1 install, 2026-10-31"
 }

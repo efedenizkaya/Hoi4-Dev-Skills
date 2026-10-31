@@ -2,8 +2,18 @@
   "target_contract": "HOI4 1.19.4.1 (Operation Postern)",
   "method": "Structural lint via scripts/validate.py incl. focus rules; patterns sourced from vanilla germany.txt and claims register",
   "checks": [
-    {"tool": "validate.py", "result": "0 errors, 0 warnings (focus rules active: prerequisites, bidirectional mutual exclusion, grid overlap)"},
-    {"tool": "claims-register.md", "result": "focus-tree-placement, focus-fields, focus-cost-weeks, focus-tree-selection, mutual-exclusive-both rows verified 2026-10-30/31"}
+    {
+      "tool": "validate.py",
+      "result": "0 errors, 0 warnings (focus rules active: prerequisites, bidirectional mutual exclusion, grid overlap)"
+    },
+    {
+      "tool": "claims-register.md",
+      "result": "focus-tree-placement, focus-fields, focus-cost-weeks, focus-tree-selection, mutual-exclusive-both rows verified 2026-10-30/31"
+    },
+    {
+      "tool": "validate.py --data extracted/1.19.4.1 --game-dir <install>",
+      "result": "0 errors, 0 warnings \u2014 focus rules (prereq/bidirectional ME/overlap) + sprite names vs real game gfx + loc BOM; tree selection matches vanilla factor=0 pattern"
+    }
   ],
   "native_game_tested": false,
   "not_established": [
@@ -13,5 +23,6 @@
   "external_inputs": [
     "User's mod namespace (replace `mymod`)",
     "Owning country tag (modifier in the tree's country block)"
-  ]
+  ],
+  "static_verified_against": "1.19.4.1 install, 2026-10-31"
 }

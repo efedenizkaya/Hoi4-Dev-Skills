@@ -168,3 +168,5 @@ game patch; delete rows that no longer hold.
 | map-risk-tiers | Risk tiers: state reassignment low, region/supply medium, province add high, default.map extreme | community knowledge | 2026-10-31 |
 | abilities | Unit leader ability fields: name/desc/icon/sound_effect/type (army|navy_leader)/allowed with OWNER | game-file common/abilities sample | 2026-10-31 |
 | agency-upgrades | Agency upgrade: branch block, unique names across branches, frame suffixes, loc via <name>_desc | game-file intelligence_agency_upgrades/_documentation.info | 2026-10-31 |
+| pc-ai-desires-summed | AI peace desires are summed; <= 0 total means the AI skips the action | game-file ai_peace/_documentation.md | 2026-10-31 |
+| pc-ai-desire-percent | ai_desire is a percentage modifier (100 = double), not a weight | game-file ai_peace/_documentation.md | 2026-10-31 |

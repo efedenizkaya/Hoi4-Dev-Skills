@@ -65,3 +65,23 @@ peace_action_categories = {
 2. In game: win a war → conference screen; category grouping and costs
    visible in tooltips.
 3. Triage: `invalid-scope` for broken FROM chains.
+
+## AI peace desires (`ai_peace/`)
+
+Same scope contract, opposite knob — **desires affect AI behavior, not
+cost**:
+
+```txt
+peace_ai_desires = {
+	arbitrary_name_for_the_desire = {
+		peace_action_type = force_government   # single or array
+		enable = { ... }                       # same pc_* trigger caveat
+		ai_desire = 100    # PERCENT: +100 = double desire, 0 = no change,
+		                   # -50 = halve; <= 0 total = AI won't take it
+	}
+}
+```
+
+- Active desires are **SUMMED** (cost modifiers multiply — don't mix the
+  two mental models). CLAIM(pc-ai-desires-summed)
+- `ai_desire` is a percentage modifier, not a weight. CLAIM(pc-ai-desire-percent)
