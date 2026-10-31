@@ -816,6 +816,152 @@ def _check_loc_hygiene(mod_dir: Path, findings: list[Finding]) -> None:
             seen.add(key)
 
 
+# ---- audit lints (roadmap item 8) ----
+
+_REPLACE_PATH_RE = re.compile(r'replace_path\s*=\s*"([^"]+)"')
+_EVENT_REF_RE = re.compile(
+    r"\b(?:country_event|news_event|state_event|unit_leader_event)"
+    r"\s*=\s*\{[^{}]*?\bid\s*=\s*([\w.\-]+)", re.S)
+_IDEA_REF_RE = re.compile(
+    r"\b(?:add_ideas|remove_ideas|has_idea)\s*=\s*([\w.\-]+)")
+_EVENT_LOC_KEY_RE = re.compile(r"^[a-z0-9_]+\.\d+(\.[a-z0-9_]+)?$")
+
+
+def _check_descriptor(mod_dir: Path, findings: list[Finding]) -> None:
+    """replace_path skips vanilla content entirely — a destructive
+    compatibility decision the user must confirm."""
+    for path in sorted(mod_dir.glob("*.mod")):
+        text = _read(path)
+        for m in _REPLACE_PATH_RE.finditer(text):
+            findings.append(
+                Finding(
+                    severity="warning",
+                    rule="replace-path-used",
+                    file=str(path.relative_to(mod_dir)),
+                    line=text.count("\n", 0, m.start()) + 1,
+                    message=f"replace_path '{m.group(1)}': skips vanilla "
+                            "content entirely — compatibility risk",
+                )
+            )
+
+
+def _idea_tokens(root: Path) -> set[str]:
+    """Idea tokens: identifiers at depth 2 inside common/ideas files
+    (category wrapper -> idea). Both wrapper and wrapper-less layouts
+    exist (vanilla uses wrappers, many mods do not), so depth 1 and 2 are
+    both collected."""
+    toks: set[str] = set()
+    for path in root.glob("common/ideas/**/*.txt"):
+        masked = mask_comments_and_strings(_read(path))
+        depth = 0
+        for m in re.finditer(r"([{}])|(?m:^[ \t]*)([A-Za-z_][\w.]*)\s*=", masked):
+            if m.group(1):
+                depth += 1 if m.group(1) == "{" else -1
+                continue
+            if depth in (1, 2):
+                toks.add(m.group(2))
+    return toks
+
+
+def _check_reference_targets(
+    mod_dir: Path, findings: list[Finding], game_dir: Path,
+    mod_event_ids: set[str],
+) -> None:
+    """Fired events and idea references must resolve to definitions in the
+    mod or vanilla (needs the game dir — vanilla ids are legitimate)."""
+    known_events = set(_load_event_ids_from(game_dir / "events")) | mod_event_ids
+    known_ideas = _idea_tokens(game_dir) | _idea_tokens(mod_dir)
+
+    for path in sorted(mod_dir.glob("events/**/*.txt")):
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _EVENT_HEADER_RE.finditer(masked):
+            if _brace_depth_at(masked, m.start()) == 0:
+                continue  # a definition, not a firing reference
+            for ref_id, _line in _event_ids_in(masked, m):
+                if ref_id not in known_events:
+                    findings.append(
+                        Finding(
+                            severity="warning",
+                            rule="unknown-event-reference",
+                            file=rel,
+                            line=masked.count("\n", 0, m.start()) + 1,
+                            message=f"{ref_id}: fired event is not defined "
+                                    "in mod or vanilla",
+                        )
+                    )
+
+    for path in sorted(mod_dir.glob("**/*.txt")):
+        if not path.is_file():
+            continue
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        for m in _IDEA_REF_RE.finditer(masked):
+            token = m.group(1)
+            if token not in known_ideas:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="unknown-idea-reference",
+                        file=rel,
+                        line=masked.count("\n", 0, m.start()) + 1,
+                        message=f"{token}: idea token not defined in mod or "
+                                "vanilla",
+                    )
+                )
+
+
+def _check_unused_event_loc(mod_dir: Path, findings: list[Finding]) -> None:
+    """Event-pattern loc keys (ns.N[.letter]) referenced nowhere in the
+    mod's events are leftovers. Dynamic-key construction makes general
+    unused-loc detection unreliable, so this stays scoped to event keys."""
+    script = "\n".join(
+        _read(p) for p in sorted(mod_dir.glob("events/**/*.txt")) if p.is_file()
+    )
+    for path in sorted(mod_dir.glob("localisation/**/*.yml")):
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        rel = str(path.relative_to(mod_dir))
+        for m in _LOC_KEY_RE.finditer(text):
+            key = m.group(1)
+            if _EVENT_LOC_KEY_RE.match(key) and key not in script:
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="unused-loc-key",
+                        file=rel,
+                        line=text.count("\n", 0, m.start()) + 1,
+                        message=f"{key}: event-pattern key referenced by no "
+                                "event file",
+                    )
+                )
+
+
+def _check_periodic_hooks(mod_dir: Path, findings: list[Finding]) -> None:
+    for path in sorted(mod_dir.glob("common/on_actions/**/*.txt")):
+        masked = mask_comments_and_strings(_read(path))
+        rel = str(path.relative_to(mod_dir))
+        depth = 0
+        for hm in re.finditer(r"([{}])|(?m:^)(\s*)([a-z0-9_]+)(?=\s*=)", masked):
+            if hm.group(1):
+                depth += 1 if hm.group(1) == "{" else -1
+                continue
+            if depth != 1:
+                continue
+            hook = hm.group(3)
+            if hook in ("on_daily", "on_hourly"):
+                findings.append(
+                    Finding(
+                        severity="warning",
+                        rule="periodic-effect-performance",
+                        file=rel,
+                        line=masked.count("\n", 0, hm.start()) + 1,
+                        message="(heuristic) " + hook + ": runs every game "
+                                "hour/day per country — heavy effects here "
+                                "hurt late-game performance",
+                    )
+                )
+
+
 def validate_mod(
     mod_dir: Path, data_dir: Path | None = None, game_dir: Path | None = None
 ) -> list[Finding]:
@@ -841,6 +987,9 @@ def validate_mod(
     _check_focus_tree(mod_dir, findings, game_dir)
     _check_event_namespaces(mod_dir, findings)
     _check_loc_hygiene(mod_dir, findings)
+    _check_descriptor(mod_dir, findings)
+    _check_periodic_hooks(mod_dir, findings)
+    _check_unused_event_loc(mod_dir, findings)
     if data_dir is not None:
         known = _load_known_names(data_dir)
         scripted = _load_scripted_names(mod_dir)
@@ -852,6 +1001,15 @@ def validate_mod(
         _check_focus_references(mod_dir, findings, game_dir)
         _check_sprite_references(mod_dir, findings, game_dir)
         _check_on_actions(mod_dir, findings, game_dir)
+        mod_event_ids = {
+            eid
+            for _p in sorted(mod_dir.glob('events/**/*.txt'))
+            if _p.is_file()
+            for _h in _EVENT_HEADER_RE.finditer(mask_comments_and_strings(_read(_p)))
+            if _brace_depth_at(mask_comments_and_strings(_read(_p)), _h.start()) == 0
+            for eid, _ in _event_ids_in(mask_comments_and_strings(_read(_p)), _h)
+        }
+        _check_reference_targets(mod_dir, findings, game_dir, mod_event_ids)
     return findings
 
 

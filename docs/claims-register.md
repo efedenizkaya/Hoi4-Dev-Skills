@@ -177,3 +177,8 @@ game patch; delete rows that no longer hold.
 | never-execute | PDX script and Lua from mods are never executed outside the game by the agent | policy | 2026-10-31 |
 | backup-habit | Bulk edits are preceded by a file copy or git stash | policy | 2026-10-31 |
 | game-actions-are-users | Launching the game, Steam and Workshop actions belong to the user | policy | 2026-10-31 |
+| descriptor-replace-path | replace_path in .mod skips vanilla content entirely | policy/compat decision; see agent-safety.md | 2026-10-31 |
+| unknown-event-reference | Fired event ids must resolve to mod or vanilla definitions (game-dir aware) | tool (validator rule; spot-verified true positives) | 2026-10-31 |
+| unknown-idea-reference | Idea tokens in add/remove_ideas and has_idea must resolve to mod or vanilla ideas; idea tokens are depth-1/2 names in common/ideas | tool (validator rule; spot-verified true positives) | 2026-10-31 |
+| unused-loc-key | Event-pattern loc keys (ns.N[.letter]) referenced by no event file are leftovers; general unused-loc is unreliable due to dynamic keys | tool (validator rule, scoped) | 2026-10-31 |
+| periodic-effect-performance | on_daily/on_hourly hooks run every hour/day per country — heavy effects hurt late-game performance (heuristic) | **unverified** (community knowledge) | 2026-10-31 |
