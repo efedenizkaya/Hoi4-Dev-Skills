@@ -71,6 +71,10 @@ Install details and agent support tiers:
 Python 3.10+, stdlib only. Details:
 [docs/setup-game-data.md](docs/setup-game-data.md).
 
+Why plain CLIs instead of an MCP server: they run in any agent loop with
+zero setup, and every one of them is covered by the test suite. A
+read-only MCP wrapper can sit on top of these same binaries later.
+
 ## Contributing
 
 Forks and PRs welcome — the core rule is simple: **every claim about game

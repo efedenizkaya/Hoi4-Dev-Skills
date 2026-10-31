@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.1 — Adopted patterns from Fostanico v1.8.0
+
+Ideas only — no CC BY-SA text or data copied, everything re-implemented in
+this repo's tested-tool idiom:
+
+- `scripts/override_audit.py`: inventories every mod file that exactly
+  shadows a vanilla file (the full-file-replace breakage vector). Exit 1
+  when overrides exist, so agents/CI notice. (Their audit script idea,
+  now tested and stdlib.)
+- `references/version-migration.md`: the ordered patch-recovery run —
+  extract → `version_diff` → override audit → claims re-verification →
+  mod validation — using only tools that ship with the skill. (Their
+  migration workflow, grounded in our toolchain.)
+- Kits now ship `verification.json`: machine-readable record of what was
+  verified, by which tool, and an explicit `not_established` list (their
+  honesty pattern; CONTRIBUTING now requires it for new kits).
+- README documents why plain CLIs instead of an MCP server.
+
+Deliberately NOT adopted: GUI-shader references (niche, deferred to the
+scripted-GUI reference), runtime-test consent gating (our
+proportionate-verification + never-simulate rules already cover it).
+
 ## 0.9.0 — Silent-failure rules
 
 Three validator rules targeting behaviors the game ignores WITHOUT an

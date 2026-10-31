@@ -44,6 +44,8 @@ House rules:
   (`extracted/` is git-ignored; use `%USERPROFILE%` in examples).
 - One reference per domain; prefer editing the existing file over new
   files unless the domain is genuinely new.
+- New asset kits must ship a `verification.json` (what was verified,
+  with which tool, and an explicit `not_established` list).
 
 ## Fork and pull request flow
 

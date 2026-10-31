@@ -1,0 +1,17 @@
+{
+  "target_contract": "HOI4 1.19.4.1 (Operation Postern)",
+  "method": "Structural lint via scripts/validate.py; content sourced from vanilla events and the game's own documentation",
+  "checks": [
+    {"tool": "validate.py", "result": "0 errors, 0 warnings (kit as shipped, with base-game awareness)"},
+    {"tool": "claims-register.md", "result": "event-types, event-properties-not-triggers, loc-key-convention, add-namespace rows verified 2026-10-30/31"}
+  ],
+  "native_game_tested": false,
+  "not_established": [
+    "in-game popup rendering with custom namespace icons",
+    "ai_chance weighting behavior in live play"
+  ],
+  "external_inputs": [
+    "User's mod namespace (replace `mymod`)",
+    "User's localisation language folders"
+  ]
+}
