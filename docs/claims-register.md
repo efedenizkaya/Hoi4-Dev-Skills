@@ -183,3 +183,10 @@ game patch; delete rows that no longer hold.
 | unused-loc-key | Event-pattern loc keys (ns.N[.letter]) referenced by no event file are leftovers; general unused-loc is unreliable due to dynamic keys | tool (validator rule, scoped) | 2026-10-31 |
 | periodic-effect-performance | on_daily/on_hourly hooks run every hour/day per country — heavy effects hurt late-game performance (heuristic) | **unverified** (community knowledge) | 2026-10-31 |
 | chain-map | Firing effects inside event definitions form a from->to graph; dangling targets are detectable | tool (chain_map; real mod: 34 undefined targets) | 2026-10-31 |
+| focus-filter-census | Complete FOCUS_FILTER token list with frequencies; generic vs DLC-specific split; two vanilla typo tokens exist | game-file vanilla national_focus census | 2026-10-31 |
+| shared-vs-joint-focus | shared_focus (one focus, many trees) and joint_focus (one focus, several countries same position) are distinct real keywords | game-file vanilla census: shared in baltic/china/toa files; joint in ABDA/indonesia/goe | 2026-10-31 |
+| focus-offset-semantics | offset = { x y trigger } is a conditional PIXEL nudge (vanilla: -25/-18/-8 values), not grid position; multiple blocks allowed | game-file vanilla germany.txt + abdacom_shared_branch.txt | 2026-10-31 |
+| text-icon-field | focus text_icon = <style> picks a custom text-icon style | game-file abdacom_shared_branch.txt (ABDACOM_focus_style) | 2026-10-31 |
+| focus-loc-contract | Focus id IS its name loc key; <id>_desc for description; no name field; validator does not cover focus loc refs | game-file vanilla trees + tool (validator scope) | 2026-10-31 |
+| mission-syntax | Mission decisions pair activation with days_mission_timeout + timeout_effect + is_good; plain decisions pair available with cost | game-file common/decisions/AFG.txt | 2026-10-31 |
+| ai-focuses | common/ai_focuses: ai_focus_<persona>_<TAG> = { research = { category = weight } } | game-file common/ai_focuses sample | 2026-10-31 |

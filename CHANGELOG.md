@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.27.0 — Production-depth pass on the authoring references
+
+Goal: an AI can write complete content in one pass. Every table below is
+a vanilla census, not memory:
+
+- `national-focus.md`: complete FOCUS_FILTER token census (generic vs
+  DLC-specific; two vanilla typo tokens documented), shared_focus vs
+  joint_focus (distinct keywords, vanilla file counts), offset = pixel
+  nudges not grid, text_icon field, focus localisation contract (id IS
+  the name key), and an end-to-end branch authoring checklist.
+- `decisions.md`: mission grammar (activation + days_mission_timeout +
+  timeout_effect + is_good) vs plain-decision grammar.
+- `ai-strategy.md`: common/ai_focuses research-weight personas.
+- Register 175 claims.
+
 ## 0.26.0 — GitHub settings, repo hygiene, platform research
 
 Settings applied via gh CLI:

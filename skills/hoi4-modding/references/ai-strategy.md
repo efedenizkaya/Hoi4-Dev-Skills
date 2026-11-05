@@ -77,3 +77,22 @@ changes. CLAIM(ai-debug-logs)
 2. error.log triage after a run.
 3. Behavior test: observer game (`debug_always_ready`/observer) watching
    the targeted country, or `ai.log` grep for the country tag.
+
+## AI focus preferences (`common/ai_focuses/*.txt`)
+
+How the AI weights research while pursuing a focus-branch persona:
+
+```txt
+ai_focus_defense_ENG = {
+	research = {
+		defensive = 5.0
+		radar_tech = 1.0
+		construction_tech = 2.0
+	}
+}
+```
+
+`research` maps technology categories to weights. The file name is free
+form. Which branches the AI actually picks is driven by the focuses'
+`ai_will_do` plus game rules — see the tree side in
+[national-focus.md](national-focus.md). CLAIM(ai-focuses)

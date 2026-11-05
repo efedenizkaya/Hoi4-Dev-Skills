@@ -72,3 +72,34 @@ complete, validator-clean category + two decisions with localisation.
    console `pp` gives command power for testing cost.
 3. error.log triage — decision parse failures surface as
    `invalid-database-object` / missing-loc classes.
+
+## Missions (activation-style decisions)
+
+A decision with `activation` is a MISSION: it auto-activates when the
+trigger holds, runs on a timer, and expires (vanilla AFG.txt pattern):
+
+```txt
+mymod_build_university = {
+	icon = generic_construction
+	
+	available = { ... }              # can be COMPLETED while active
+	days_mission_timeout = 365       # mission lifetime
+	activation = {                   # when it auto-activates
+		AND = {
+			has_completed_focus = mymod_focus
+			industrial_complex < 19
+		}
+	}
+	is_good = no                     # red "bad thing happening" styling
+	fire_only_once = no
+	timeout_effect = { ... }         # what happens when the timer expires
+	# cancel_trigger = { ... }       # optional: cancel mid-flight
+}
+```
+
+CLAIM(mission-syntax)
+
+- Missions pair `activation` with `days_mission_timeout`; plain decisions
+  pair `available` with `cost`. Mixing the two grammars is the classic
+  "my decision never activates" bug.
+- `timeout_effect` fires on expiry; `is_good = yes/no` picks the UI color.
