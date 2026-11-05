@@ -90,9 +90,9 @@ self-hosted Windows runner (Python 3.14) via `ci.yml`; other platforms
 and versions are untested. Details:
 [docs/setup-game-data.md](docs/setup-game-data.md).
 
-Why plain CLIs instead of an MCP server: they run in any agent loop with
-zero setup, and every one of them is covered by the test suite. A
-read-only MCP wrapper can sit on top of these same binaries later.
+An optional read-only MCP server over these same tools now exists —
+see [docs/MCP.md](docs/MCP.md). The CLIs remain the primary interface
+(zero setup, every agent).
 
 ## Asset and legal posture
 

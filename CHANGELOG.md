@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.25.0 — Read-only MCP server (final roadmap item)
+
+- `mcp-server/hoi4_mcp.py`: MCP server (mcp>=2) exposing 8 read-only
+  tools over the tested CLI implementations — validate_mod, doctor,
+  find_identifier, event_chain_map, loc_coverage, vanilla_overrides,
+  triage_error_log, staleness_check. No mod writes, no game launch, no
+  network.
+- `docs/MCP.md`: client configuration and security boundaries.
+- `requirements-mcp.txt`: optional dependency, kept out of the core
+  tooling's zero-dependency stance. CI installs mcp so the server tests
+  run there.
+- doctor.py refactor: report assembly extracted to `build_report()` for
+  MCP reuse.
+- This completes the roadmap adopted across all four audit rounds.
+
 ## 0.24.0 — Distribution groundwork (no release yet)
 
 - README: "First things to try" prompts, "Asset and legal posture"
