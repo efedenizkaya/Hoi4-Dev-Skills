@@ -1,6 +1,6 @@
 [project]
 name = "hoi4-dev-skills"
-version = "0.25.0"
+version = "0.26.0"
 description = "Verified, game-derived Agent Skill and tooling for AI-assisted Hearts of Iron IV modding"
 readme = "README.md"
 requires-python = ">=3.10"
