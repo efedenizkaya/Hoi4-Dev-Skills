@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.26.0 — GitHub settings, repo hygiene, platform research
+
+Settings applied via gh CLI:
+- Discussions enabled (the issue-template config links there — it was
+  dead); delete-branch-on-merge enabled; `game-update` and
+  `heuristic-finding` labels created (the issue form referenced a
+  non-existent label).
+
+New repo hygiene files:
+- `.github/dependabot.yml` (github-actions + pip ecosystems, monthly).
+- `.github/CODEOWNERS` (single-maintainer routing).
+- `pyproject.toml` (project metadata + pytest config) with a version
+  consistency test against metadata.json.
+
+Research (2026-10-31) applied:
+- Copilot's repo-level location is `.github/skills/` (personal is
+  `~/.copilot/skills`, which we install); Copilot also reads
+  `.claude/skills` and `.agents/skills` natively.
+- Codex scans `.codex/skills` unreliably and the industry is
+  standardizing on `~/.agents/skills` — documented in INSTALLATION.md
+  and install.sh.
+
 ## 0.25.0 — Read-only MCP server (final roadmap item)
 
 - `mcp-server/hoi4_mcp.py`: MCP server (mcp>=2) exposing 8 read-only

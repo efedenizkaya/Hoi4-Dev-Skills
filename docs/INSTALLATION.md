@@ -40,6 +40,16 @@ Status tiers:
 | Verified | ZCode, Claude Code | installed and exercised daily by the maintainer |
 | Best effort | Codex, Cursor, Gemini CLI, OpenCode, Copilot | spec-compliant install, not manually verified |
 
+Platform notes (researched 2026-10-31):
+- **Codex** also scans the industry-standard `~/.agents/skills` (the
+  `zcode` entry installs there), but some Codex versions skip
+  `~/.codex/skills` — if skills don't appear, symlink it to
+  `~/.agents/skills`.
+- **Copilot**: repo-level skills live in `.github/skills/` (copy the
+  skill there per-project); `~/.copilot/skills` is the cross-project
+  location this installer uses. Copilot also reads `.claude/skills` and
+  `.agents/skills` natively.
+
 ## Option B: install into one project
 
 Copy (or link) the skill into the project so teammates get it via git:

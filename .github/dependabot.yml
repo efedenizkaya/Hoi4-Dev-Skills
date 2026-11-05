@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # CI dependencies (actions versions)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+  # Python dev deps (pytest, skills-ref, mcp)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      python-dev:
+        patterns:
+          - "*"

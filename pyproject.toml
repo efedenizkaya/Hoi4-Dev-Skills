@@ -1,0 +1,21 @@
+[project]
+name = "hoi4-dev-skills"
+version = "0.25.0"
+description = "Verified, game-derived Agent Skill and tooling for AI-assisted Hearts of Iron IV modding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Efe Deniz Kaya" }]
+keywords = ["hoi4", "hearts-of-iron-4", "paradox", "agent-skills", "claude-code", "modding"]
+
+[project.urls]
+Repository = "https://github.com/efedenizkaya/Hoi4-Dev-Skills"
+Changelog = "https://github.com/efedenizkaya/Hoi4-Dev-Skills/blob/main/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+mcp = ["mcp>=2"]

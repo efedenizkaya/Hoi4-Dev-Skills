@@ -29,3 +29,12 @@ def test_gitignore_covers_generated_and_private():
     gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
     for entry in ["extracted/", "__pycache__/", ".superpowers/", ".pytest_cache/"]:
         assert entry in gi, entry
+
+
+def test_versions_consistent():
+    import json
+    import tomllib
+
+    meta = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))
+    pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    assert pyproject["project"]["version"] == meta["version"]

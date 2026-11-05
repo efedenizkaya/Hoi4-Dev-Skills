@@ -21,6 +21,11 @@ SKILL_SRC="skills/hoi4-modding"
 SKILL_NAME="hoi4-modding"
 
 # agent name -> skills dir (relative to HOME)
+# NOTE (researched 2026-10-31):
+#  - Codex also scans ~/.agents/skills (industry standard) but some
+#    versions skip ~/.codex/skills — the zcode entry installs there too.
+#  - Copilot's repo-level location is .github/skills/ (see INSTALLATION.md);
+#    the personal entry below is correct for cross-project use.
 AGENTS=(
   "claude:.claude/skills"
   "zcode:.agents/skills"
