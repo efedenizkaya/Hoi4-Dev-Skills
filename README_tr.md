@@ -56,6 +56,9 @@ characters, scripted GUI) + iddia kaydı. Kurulum detayları:
 | `chain_map.py` | hangi event kimi tetikliyor (zincir grafiği) |
 | `override_audit.py` | vanilla'yı birebir ezen dosyalar |
 | `loc_report.py` | diller arası çeviri kapsamı |
+| `loc_sync.py` | eksik çeviri iskeleti üretici (kullanıcı dosyalarına dokunmaz) |
+| `chain_map.py` | event tetikleme grafiği + ölü hedefler |
+| `stale_check.py` | oyun sürümü ↔ skill sürümü bayatlık kontrolü |
 | `version_diff.py` | yama göçü diff'i |
 | `new_mod.py` | mod iskeleti üretici |
 

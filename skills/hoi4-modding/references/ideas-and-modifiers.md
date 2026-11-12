@@ -142,3 +142,13 @@ Inside an idea: `modifier` keys = **modifier names** (from modifiers.json),
 `rule` keys = **rules** (a separate engine list), and effect blocks
 (`on_add`) = **effects**. An AI mixing these three produces ideas that
 load fine and do nothing. CLAIM(idea-keyword-spaces)
+
+### Rule token census (vanilla ideas + characters, 1.19.4.1)
+
+Rules are a FIXED engine list — an AI cannot invent a new rule name.
+Tokens seen in vanilla (frequency): `can_send_volunteers` (24),
+`can_join_factions` (8), `can_decline_call_to_war` (5),
+`can_create_factions` (5), `can_not_declare_war` (2),
+`can_join_opposite_factions` (2), `can_boost_other_ideologies` (2),
+`can_declare_war_on_same_ideology` (1). Grep vanilla for the complete
+current list before using an uncommon one. CLAIM(rule-token-census)

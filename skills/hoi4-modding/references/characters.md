@@ -56,6 +56,10 @@ CLAIM(character-roles)
   character appears in the political ledger.
 - Portrait families: `civilian` / `army` / `navy`; `large` required,
   `small` optional (defaults to large). CLAIM(portrait-families)
+- Portrait DDS files live in `gfx/leaders/<TAG>/Portrait_<name>.dds`;
+  the `GFX_portrait_*` sprites are declared in
+  `interface/_leader_portraits.gfx`. A missing sprite shows the default
+  portrait, silently. CLAIM(portrait-files)
 
 ## Script surface (all verified in 1.19.4.1)
 

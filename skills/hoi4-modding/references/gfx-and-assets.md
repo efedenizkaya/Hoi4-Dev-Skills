@@ -33,7 +33,7 @@ spriteTypes = {
 | Event pictures, focus icons, portraits | **DDS** (DXT1/5) | vanilla standard; power-of-two sizes |
 | Older assets / some flags | TGA | still accepted |
 | Flags | `gfx/flags/<tag>.tga` + `gfx/flags/medium/`, `small/` | fixed sizes per folder |
-| Leader portraits | `gfx/leaders/<tag>/portraits_*.txt` mapping | character system uses GFX names |
+| Leader portraits | DDS in `gfx/leaders/<TAG>/Portrait_*.dds`; sprites declared in `interface/_leader_portraits.gfx` | characters reference `GFX_portrait_*` names directly |
 
 CLAIM(image-formats)
 
@@ -81,3 +81,13 @@ separately. CLAIM(sprite-census)
 A `noOfFrames = 5` sprite feeds `£token|3` in localisation (frame 3 of 5).
 When a modded icon shows the WHOLE strip, the frame index or noOfFrames is
 wrong — this pairs with `loc-icon-syntax`. CLAIM(sprite-strips)
+
+## Entities and unit models (3D)
+
+Unit/ship models are **entities**: `entity = { name = "..."; pdxmesh = "..."; default_state / state = { name animation ... } }` blocks in `gfx/entities/*.asset` files (one file per domain: units_infantry.asset, units_artillery.asset, _units_battleships_DLC.asset, MTG_buildings.asset, ...). The `pdxmesh` references a `.mesh` + animations under `gfx/models/`.
+
+Resolution order when something asks for `GER_infantry_entity` (from the raids documentation, same lookup everywhere): country-specific override → culture-specific override → base entity → `default_entity`.
+
+Claiming a new unit model means: `.mesh` + animations under `gfx/models/`, an `entity` block in a `.asset` file, and (for raids) the `unit_model` block in the raid type. Wrong entity names fall down the resolution chain silently — only a completely missing default logs. CLAIM(entities-asset-files)
+
+Also in `.gfx` files beyond sprites: `spriteType`/`corneredTileSpriteType`/`progressBarType`, and `bitmapfonts`/font blocks. Screen effects are `.fxh`/`.shader` files under `gfx/FX/` (advanced; see the game's own shader examples).

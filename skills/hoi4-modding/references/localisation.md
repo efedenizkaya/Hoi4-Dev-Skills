@@ -110,3 +110,12 @@ there; a wrong getter renders literally. CLAIM(loc-getter-census)
 - Character loc uses the character object: `[Root.GetLeader]` is the safe
   accessor; `[CHARACTER_token.GetName]` also works after the character is
   in scope. CLAIM(loc-display-traps)
+
+## Syncing missing translations
+
+`scripts/loc_sync.py --mod <dir> --lang german[,french,...]` generates
+`zz_sync_l_<lang>.yml` stub files: every key present in english but
+missing from the language, prefilled with the ENGLISH text. Existing
+translations anywhere in the language folder are respected, user files
+are never touched, and re-running never overwrites your edits. Pair with
+`scripts/loc_report.py` for the coverage numbers. CLAIM(loc-sync-tool)

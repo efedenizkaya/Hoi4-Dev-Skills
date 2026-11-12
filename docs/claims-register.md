@@ -190,3 +190,9 @@ game patch; delete rows that no longer hold.
 | focus-loc-contract | Focus id IS its name loc key; <id>_desc for description; no name field; validator does not cover focus loc refs | game-file vanilla trees + tool (validator scope) | 2026-10-31 |
 | mission-syntax | Mission decisions pair activation with days_mission_timeout + timeout_effect + is_good; plain decisions pair available with cost | game-file common/decisions/AFG.txt | 2026-10-31 |
 | ai-focuses | common/ai_focuses: ai_focus_<persona>_<TAG> = { research = { category = weight } } | game-file common/ai_focuses sample | 2026-10-31 |
+| entities-asset-files | Unit/ship models are entity blocks in gfx/entities/*.asset (entity/pdxmesh/states); resolution country->culture->base->default | game-file gfx/entities/units_infantry.asset + raids _documentation.md | 2026-10-31 |
+| portrait-files | Portrait DDS in gfx/leaders/<TAG>/, sprites in interface/_leader_portraits.gfx; missing sprite = default portrait silently | game-file gfx/leaders/GER + interface/_leader_portraits.gfx | 2026-10-31 |
+| rule-token-census | Rules are a fixed engine list; vanilla census tokens (can_send_volunteers 24x, can_join_factions 8x, ...) | game-file vanilla ideas/characters census | 2026-10-31 |
+| mio-policies | One policy per MIO, scoped to variant/production line; triggers compute eligibility | game-file policies/_documentation.md | 2026-10-31 |
+| sp-specialization | specialization_<domain> blocks (color, program_background) + prototype reward pools keyed by threshold with weighted picks | game-file specialization/specializations.txt + prototype_rewards | 2026-10-31 |
+| loc-sync-tool | Generated stubs (zz_sync_l_<lang>.yml) carry english text, respect existing translations anywhere in the language folder, and never touch user files | tool (loc_sync tests: idempotent, preserves user translation in second file) | 2026-10-31 |

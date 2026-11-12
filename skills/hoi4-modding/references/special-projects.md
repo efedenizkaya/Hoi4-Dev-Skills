@@ -50,3 +50,15 @@ Facilities and project assignment use dedicated effects/triggers — check
 
 1. Validator; 2. in game: facility view shows the project tree; 3. triage
    for `invalid-scope`/`invalid-database-object`.
+
+## Specialization and prototype rewards
+
+`specialization/specializations.txt`: `specialization_<domain> = { color
+= {R G B} program_background = "GFX_..." }` — one per facility domain
+(nuclear, naval, air, electronics, tank, artillery, rocket, missiles).
+
+`prototype_rewards/*.txt`: weighted reward pools keyed by breakthrough
+`threshold = { min max }`, with `weight = { base = N modifier = {...} }`
+and `@base_reward_weight` aliases — failures and successes pick from the
+same pool unless gated. Rewards fire `fire_only_once = no` style entries
+per threshold. CLAIM(sp-specialization)

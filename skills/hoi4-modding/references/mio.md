@@ -69,3 +69,10 @@ undefined content. CLAIM(mio-dlc-gate)
 2. `setup.log`/`error.log` after a run — MIO parse errors are loud.
 3. In game: company list in the production/research tabs; assign to a tech
    and a variant to exercise both on-actions.
+
+## Policies (`policies/` — game-shipped `_documentation.md`)
+
+One policy can be attached per MIO for extra bonuses, scoped to the
+assigned equipment variant or production line. Fields mirror traits
+(name fallback chain, optional icon, `allowed`/`available` triggers with
+FROM = country). CLAIM(mio-policies)
