@@ -201,3 +201,4 @@ game patch; delete rows that no longer hold.
 | hourly-dominates | gamestate.hourly scripts run 24x per game day and dominate late-game script cost | **unverified** (community knowledge, high consensus) | 2026-11-05 |
 | mission-hourly-cost | Mission activation triggers evaluate hourly | **unverified** (community knowledge; consistent with periodic-effect lint) | 2026-11-05 |
 | perf-optimizations | Early-exit trigger ordering, mission->event conversion, scripted-gui polling reduction are the standard optimizations | **unverified** (community knowledge) | 2026-11-05 |
+| basic-syntax | Comments (#), key = value, blocks, value types, @file-scoped aliases, implicit AND/sibling + OR/NOT trigger logic | game-file vanilla germany.txt (@aliases), community-verified grammar | 2026-11-05 |

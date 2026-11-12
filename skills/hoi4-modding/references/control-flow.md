@@ -3,6 +3,27 @@
 The heart of HOI4 scripting is moving between scopes correctly. This page
 covers the constructs; per-effect scopes live in the extracted JSON.
 
+## Basic syntax primitives
+
+Everything an AI needs before writing any block:
+
+- **Comments** start with `#` (rest of line). No block comments.
+- **Assignment**: `key = value` — one per line, whitespace-insensitive
+  but the convention is tabs (see [mod-structure.md](mod-structure.md)).
+- **Blocks**: `key = { ... }` — braces on the same line as the key.
+- **Value types**: integers (`5`), decimals (`0.05`), percentages-as-
+  decimals (`0.1` = 10%), strings (`"infantry_equipment_0"`), booleans
+  (`yes`/`no`), and nested blocks. Quotes are needed for names with
+  spaces and sprite keys.
+- **@aliases**: `@my_cost = 50` at the top of a file defines a constant
+  usable as `@my_cost` anywhere below in that file (vanilla
+  `germany.txt`: `@inner_circle_time_tier_1 = 20`). File-scoped only.
+- **AND/OR/NOT**: inside trigger blocks, sibling entries are an implicit
+  OR inside `OR = { }` and an implicit AND at block level; `NOT = { }`
+  negates the whole block.
+
+CLAIM(basic-syntax)
+
 ## if / else_if / else — with limit
 
 `if` is an EFFECT; its condition lives in the `limit` TRIGGER block:
