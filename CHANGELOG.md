@@ -1,5 +1,60 @@
 # Changelog
 
+## 0.31.0 — Release-readiness audit
+
+Final pre-release audit: all gates green (129 tests + evals + skills-ref
++ installer smokes), version sources consistent (0.30.0), three missing
+CHANGELOG entries restored (0.28.0-0.30.0 had silently failed to append —
+CRLF replace anchors), README counters corrected against reality (30
+references, 6 kits), 13 CLI entry points + bundled validate smoke-tested,
+MCP server module load verified, privacy grep clean (no personal paths;
+identity files only), largest tracked files are source/docs (no game
+data). Release notes draft + owner checklist added:
+docs/RELEASE_NOTES_v1.0.0-draft.md.
+
+## 0.30.0 — Broken/fixed teaching pairs + basic syntax
+
+From the postigodev file-level analysis (their broken-cases teaching
+format adopted, content written from our own fixtures):
+
+- `examples/broken-cases.md` upgraded from a table to BROKEN + FIXED
+  snippet pairs for all six failure classes, each with the exact
+  validator finding — the teaching material is now visible to the
+  installed skill, not just repo readers.
+- `control-flow.md` gained a Basic syntax section (comments, assignment,
+  blocks, value types, @aliases, AND/OR/NOT semantics) — grounded in
+  vanilla `germany.txt` aliases.
+- Register 187 claims.
+
+## 0.29.0 — Performance reference + GEMINI template (from eightman999 zip analysis)
+
+- `references/performance.md`: the profiler workflow (`imgui show
+  profiler` — command verified in the game's own console documentation),
+  the gamestate.hourly/daily/weekly cost hierarchy, mission-hourly cost,
+  and the standard optimizations. Unverified profiler UI details are
+  labeled, per the claims discipline. Cross-linked from decisions.md and
+  the periodic-effect lint.
+- `templates/mod-GEMINI.md`: mod-repo template parity for Gemini users.
+- INSTALLATION.md: researched platform notes (Copilot repo-level
+  `.github/skills/` + native `.claude/skills`/`.agents/skills` reading;
+  Codex `.codex/skills` scanning caveat with the symlink workaround).
+- Register 186 claims.
+
+## 0.28.0 — Deepening pass 2 + loc_sync
+
+- Six medium-depth references deepened with vanilla grounding: rule token
+  census (fixed engine list), portrait system correction (sprites in
+  interface/_leader_portraits.gfx, DDS in gfx/leaders/<TAG>/), entity
+  system (gfx/entities/*.asset, resolution order), MIO policies,
+  special-projects specialization + prototype rewards, mission decision
+  grammar.
+- `scripts/loc_sync.py`: generates `zz_sync_l_<lang>.yml` translation
+  stubs for keys missing in a language — english text prefilled, existing
+  translations anywhere in the language folder respected, user files
+  never touched, re-runs idempotent. Pairs with loc_report. (Built from
+  the real dogfood finding: 213 missing German keys.)
+- Register 181 claims; tool count 14.
+
 ## 0.27.0 — Production-depth pass on the authoring references
 
 Goal: an AI can write complete content in one pass. Every table below is
