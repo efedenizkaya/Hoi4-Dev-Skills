@@ -102,4 +102,6 @@ CLAIM(mission-syntax)
 - Missions pair `activation` with `days_mission_timeout`; plain decisions
   pair `available` with `cost`. Mixing the two grammars is the classic
   "my decision never activates" bug.
+- Mission activation checks run on the HOURLY tick — heavy triggers here
+  are a performance risk; see [performance.md](performance.md).
 - `timeout_effect` fires on expiry; `is_good = yes/no` picks the UI color.

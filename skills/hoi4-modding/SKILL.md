@@ -154,6 +154,7 @@ Read only what the task needs:
 | Game rules, ideologies, buildings | [references/small-systems.md](references/small-systems.md) |
 | Opinion modifiers, wargoals, occupation laws, medals, terrain, autonomy... | [references/misc-systems.md](references/misc-systems.md) |
 | Trust boundaries: workshop content, destructive ops | [references/agent-safety.md](references/agent-safety.md) |
+| Late-game lag, profiling, script cost | [references/performance.md](references/performance.md) |
 | New HOI4 patch landed — recovery run | [references/version-migration.md](references/version-migration.md) |
 | Full mod health report (validator + duplicates + overrides + loc) | `scripts/doctor.py --mod <dir>` |
 | Is my skill stale for this game install? | `scripts/stale_check.py` |

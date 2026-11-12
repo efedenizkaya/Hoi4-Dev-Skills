@@ -196,3 +196,8 @@ game patch; delete rows that no longer hold.
 | mio-policies | One policy per MIO, scoped to variant/production line; triggers compute eligibility | game-file policies/_documentation.md | 2026-10-31 |
 | sp-specialization | specialization_<domain> blocks (color, program_background) + prototype reward pools keyed by threshold with weighted picks | game-file specialization/specializations.txt + prototype_rewards | 2026-10-31 |
 | loc-sync-tool | Generated stubs (zz_sync_l_<lang>.yml) carry english text, respect existing translations anywhere in the language folder, and never touch user files | tool (loc_sync tests: idempotent, preserves user translation in second file) | 2026-10-31 |
+| profiler-command | imgui console command exists (Controls ImGui UIs); imgui show profiler opens the profiler | game-file documentation/console_commands_documentation.md (imgui entry) | 2026-11-05 |
+| profiler-workflow | Enable Collection -> Script tab -> Start/Stop gives ranked script costs (gamestate.hourly/daily/weekly) | **unverified** (community knowledge; imgui command itself verified) | 2026-11-05 |
+| hourly-dominates | gamestate.hourly scripts run 24x per game day and dominate late-game script cost | **unverified** (community knowledge, high consensus) | 2026-11-05 |
+| mission-hourly-cost | Mission activation triggers evaluate hourly | **unverified** (community knowledge; consistent with periodic-effect lint) | 2026-11-05 |
+| perf-optimizations | Early-exit trigger ordering, mission->event conversion, scripted-gui polling reduction are the standard optimizations | **unverified** (community knowledge) | 2026-11-05 |

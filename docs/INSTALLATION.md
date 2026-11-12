@@ -72,10 +72,10 @@ git clone https://github.com/efedenizkaya/Hoi4-Dev-Skills.git &&
 
 ## Templates for your mod repository
 
-`templates/` holds `mod-AGENTS.md` and `mod-CLAUDE.md` — copy the one
-matching your agent into your mod repository so the agent that opens it
-knows the verification rules (validate after every change, review ≠
-modify, sourced claims).
+`templates/` holds `mod-AGENTS.md`, `mod-CLAUDE.md` and `mod-GEMINI.md`
+— copy the one matching your agent into your mod repository so the agent
+that opens it knows the verification rules (validate after every change,
+review ≠ modify, sourced claims).
 
 ## Set up the verification tools
 
