@@ -1,0 +1,19 @@
+###
+# Ideas kit — a national spirit with on_add/on_remove effects.
+# Slot blocks live in the ideas file itself (vanilla _economic.txt pattern).
+###
+
+mymod_spirits = {
+	mymod_industrial_spirit = {
+		picture = GFX_idea_generic_supply_line
+		allowed = {
+			original_tag = GER
+		}
+		modifier = {
+			production_speed_industrial_complex_factor = 0.1
+		}
+		on_add = {
+			add_political_power = 10
+		}
+	}
+}

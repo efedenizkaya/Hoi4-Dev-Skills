@@ -1,0 +1,54 @@
+###
+# Focus kit — replace `mymod` with your mod namespace everywhere.
+# Tree selection: factor = 0 + per-tag modifier (vanilla pattern);
+# cost is POINTS (define FOCUS_POINT_DAYS = 7 -> 1 point = 1 week).
+###
+
+focus_tree = {
+	id = mymod_tree
+	default = no
+
+	country = {
+		factor = 0
+		modifier = { add = 10 tag = GER }
+	}
+
+	focus = {
+		id = mymod_rearm
+		icon = GFX_focus_generic_industry_3
+		x = 1
+		y = 0
+		cost = 5
+		mutually_exclusive = { focus = mymod_economy }
+		completion_reward = {
+			add_political_power = 50
+		}
+		ai_will_do = { factor = 10 }
+	}
+
+	focus = {
+		id = mymod_economy
+		icon = GFX_focus_generic_industry_3
+		x = 3
+		y = 0
+		cost = 5
+		mutually_exclusive = { focus = mymod_rearm }
+		completion_reward = {
+			add_stability = 0.05
+		}
+		ai_will_do = { factor = 5 }
+	}
+
+	focus = {
+		id = mymod_industry
+		icon = GFX_focus_generic_industry_3
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = { focus = mymod_rearm focus = mymod_economy }
+		completion_reward = {
+			add_ideas = mymod_rearm_idea
+		}
+		ai_will_do = { factor = 8 }
+	}
+}

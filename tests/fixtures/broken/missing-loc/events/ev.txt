@@ -1,0 +1,8 @@
+country_event = {
+	id = mymod.1
+	title = mymod.1.t
+	desc = mymod.1.d
+	option = {
+		name = mymod.1.a
+	}
+}

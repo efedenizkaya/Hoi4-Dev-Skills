@@ -1,0 +1,5 @@
+{
+ "expect_rules": [
+  "duplicate-event-id"
+ ]
+}

@@ -1,0 +1,5 @@
+common/scripted_guis/mymod_panel_scripted_gui.txt
+interface/mymod_panel_gui.gui
+localisation/english/mymod_panel_l_english.yml
+verification.json
+README.md

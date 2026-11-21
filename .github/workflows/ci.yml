@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # pull_request intentionally absent: this workflow runs on a self-hosted
+  # runner. If the repo ever goes public, foreign PR code would execute on
+  # the maintainer's machine.
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Two legs: the maintainer's self-hosted Windows runner (Python 3.14, Git
+# Bash + PowerShell smoke tests, evals) and GitHub-hosted Ubuntu jobs that
+# keep CI alive when that machine is offline and cover the Python
+# 3.10-3.14 matrix. pull_request stays OFF: self-hosted jobs must never
+# execute foreign code.
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install pinned dev deps
+        run: python -m pip install -r requirements-dev.txt "skills-ref==0.1.1" "mcp>=2"
+        shell: bash
+      - name: Run test suite
+        run: python -m pytest -v
+        shell: bash
+      - name: Eval self-test (kits satisfy their gates)
+        run: python tools/run_evals.py --evals evals/task-evals.json --self-test
+        shell: bash
+      - name: Install script smoke (POSIX)
+        run: bash tests/test_install.sh
+        shell: bash
+      - name: Install script smoke (PowerShell)
+        run: tests/test_install.ps1
+        shell: powershell
+
+  # GitHub-hosted leg: runner-independent + Python compat. Matrix is the
+  # floor (3.10 — the requires-python claim) plus the most-deployed mid
+  # (3.12); 3.14 runs on the self-hosted leg. skills-ref is NOT installed
+  # here: it requires Python >=3.11 and no test imports it (frontmatter
+  # validation lives in the lint job).
+  test-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install dev deps
+        run: python -m pip install -r requirements-dev.txt "mcp>=2"
+      - name: Run test suite
+        run: python -m pytest -v
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install ruff + skills-ref
+        run: python -m pip install "ruff>=0.17" "skills-ref==0.1.1"
+      - name: Ruff check
+        run: ruff check tools skills/hoi4-modding/scripts mcp-server tests
+      - name: Validate skill frontmatter
+        run: python -m skills_ref.cli validate skills/hoi4-modding
+
+  # Manual only: a skill zip is built per release by the maintainer
+  # (gh release create can attach it); not worth a leg on every push.
+  package:
+    runs-on: self-hosted
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v7
+      - name: Package the skill (.skill = zip of the skill dir)
+        run: python -c "import shutil; shutil.make_archive('hoi4-modding', 'zip', 'skills', 'hoi4-modding')"
+        shell: bash
+      - uses: actions/upload-artifact@v7
+        with:
+          name: hoi4-modding-skill
+          path: hoi4-modding.zip

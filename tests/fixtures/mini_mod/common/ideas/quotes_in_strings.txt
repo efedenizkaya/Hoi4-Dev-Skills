@@ -1,0 +1,4 @@
+idea_token = {
+	name = "Braces { and } inside strings are fine"
+	desc = "So are # hash signs in quotes"
+}

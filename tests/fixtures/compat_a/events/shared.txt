@@ -1,0 +1,6 @@
+add_namespace = shared
+country_event = {
+	id = shared.1
+	option = { name = shared.1.a }
+}
+A content event

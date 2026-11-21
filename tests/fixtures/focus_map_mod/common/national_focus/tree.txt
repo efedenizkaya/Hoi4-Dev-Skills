@@ -1,0 +1,62 @@
+focus_tree = {
+	id = mymod_tree
+	default = no
+	country = {
+		factor = 0
+		modifier = { add = 10 tag = GER }
+	}
+
+	focus = {
+		id = mymod_rearm
+		icon = GFX_focus_generic_industry_3
+		x = 1
+		y = 0
+		cost = 5
+	}
+
+	focus = {
+		id = mymod_economy
+		icon = GFX_focus_generic_industry_3
+		x = 3
+		y = 0
+		cost = 6
+		mutually_exclusive = { focus = mymod_rearm }
+	}
+
+	focus = {
+		id = mymod_industry
+		icon = GFX_focus_generic_industry_3
+		x = 1
+		y = 1
+		cost = 15
+		prerequisite = { focus = mymod_rearm }
+		prerequisite = { focus = mymod_economy }
+	}
+
+	focus = {
+		id = mymod_ghost_dep
+		icon = GFX_focus_generic_industry_3
+		x = 5
+		y = 0
+		cost = 10
+		prerequisite = { focus = nonexistent_focus }
+	}
+
+	focus = {
+		id = mymod_cycled_a
+		icon = GFX_focus_generic_industry_3
+		x = 5
+		y = 1
+		cost = 10
+		prerequisite = { focus = mymod_ghost_dep focus = mymod_cycled_b }
+	}
+
+	focus = {
+		id = mymod_cycled_b
+		icon = GFX_focus_generic_industry_3
+		x = 5
+		y = 2
+		cost = 10
+		prerequisite = { focus = mymod_cycled_a }
+	}
+}

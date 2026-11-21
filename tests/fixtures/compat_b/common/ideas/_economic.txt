@@ -1,0 +1,3 @@
+compat_b_idea_from_shared_file = {
+	modifier = {}
+}

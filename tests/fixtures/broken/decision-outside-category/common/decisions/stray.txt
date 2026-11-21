@@ -1,0 +1,4 @@
+stray_decision = {
+	icon = generic_industry
+	visible = { always = yes }
+}

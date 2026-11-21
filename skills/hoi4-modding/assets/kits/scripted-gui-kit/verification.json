@@ -1,0 +1,23 @@
+{
+  "target_contract": "HOI4 1.19.4.1 (Operation Postern)",
+  "method": "Structural lint via scripts/validate.py with --data and --game-dir; binding semantics sourced from the game's own common/scripted_guis/_documentation.md",
+  "checks": [
+    {
+      "tool": "validate.py --data + --game-dir",
+      "result": "0 errors, 0 warnings (sprites GFX_focus_generic_industry_3 and GFX_button_small verified against the real gfx inventory)"
+    },
+    {
+      "tool": "claims-register.md",
+      "result": "sgui-files, sgui-minimal, sgui-context-types, sgui-binding-silent verified 2026-10-31"
+    }
+  ],
+  "native_game_tested": false,
+  "not_established": [
+    "visual layout inside the decision category view",
+    "button click feedback under real variable state"
+  ],
+  "external_inputs": [
+    "User's mod namespace",
+    "Owning decision category"
+  ]
+}

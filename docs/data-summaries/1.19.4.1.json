@@ -1,0 +1,29 @@
+{
+ "gameVersion": "1.19.4.1",
+ "counts": {
+  "effects": 553,
+  "triggers": 596,
+  "modifiers": {
+   "aggressive": 90,
+   "ai": 15,
+   "air": 53,
+   "army": 187,
+   "autonomy": 21,
+   "character": 3,
+   "country": 260,
+   "defensive": 64,
+   "faction": 3,
+   "government_in_exile": 7,
+   "intelligence_agency": 38,
+   "military_advancements": 10,
+   "naval": 117,
+   "peace": 4,
+   "politics": 8,
+   "scientist": 1,
+   "state": 67,
+   "unit_leader": 121,
+   "war_production": 63
+  }
+ },
+ "extractedAt": "2026-10-30T19:19:12+00:00"
+}

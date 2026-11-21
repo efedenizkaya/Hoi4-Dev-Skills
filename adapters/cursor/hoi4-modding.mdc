@@ -1,0 +1,15 @@
+---
+description: Hearts of Iron IV modding tasks in this workspace
+globs: ["**/*.txt", "**/*.yml", "common/**", "events/**", "history/**", "localisation/**", "interface/**"]
+alwaysApply: false
+---
+
+# HOI4 modding rules
+
+- Read `skills/hoi4-modding/SKILL.md` first; follow its Working agreement
+  (first-use discovery, review ≠ modify, finding labels) and routing table.
+- After any script change, run the verification loop:
+  `python tools/validate.py <mod_dir>` (repo root) — fix new findings
+  before claiming success.
+- Every claim about game behavior must be traceable to
+  `docs/claims-register.md`; label anything unverified.

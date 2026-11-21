@@ -1,0 +1,34 @@
+[project]
+name = "hoi4-dev-skills"
+version = "1.3.1"
+description = "Verified, game-derived Agent Skill and tooling for AI-assisted Hearts of Iron IV modding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Efe Deniz Kaya" }]
+keywords = ["hoi4", "hearts-of-iron-4", "paradox", "agent-skills", "claude-code", "modding"]
+
+[project.urls]
+Repository = "https://github.com/efedenizkaya/Hoi4-Dev-Skills"
+Changelog = "https://github.com/efedenizkaya/Hoi4-Dev-Skills/blob/main/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 96
+
+[tool.ruff.lint]
+# pragmatic set: pyflakes-equivalent errors, whitespace hygiene and import
+# order — broader rule packs flag intentional patterns (blind except in
+# doctor, subprocess in installer smoke tests, bootstrap import placement)
+select = ["E4", "E7", "E9", "F", "W291", "W292", "W293", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# sys.path bootstrap must run before the script imports
+"mcp-server/hoi4_mcp.py" = ["E402"]
+
+[dependency-groups]
+dev = ["pytest>=9.0", "ruff>=0.17"]
+mcp = ["mcp>=2"]

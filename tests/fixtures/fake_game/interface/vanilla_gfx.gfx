@@ -1,0 +1,10 @@
+spriteTypes = {
+	SpriteType = {
+		name = "GFX_focus_generic_industry"
+		texturefile = "gfx/interface/goals/focus_generic_industry.dds"
+	}
+	SpriteType = {
+		name = "GFX_report_event_generic_sign_treaty1"
+		texturefile = "gfx/event_pictures/report_event_generic_sign_treaty1.dds"
+	}
+}

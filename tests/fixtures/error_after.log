@@ -1,0 +1,9 @@
+[18:53:57][1936.01.01.12][database_scoped_variables.cpp:267]: invalid database object for effect/trigger: schwerpunk. use var:var_name to explicitly use variables in effects/triggers
+[18:53:57][1936.01.01.12][database_scoped_variables.cpp:267]: invalid database object for effect/trigger: blitzkrieg. use var:var_name to explicitly use variables in effects/triggers
+[18:53:57][1936.01.01.12][database_scoped_variables.cpp:267]: invalid database object for effect/trigger: convoy_interdiction_ti. use var:var_name to explicitly use variables in effects/triggers
+[18:53:58][1936.01.01.12][technology_effect_implementation.cpp:996]: history/countries/GER - Germany.txt:78: set_technology: Invalid tech
+[18:53:58][1936.01.01.12][technology_effect_implementation.cpp:996]: history/countries/GER - Germany.txt:78: set_technology: Invalid tech
+[18:53:59][1936.01.01.12][effectimplementation.cpp:5554]: history/countries/FIN - Finland.txt:274: recruit_character: Character GER_nikolaus_von_falkenhorst cannot be assigned to FIN as it is already assigned to GER
+[18:53:59][1936.01.01.12][eventtarget.cpp:336]: tried to use character GER_nikolaus_von_falkenhorst as scope, but could not find this character in country FIN. Check that recruit_character was done before this.
+[18:53:59][1936.01.01.12][effect.cpp:555]: history/countries/FIN - Finland.txt:393: set_character_flag: Invalid Scope, supported: Character, provided: None
+[18:53:59][1936.01.01.12][effect.cpp:555]: history/countries/FIN - Finland.txt:400: set_character_flag: Invalid Scope, supported: Character, provided: None

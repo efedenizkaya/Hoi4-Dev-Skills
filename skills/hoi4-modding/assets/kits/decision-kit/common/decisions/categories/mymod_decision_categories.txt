@@ -1,0 +1,12 @@
+###
+# Decision kit — category DEFINITION (vanilla pattern: this lives in
+# common/decisions/categories/). Replace `mymod` everywhere.
+###
+
+mymod_category = {
+	icon = generic_political_actions
+
+	visible = {
+		always = yes
+	}
+}

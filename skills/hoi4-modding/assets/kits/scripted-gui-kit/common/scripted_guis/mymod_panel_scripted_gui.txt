@@ -1,0 +1,33 @@
+###
+# Scripted GUI kit — script half. The window it binds to lives in
+# interface/mymod_panel_gui.gui (window_name must match the container).
+###
+
+scripted_gui = {
+	mymod_panel_ui = {
+		context_type = decision_category
+		window_name = "mymod_panel_ui_window"
+
+		visible = {
+			has_war = yes
+		}
+
+		effects = {
+			mymod_panel_button_click = {
+				add_political_power = 10
+			}
+		}
+
+		triggers = {
+			mymod_panel_button_click_enabled = {
+				check_variable = { mymod_ready > 0 }
+			}
+		}
+
+		properties = {
+			mymod_panel_icon = {
+				image = "[?mymod_frame|0]"
+			}
+		}
+	}
+}
